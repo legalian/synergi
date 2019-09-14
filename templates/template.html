@@ -1,5 +1,9 @@
 <html>
 <head>
+	{% set navigation_bar = [('/', 'index', 'Index'),
+							 ('/editor', 'editor', 'Editor'),
+							 ('/projectlist', 'projectlist', 'Browse'),
+							 ('/template','template','Template')] %}
 	<link rel="stylesheet" href="static/css/header.css">
 	<link href="static/css/default.css" rel="stylesheet" type="text/css" media="all" />
 	<link href="static/css/fonts.css" rel="stylesheet" type="text/css" media="all" />
@@ -10,6 +14,17 @@
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.6/ace.js" integrity="sha256-CVkji/u32aj2TeC+D13f7scFSIfphw2pmu4LaKWMSY8=" crossorigin="anonymous"></script>
+
+
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title></title>
+	<meta name="keywords" content="" />
+	<meta name="description" content="" />
+	<link href="http://fonts.googleapis.com/css?family=Varela" rel="stylesheet" />
+	<link href="static/css/default.css" rel="stylesheet" type="text/css" media="all" />
+	<link href="static/css/fonts.css" rel="stylesheet" type="text/css" media="all" />
+
+
 </head>
 <body>
 	<div id="header-wrapper">
@@ -19,15 +34,19 @@
 		</div>
 		<div id="menu">
 			<ul>
-				<li class="current_page_item"><a href="#" accesskey="1" title="">Homepage</a></li>
-				<li><a href="/editor" accesskey="2" title=""></a>Editor</li>
+				{% for href, id, caption in navigation_bar%}
+				<li {% if id == active_page %} class="current_page_item" {% endif %}><a href="{{href}}">{{caption}}</a></li>
+				{% endfor %}
+				<!-- 
+				<li class=""><a href="/" accesskey="1" title="">Homepage</a></li>
+				<li><a href="/editor" accesskey="2" title="">Editor</a></li>
 				<li><a href="/projectlist" accesskey="3" title="">Browse</a></li>
-				<li><a href="/template" accesskey="4" title="">Template</a></li>
-				<li><a href="#" accesskey="5" title="">Contact Us</a></li>
+				<li class="current_page_item"><a href="/template" accesskey="4" title="">Template</a></li>
+				<li><a href="#" accesskey="5" title="">Contact Us</a></li> -->
 			</ul>
 		</div>
 	</div>
-	</div>
+</div>
 {% block body %}
 {% endblock %}
 </body>
