@@ -103,6 +103,8 @@ function AppViewModel() {
 	self.listening = true;
 
 	self.editor.session.on('change', function(delta) {
+		socket.emit('edit', {data:delta});
+
 		if (self.activefile()==null) {return}
 		if (self.listening) {
 			self.activefile().content(self.editor.getValue());
@@ -182,8 +184,15 @@ function AppViewModel() {
 
 
 
-ko.applyBindings(justice);
-socket.emit('my event', {data: 'I\'m connected!'});
+	ko.applyBindings(justice);
+	socket.emit('my event', {data: 'I\'m connected!'});
+
+	socket.on('edit',function(data){
+		console.log(data);
+
+	});
+
+
 });
 
 
