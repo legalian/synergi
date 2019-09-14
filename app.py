@@ -10,18 +10,18 @@ app = Flask(__name__)
 socketio = SocketIO(app)
 # heroku = Heroku(app)
 
-app.config.from_object(os.environ['APP_SETTINGS'])
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
+# app.config.from_object(os.environ['APP_SETTINGS'])
+# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# db = SQLAlchemy(app)
 
-from models import Book
-
-
+# from models import Book
 
 
-# @app.route("/")
-# def hello():
-#     return "Hello World!"
+
+
+@app.route("/")
+def hello():
+    return "Hello World!"
 
 # @app.route("/add")
 # def add_book():
