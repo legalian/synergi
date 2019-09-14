@@ -1,0 +1,195 @@
+{% extends "template.html" %}
+{% block body %}
+
+<script id="layerNode" type="text/html">
+  <div class="layerbox">
+    <div style="width:30px;text-align: center;" data-bind="if:type=='tree'">
+      <i data-bind="class:expanded()?'material-icons rotate-90':'material-icons',click:function(){expanded(!expanded())}">play_arrow</i>
+    </div>
+    <div style="flex:1">
+      <span data-bind="text:title,click:click"></span>
+    </div>
+  </div>
+  <!-- ko if: type == "tree" && expanded() -->
+    <div style="margin-left:20px;">
+    <!-- ko template:{name: 'layerNode',foreach: children } -->
+    <!-- /ko -->    
+    </div>
+  <!-- /ko -->
+</script>
+
+
+<div id="editormain">
+	<div id="editleft" data-bind="template: {name:'layerNode',foreach:children}">
+	</div>
+	<div id="editorcenter">
+		<div data-bind="foreach: tabs" id="tabbar">
+			<div data-bind="click:click,text:title,class:$root.activefile()==$data?'activetab':'tab'"></div>
+		</div>
+		<div id="editor"></div>
+	</div>
+	<div id="editright" data-bind="foreach:users">
+		<div class="userbox">
+			
+		</div>
+	</div>
+</div>
+
+<script>
+var socket = io(window.location.origin);//,{query:'loggeduser=user1'}
+
+socket.on('connect', function() {
+justice = new AppViewModel();
+
+
+//GET /repos/:owner/:repo/git/trees/:tree_sha?recursive=1
+
+
+function Directory(data){
+	var self = this;
+	self.type = 'tree';
+	self.title = data.title;
+	self.path = data.path;
+	self.children = [];
+	self.expanded = ko.observable(true);
+	self.connectedusers = ko.observableArray([]);
+	self.radd = function(ra) {
+		ra.title = ra.title.substr(ra.title.indexOf('/')+1);
+		if (ra.title.indexOf('/') == -1) {
+			if (ra.type == 'blob') {
+				self.children.push(new File(ra));
+			} else if (ra.type == 'tree') {
+				self.children.push(new Directory(ra));
+			}
+		} else {
+			self.children[self.children.length-1].radd(ra);
+		}
+	}
+	self.click = function(){}
+}
+function File(data) {
+	var self = this;
+	self.type = 'blob';
+	self.title = data.title;
+	self.path = data.path;
+	self.sha = data.sha;
+	self.loaded = false
+	self.content = ko.observable("");
+	self.requestload = function(callback) {
+		if (!self.loaded) {
+			self.loaded = true;
+			function aye(data) {
+				self.content(data);
+				callback();
+			};
+			aye("example file.\n\n\n\n\n\n\n\n");
+		}
+	}
+	self.click = function(){
+		justice.openfile(self);
+	}
+}
+
+
+function AppViewModel() {
+	var self =	this;
+	self.children = [];
+	self.tabs = ko.observableArray([]);
+
+	self.editor = ace.edit("editor");
+	self.editor.setTheme("ace/theme/monokai");
+	self.editor.session.setMode("ace/mode/javascript");
+
+	self.listening = true;
+
+	self.editor.session.on('change', function(delta) {
+		if (self.activefile()==null) {return}
+		if (self.listening) {
+			self.activefile().content(self.editor.getValue());
+		}
+	});
+
+	self.activefile = ko.observable(null);
+	self.activefile.subscribe(function(){
+	// self.activecontent = ko.computed(function(){
+		if (self.activefile() == null) {return null}
+		if (self.activefile().content() == null) {
+			self.editor.setReadOnly(true);
+			self.editor.setValue("");
+		}
+		self.editor.setReadOnly(false);
+		self.listening = false;
+		self.editor.session.setValue(self.activefile().content());
+		self.listening = true;
+	});
+	self.openfile = function(file) {
+		if (self.tabs().indexOf(file) == -1) {
+			self.tabs.push(file);
+		}
+		self.activefile(file);
+		file.requestload(function(){self.activefile.notifySubscribers();});
+	};
+
+	self.users = ko.observableArray([]);
+
+	function aye(){
+		var pretend = {
+		  "sha": "9fb037999f264ba9a7fc6274d15fa3ae2ab98312",
+		  "url": "https://api.github.com/repos/octocat/Hello-World/trees/9fb037999f264ba9a7fc6274d15fa3ae2ab98312",
+		  "tree": [
+		    {
+		      "path": "file.rb",
+		      "mode": "100644",
+		      "type": "blob",
+		      "size": 30,
+		      "sha": "44b4fc6d56897b048c772eb4087f854f46256132",
+		      "url": "https://api.github.com/repos/octocat/Hello-World/git/blobs/44b4fc6d56897b048c772eb4087f854f46256132"
+		    },
+		    {
+		      "path": "subdir",
+		      "mode": "040000",
+		      "type": "tree",
+		      "sha": "f484d249c660418515fb01c2b9662073663c242e",
+		      "url": "https://api.github.com/repos/octocat/Hello-World/git/blobs/f484d249c660418515fb01c2b9662073663c242e"
+		    },
+		    {
+		      "path": "subdir/exec_file",
+		      "mode": "100755",
+		      "type": "blob",
+		      "size": 75,
+		      "sha": "45b983be36b73c0788dc9cbcb76cbb80fc7bb057",
+		      "url": "https://api.github.com/repos/octocat/Hello-World/git/blobs/45b983be36b73c0788dc9cbcb76cbb80fc7bb057"
+		    }
+		  ],
+		  "truncated": false
+		};
+		pretend.tree.forEach(function(ra){
+			ra.title = ra.path;
+			console.log(ra.title);
+			if (ra.title.indexOf('/') == -1) {
+				if (ra.type == 'blob') {
+					self.children.push(new File(ra));
+				} else if (ra.type == 'tree') {
+					self.children.push(new Directory(ra));
+				}
+			} else {
+				self.children[self.children.length-1].radd(ra);
+			}
+		});
+	};
+	aye();
+}
+
+
+
+ko.applyBindings(justice);
+socket.emit('my event', {data: 'I\'m connected!'});
+});
+
+
+
+</script>
+
+{% endblock %}
+
+
