@@ -2,7 +2,7 @@ from app import db
 import datetime
 
 class Project(db.Model):
-    __tablename__ = 'projects'
+    __tablename__ = 'project'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String())
     description = db.Column(db.String())
@@ -34,12 +34,12 @@ class Project(db.Model):
         }
 
 class Request(db.Model):
-    __tablename__ = 'requests'
+    __tablename__ = 'request'
 
     id = db.Column(db.Integer, primary_key=True)
     message = db.Column(db.String())
-    author = db.Column(db.String())
-    project_id = db.Column(db.Integer, db.ForeignKey('Project.id'))
+    author = db.Column(db.Integer, db.ForeignKey('user.id'))
+    project_id = db.Column(db.Integer, db.ForeignKey('project.id'))
 
     def __init__(self, message, author, project):
         self.message = message
@@ -58,14 +58,14 @@ class Request(db.Model):
 
 
 class Session(db.Model):
-    __tablename__ = 'sessions'
+    __tablename__ = 'session'
 
     id         = db.Column(db.Integer, primary_key=True)
     owner      = db.Column(db.String())
     repo       = db.Column(db.String())
     branch     = db.Column(db.String())
     sha        = db.Column(db.String())
-    project_id = db.Column(db.Integer, db.ForeignKey('Project.id'))
+    project_id = db.Column(db.Integer, db.ForeignKey('project.id'))
     activemembers = db.Column(db.String())
 
     def __init__(self, owner, repo, branch, sha,project_id,activemembers):
@@ -90,10 +90,10 @@ class Session(db.Model):
 
 
 class TemFile(db.Model):
-    __tablename__ = 'temfiles'
+    __tablename__ = 'temfile'
 
     id         = db.Column(db.Integer, primary_key=True)
-    session_id = db.Column(db.Integer, db.ForeignKey('Session.id'))
+    session_id = db.Column(db.Integer, db.ForeignKey('session.id'))
     path       = db.Column(db.String())
     content    = db.Column(db.String())
     sha        = db.Column(db.String())
@@ -110,7 +110,7 @@ class TemFile(db.Model):
 
 
 class User(db.Model):
-    __tablename__ = 'users'
+    __tablename__ = 'user'
 
     id         = db.Column(db.Integer, primary_key=True)
     token      = db.Column(db.String())
