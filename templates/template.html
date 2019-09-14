@@ -1,31 +1,33 @@
 <html>
 <head>
-	<link rel="stylesheet" href="">
+	<link rel="stylesheet" href="static/css/header.css">
+	<link href="static/css/default.css" rel="stylesheet" type="text/css" media="all" />
+	<link href="static/css/fonts.css" rel="stylesheet" type="text/css" media="all" />
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.0/knockout-min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
-	<link rel="stylesheet" href="static/styles.css">
+	<link rel="stylesheet" href="static/css/styles.css">
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.6/ace.js" integrity="sha256-CVkji/u32aj2TeC+D13f7scFSIfphw2pmu4LaKWMSY8=" crossorigin="anonymous"></script>
 </head>
 <body>
-<div class="header">
-	<div class="headericon">
-		<a>Header Icon</a>
+	<div id="header-wrapper">
+	<div id="header" class="container">
+		<div id="logo">
+			<h1><a href="/">Synergi</a></h1>
+		</div>
+		<div id="menu">
+			<ul>
+				<li class="current_page_item"><a href="#" accesskey="1" title="">Homepage</a></li>
+				<li><a href="/editor" accesskey="2" title=""></a>Editor</li>
+				<li><a href="/projectlist" accesskey="3" title="">Browse</a></li>
+				<li><a href="/template" accesskey="4" title="">Template</a></li>
+				<li><a href="#" accesskey="5" title="">Contact Us</a></li>
+			</ul>
+		</div>
 	</div>
-	<div style="flex:1">
 	</div>
-	<div class="headerbutton">
-		Browse Projects
-	</div>
-	<div class="headerbutton">
-		My Projects
-	</div>
-	<div class="headerbutton">
-		Login
-	</div>
-
-</div>
 {% block body %}
 {% endblock %}
 </body>

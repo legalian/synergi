@@ -17,11 +17,13 @@ socketio = SocketIO(app)
 # from models import Book
 
 
-
+@app.route("/template")
+def templte():
+	return render_template("/template.html")
 
 @app.route("/")
 def hello():
-    return "Hello World!"
+    return render_template("/index.html")
 
 # @app.route("/add")
 # def add_book():
