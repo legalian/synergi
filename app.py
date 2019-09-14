@@ -122,9 +122,8 @@ def on_disconnect():
 
 
 @socketio.on('edit')
-def handle_my_custom_event(json):
-	print(json)
-
+def handle_edit(edit):
+    emit('edit',edit,broadcast=True)
 
 
 
