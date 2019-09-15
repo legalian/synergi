@@ -192,7 +192,11 @@ function AppViewModel() {
 			if (item.path == self.activefile().path) {
 				console.log("change made");
 				var icont = item.content();
-				item.content(icont.slice(0,data.delta.amt)+data.delta.msg+icont.slice(data.delta.amt));
+				if (data.mode == "insert") {
+					item.content(icont.slice(0,data.delta.amt)+data.delta.msg+icont.slice(data.delta.amt));
+				} else if (data.mode == "remove") {
+					item.content(icont.slice(0,data.delta.amt)+icont.slice(data.delta.amt+data.delta.msg.length))
+				}
 				item.content.notifySubscribers();
 			}
 		});
@@ -211,6 +215,7 @@ function AppViewModel() {
 		var msg = delta.lines.join("\n")
 		socket.emit('edit', {
 			delta:{amt:amt,msg:msg},
+			mode:delta.action,
 			path:self.activefile().path,
 			sessionId:projectid
 		});

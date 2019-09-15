@@ -188,7 +188,10 @@ def handle_edit(edit):
 	if sesh == None: return
 	book = TemFile.query.filter_by(session_id = int(sesh.id),path=str(edit['path'])).first()
 	if book == None: return
-	book.content = book.content[:edit['delta']['amt']]+edit['delta']['msg']+book.content[edit['delta']['amt']:]
+	if edit['mode'] == 'insert':
+		book.content = book.content[:edit['delta']['amt']]+edit['delta']['msg']+book.content[edit['delta']['amt']:]
+	elif edit['mode'] == 'remove':
+		book.content = book.content[:edit['delta']['amt']]+book.content[edit['delta']['amt']+len(edit['delta']['msg']):]
 	db.session.commit()
 	emit('edit',edit,broadcast=True,include_self=False)
 
