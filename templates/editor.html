@@ -201,10 +201,10 @@ function AppViewModel() {
 		}
 	});
 	self.editor.session.on('change', function(delta) {
-		console.log("change edit(B)",data)
+		console.log("change edit(B)",delta)
 		if (self.activefile()==null) {return}
 		if (self.listening != 0) {return}
-		console.log("change edit",data)
+		console.log("change edit",delta)
 		var yaya = self.editor.getValue()
 		self.activefile().content(yaya);
 		var amt = nthIndex(yaya,"\n",delta.start.row)+1+delta.start.column;
