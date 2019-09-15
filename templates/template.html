@@ -93,7 +93,7 @@
         <div class="popupCloseButton">X</div>
         <form action = "/projects" method = "POST">
 
-				<input type="hidden" name="owner" data-bind="owner">
+				<input type="hidden" name="owner" data-bind="value:owner">
 				Name of Project: <input type="text" name="name"><br>
 				Description: <input type="text" name="description"><br>
 				Repo: <select name="repo" data-bind="options: repochoices(), value:activerepo"></select>
