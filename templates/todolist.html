@@ -2,7 +2,22 @@
 {% extends "template.html"%}
 {% set active_page = "projectlist" %}
 {% block body %}
+<script>
+// var coll = document.getElementsByClassName("collapsible");
+// var i;
 
+// for (i = 0; i < coll.length; i++) {
+//   coll[i].addEventListener("click", function() {
+//     this.classList.toggle("active");
+//     var content = this.nextElementSibling;
+//     if (content.style.display === "block") {
+//       content.style.display = "none";
+//     } else {
+//       content.style.display = "block";
+//     }
+//   });
+// }
+</script>
 <style>
 	.project {
 		background: #EEE;
@@ -56,23 +71,54 @@
 
 
 </style>
-
+<!-- <div class="wrap-collabsible">
+  <input id="collapsible" class="toggle" type="checkbox">
+  <label for="collapsible" class="lbl-toggle">More Info</label>
+  <div class="collapsible-content">
+    <div class="content-inner">
+      <p>
+        QUnit is by calling one of the object that are embedded in JavaScript, and faster JavaScript program could also used with
+        its elegant, well documented, and functional programming using JS, HTML pages Modernizr is a popular browsers without
+        plug-ins. Test-Driven Development.
+      </p>
+    </div>
+  </div>
+</div> -->
 <div id="extra" class="container" data-bind="foreach:results">
-	<div class = "project">
-		<ul>
-			<li class="expander-edit" style=""><a href="">+</a></li>
-			<li class = "name" data-bind="text:name">Name</li>
-			<li class="edit"><a data-bind="attr:{href:'/editor?projectId='+id}">Edit</a></li>		
-		</ul>
-		<ul>
-			<li><div data-bind="text:owner"></div></li>
-			<li><div data-bind="text:description"></div></li>
-			<li>        <li>
-			<li>        <li>
-			<li><div data-bind="text:repo"></div><div data-bind="text:branch"></div></li>
-		</ul>
-	</div>	
+	<div class = "project wrap-collabsible">
+		<input id="collapsible" class="toggle" type="checkbox">
+		<label for="collapsible" class="lbl-toggle" data-bind="text:name">[Name]</label>
+		<div class="collapsible-content">
+			<ul>
+				<li class = "name" data-bind="text:name">Name</li>
+				<li class="edit"><a data-bind="attr:{href:'/editor?projectId='+id}">Edit</a></li>	
+			</ul>
+			<ul class ="content-inner">
+				<li><div>Description:  </div></li>
+				<li><div data-bind="text:description"></div></li>
+				<li>Repository:  <div data-bind="text:repo"></div>Branch:  <div data-bind="text:branch"></div></li>
+			</ul>
+		</div>	
+	</div>
 </div>
+<!-- <div id="extra" class="container">
+	<div class = "project wrap-collabsible">
+		<input id="collapsible" class="toggle" type="checkbox">
+		<label for="collapsible" class="lbl-toggle">[Name]</label>
+		<div class="collapsible-content">
+		<ul>
+			<li class = "name">Name</li>
+			<li class="edit"><a href="#">Edit</a></li>		
+		</ul>
+		<ul class ="content-inner">
+			<li><div id = "desc_title">Description:</div></li>
+			<li><div id = "description">This project's purpose is to basically make google docs but with code </div></li>
+			<li><div id="repo">Repository:    legalian</div><div id = "branch">Branch:    synergi</div></li>
+		</ul>
+	</div>
+	</div>
+</div> -->
+
 
 	
 
