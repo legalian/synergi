@@ -3,19 +3,66 @@
 {% set active_page = "projectlist" %}
 {% block body %}
 <style>
-	.project{
-		background: #fff;
+	.project {
+		background: #EEE;
+		margin-top: 40px;
+		margin-left: 20%;
+		margin-right:20%;
+		border-radius: 8px;
+	}
+	.project ul{
+
+	}
+	.project ul li{
+		display: inline-block;
+		padding: 10px;
+		/*border-color: red;border-style: solid;border-width: 2px;*/
+
 	}
 	.edit{
-		text-align:right;
+		float:right;
+	}
+	.edit a{
+		font-size: 1.5em;
+		box-shadow: none !important;
+		transition: none;
+		text-decoration: none;
+		color: inherit;
+		line-height: 1.8em;
+
+	}
+	.name {
+		font-size: 2em;
+	}
+
+	.expander{
+		float:left;
+	}
+	.dropdown {
+	  position: relative;
+	  display: inline-block;
+	}
+
+	.dropdown-content {
+	  display: none;
+	  position: absolute;
+	  background-color: #f9f9f9;
+	  min-width: 160px;
+	  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+	  padding: 12px 16px;
+	  z-index: 1;
 	}
 
 </style>
 	<div class = "project">
-		<div class = "proj_name">
-			Name
-		</div>
-		<div class = "proj_edit"><a href="#">Edit</a></div>
+		<ul>
+			<li class="expander edit" style=""><a href="">+</a></li>
+			<li class = "name">Name</li>
+			<li class="edit"><a href="/">Edit</a></li>		
+		</ul>
+		<ul class="dropdown">
+			<li class="dropdown-content">Test Words</li>
+		</ul>
 	</div>		
 
 {% endblock %}
