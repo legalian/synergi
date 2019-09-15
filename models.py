@@ -109,16 +109,16 @@ class TemFile(db.Model):
 
 
 
-class User(db.Model):
-    __tablename__ = 'user'
+# class User(db.Model):
+#     __tablename__ = 'user'
 
-    id         = db.Column(db.Integer, primary_key=True)
-    token      = db.Column(db.String())
-    username   = db.Column(db.String())
+#     id         = db.Column(db.Integer, primary_key=True)
+#     token      = db.Column(db.String())
+#     username   = db.Column(db.String())
 
-    def __init__(self,token,username):
-        self.token = token
-        self.username = username
+#     def __init__(self,token,username):
+#         self.token = token
+#         self.username = username
 
 
 

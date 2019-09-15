@@ -11,11 +11,11 @@ app = Flask(__name__)
 socketio = SocketIO(app)
 # heroku = Heroku(app)
 
-# app.config.from_object(os.environ['APP_SETTINGS'])
-# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-# db = SQLAlchemy(app)
+app.config.from_object(os.environ['APP_SETTINGS'])
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
 
-# from models import Book
+from models import Project, Request, Session, TemFile
 
 
 blueprint = make_github_blueprint(
@@ -28,7 +28,6 @@ app.register_blueprint(blueprint, url_prefix="/gitcallback")
 
 
 
-from models import Session, TemFile
 
 
 
