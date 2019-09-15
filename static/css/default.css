@@ -62,6 +62,7 @@
 	a:hover
 	{
 		text-decoration: none;
+		box-shadow: 3px 3px rgba(22,22,22, .1) !important;
 	}
 	
 	.container
@@ -361,6 +362,7 @@
 	#menu ul
 	{
 		display: inline-block;
+		margin-top: -5px;
 
 	}
 	
@@ -369,6 +371,8 @@
 		display: block;
 		float: left;
 		text-align: center;
+		margin: 3px;
+		margin-bottom: 10px;
 	}
 	
 	#menu li a, #menu li span
