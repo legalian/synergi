@@ -12,6 +12,7 @@ import os
 
 
 app = Flask(__name__)
+app.secret_key = 'asdijfhpaieshrgiuheruwrhgjmovsijmpvgosuehg'
 socketio = SocketIO(app)
 # heroku = Heroku(app)
 SESSION_TYPE = 'redis'
