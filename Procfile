@@ -1,2 +1,2 @@
-gunicorn --worker-class eventlet -w 1 app:app
+gunicorn -k eventlet  app:app
 
