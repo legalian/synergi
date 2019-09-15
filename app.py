@@ -10,6 +10,9 @@ import os
 # eventlet.monkey_patch()
 
 
+# from flask_dance.consumer.storage import BaseStorage
+
+
 
 app = Flask(__name__)
 socketio = SocketIO(app)
@@ -210,7 +213,7 @@ def on_join(data):
 	sesh = Session.query.filter_by(project_id=int(repo.id)).first()
 	print("SESSION GOT")
 	if sesh == None:
-		master = session['github'].get("/repos/"+sesh.owner+"/"+sesh.repo+"/branches/"+sesh.branch)
+		master = github.get("/repos/"+sesh.owner+"/"+sesh.repo+"/branches/"+sesh.branch)
 		head_tree_sha = master.json()['commit']['commit']['tree']['sha']
 		print("COMMIT GOT")
 		sesh = Session(
