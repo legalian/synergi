@@ -96,7 +96,7 @@
 				<input type="hidden" name="owner" data-bind="owner">
 				Name of Project: <input type="text" name="name"><br>
 				Description: <input type="text" name="description"><br>
-				Repo: <select name="repo" data-bind="options: repochoices()"></select>
+				Repo: <select name="repo" data-bind="options: repochoices(), value:activerepo"></select>
 				Branch: <select name="branch" data-bind="options: branches()"></select>
 
 				<input type="submit" value="Import Project">
