@@ -32,7 +32,11 @@
 					{% for href, id, caption in navigation_bar%}
 					<li {% if id == active_page %} class="current_page_item" {% endif %}><a href="{{href}}">{{caption}}</a></li>
 					{% endfor %}
-					<li style="float:right;"><a class="login" id="login" style="" href="/gitlogin">Login</a></li>
+					{% if creds == None %}
+						<li style="float:right;"><a class="login" id="login" style="" href="/gitlogin">Login</a></li>
+					{% endif %}
+					<li style="float:right;"><a class="login" id="login" style="" href="/logout">{{creds}}</a></li>
+
 					<!-- 
 					<li class=""><a href="/" accesskey="1" title="">Homepage</a></li>
 					<li><a href="/editor" accesskey="2" title="">Editor</a></li>

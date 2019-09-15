@@ -26,6 +26,10 @@ app.register_blueprint(blueprint, url_prefix="/login")
 
 
 
+def gitcreds():
+	if not github.authorized: return None
+	resp = github.get("/user")
+	return resp.json["login"]
 
 
 
@@ -33,17 +37,17 @@ app.register_blueprint(blueprint, url_prefix="/login")
 
 @app.route("/")
 def index():
-	return render_template('index.html')
-
-
+	return render_template('index.html',creds=gitcreds())
 
 @app.route("/projectlist")
 def projectlist():
-	return render_template('todolist.html')
+	return render_template('todolist.html',creds=gitcreds())
 
 @app.route("/editor")
 def editor():
-	return render_template('editor.html')
+	return render_template('editor.html',creds=gitcreds())
+
+
 
 @app.route("/gitlogin")
 def login():
@@ -132,6 +136,8 @@ def directories():
 def on_join(data):
 	repo = Session.query.filter_by(owner=str(data['owner']),repo=str(data['repo'])).first()
 	if repo == None: return
+	creds=gitcreds()
+	if creds == None: return
 
 	sesh = Session.query.filter_by(project_id=int(repo.id)).first()
 	if sesh == None:
@@ -143,16 +149,16 @@ def on_join(data):
 			branch     = repo.branch,
 			sha        = head_tree_sha,
 			project_id = repo.id,
-			activemembers = str(request.sid)
+			activemembers = creds
 		)
 		db.session.add(sesh)
 	else:
-		sesh.activemembers = sesh.activemembers+","+str(request.sid)
+		sesh.activemembers = sesh.activemembers+","+creds
 	db.session.commit()
 
 	join_room(str(repo.id)+","+str(sesh.id))
 	emit('accept',{'sessionId':sesh.id,'activemembers':sesh.activemembers},room=request.sid)
-	emit('player_join',{'name':request.sid},room=str(repo.id)+","+str(sesh.id),include_self=False)
+	emit('player_join',{'name':creds},room=str(repo.id)+","+str(sesh.id),include_self=False)
 
 
 
@@ -164,7 +170,8 @@ def on_disconnect():
 			jj.remove(request.sid)
 		sesh.activemembers = ",".join(jj)
 	db.session.commit()
-	emit('player_leave',{'name':request.sid},include_self=False)
+	creds=gitcreds()
+	emit('player_leave',{'name':creds},include_self=False)
 
 
 
