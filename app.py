@@ -190,7 +190,7 @@ def handle_edit(edit):
 
 	
 
-@app.route("/directories")
+@app.route("/directories",methods=['POST'])
 def directories():
 	sesh = Session.query.filter_by(id=int(request.json['sessionId'])).first()
 	if sesh == None: return

@@ -85,6 +85,8 @@ $.ajax("/join", {
 	success: function(data){
 
 
+
+
 socket.emit('join',{projectId:suhd})
 
 
@@ -236,7 +238,7 @@ function AppViewModel() {
 	self.users = ko.observableArray([]);
 
 	$.ajax("/directories", {
-		type: "GET",
+		type: "POST",
 		contentType: "application/json",
 		data: ko.toJSON({
 			projectId:projectid
