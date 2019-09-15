@@ -1,0 +1,71 @@
+
+
+	{%extends "template.html"%}
+	{% set active_page = "index" %}
+	{% block body %}
+	<!-- <div id="header-wrapper">
+		<div id="header" class="container">
+			<div id="logo">
+				<h1><a href="/">Synergi</a></h1>
+			</div>
+			<div id="menu">
+				<ul>
+					<li class=""><a href="#" accesskey="1" title="">Homepage</a></li>
+					<li><a href="/editor" accesskey="2" title="">Editor</a></li>
+					<li><a href="/projectlist" accesskey="3" title="">Browse</a></li>
+					<li><a href="/template" accesskey="4" title="">Template</a></li>
+					<li><a href="#" accesskey="5" title="">Contact Us</a></li>
+				</ul>
+			</div>
+		</div>
+	</div> -->
+
+<div id="wrapper">
+	<div id="banner">
+		<div class="container">
+			<div class="title">
+				<h2>Welcome to Synergi Code</h2>
+				<span class="byline">The best collaborative code editor</span> </div>
+			<ul class="actions">
+				<li><a href="#extra" class="button">Get Started</a></li>
+			</ul>
+		</div>
+	</div>
+	<div id="extra" class="container">
+		<div class="title">
+			<h2>Real time collaborative coding without the hassle</h2>
+			<span class="byline">It takes only 3 steps to begin using Synergi</span> </div>
+		<div id="three-column">
+			<div class="boxA">
+				<div class="box"> <span class="fa fa-cloud-download"></span>
+					<p>Using your GitHub Login, sign in to sync your account with Synergi. </p>
+				</div>
+			</div>
+			<div class="boxB">
+				<div class="box"> <span class="fa fa-cogs"></span>
+					<p>placeholder</p>
+				</div>
+			</div>
+			<div class="boxC">
+				<div class="box"> <span class="fa fa-user"></span>
+					<p>Invite your friends and start coding and creating projects seamlessly with your collaborators.</p>
+				</div>
+			</div>
+		</div>
+		<ul class="actions">
+			<li><a href="/login" class="button">Log in</a></li>
+		</ul>
+	</div>
+	<div id="featured">
+		<div class="container">
+			<div class="title">
+				<h2>About Us</h2>
+				<span class="byline">The Mission of Synergi</span> </div>
+			<p>We are a group of undergraduate students at Purdue who are studying Computer Science. Our belief is that programming will forever be a collaborative endeavor. We seek to connect the world of code through Synergi. </p>
+		</div>
+	</div>
+	
+</div>
+
+	{% endblock %}
+

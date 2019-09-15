@@ -11,9 +11,11 @@ app = Flask(__name__)
 socketio = SocketIO(app)
 # heroku = Heroku(app)
 
-app.config.from_object(os.environ['APP_SETTINGS'])
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
+# app.config.from_object(os.environ['APP_SETTINGS'])
+# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# db = SQLAlchemy(app)
+
+# from models import Book
 
 
 blueprint = make_github_blueprint(
@@ -32,7 +34,7 @@ from models import Session, TemFile
 
 @app.route("/")
 def index():
-	return render_template('template.html')
+	return render_template('index.html')
 
 
 
@@ -61,34 +63,6 @@ def login():
 @app.route("/logout")
 def logout():
 	return "jw9ejfoweufj"
-
-
-# @app.route("/gitcallback")
-# def gitcallback():
-# 	session_code = request.args.get('code')
-# 	res = requests.post('https://github.com/login/oauth/access_token',params={'accept':'json'},data={'client_id':CLIENT_ID,'client_secret':CLIENT_SECRET,'code':session_code})
-# 	access_token = res.content
-# 	user = User(
-# 		path = request.json['path'],
-# 		content = con['content'],
-# 		sha = con['sha']
-# 	)
-# 	db.session.add(user)
-# 	db.session.commit()
-
-# 	return redirect("/",code=302)
-
-
-
-# 	# session = User.query.filter_by(id=request.json['sessionId']).first()
-
-
-# 	# extract the token and granted scopes
-
-
-
-# 	# requests.get('https://api.github.com/events',params=payload)
-# 	# requests.post('https://httpbin.org/post',params=payload,data={'key':'value'})
 
 
 
