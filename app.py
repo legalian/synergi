@@ -20,7 +20,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 Session(app)
 
-from models import Project, Request, Session, TemFile
+from models import Project, Session, TemFile
 
 
 blueprint = make_github_blueprint(
