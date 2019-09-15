@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify, redirect, url_for
 from flask_socketio import SocketIO, send, emit, join_room, leave_room
 from flask_sqlalchemy import SQLAlchemy
 from flask_dance.contrib.github import make_github_blueprint, github
+from flask_session import Session
 import requests
 # from flask.ext.heroku import Heroku
 import os
@@ -17,6 +18,7 @@ socketio = SocketIO(app)
 app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+Session(app)
 
 from models import Project, Request, Session, TemFile
 
@@ -33,7 +35,7 @@ def gitcreds(github):
 	if not github.authorized: return None
 	print("sidjfoisdf")
 	resp = github.get("/user").json()["login"]
-	request.githubuser = resp
+	session['githubuser'] = resp
 	print("oiwjfeoiwjef")
 	return resp
 
@@ -148,7 +150,7 @@ def on_join(data):
 	repo = Session.query.filter_by(owner=str(data['owner']),repo=str(data['repo'])).first()
 	print("REPO GOT")
 	if repo == None: return
-	creds=request.githubuser
+	creds=session['githubuser']
 	print("CREDS GOT")
 	if creds == None: return
 
@@ -196,7 +198,7 @@ def on_disconnect():
 			jj.remove(request.sid)
 		sesh.activemembers = ",".join(jj)
 	db.session.commit()
-	creds=request.githubuser
+	creds=session['githubuser']
 	emit('player_leave',{'name':creds},include_self=False)
 
 
