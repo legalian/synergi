@@ -143,7 +143,7 @@ function File(data) {
 			$.ajax("/files", {
 				type: "GET",
 				data: ko.toJSON({
-					projectid:projectid,
+					sessionId:projectid,
 					path:self.path
 				}),
 				contentType: "application/json",
@@ -241,7 +241,7 @@ function AppViewModel() {
 		type: "POST",
 		contentType: "application/json",
 		data: ko.toJSON({
-			projectId:projectid
+			sessionId:projectid
 		}),
 		success: function(data){
 			data.tree.forEach(function(ra){

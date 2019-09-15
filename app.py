@@ -267,13 +267,13 @@ def on_join(data):
 
 @socketio.on('disconnect')
 def on_disconnect():
+	creds=session['githubuser']
 	for sesh in Session.query:
 		jj = sesh.activemembers.split(",")
-		if request.sid in jj:
-			jj.remove(request.sid)
+		if creds in jj:
+			jj.remove(creds)
 		sesh.activemembers = ",".join(jj)
 	db.session.commit()
-	creds=session['githubuser']
 	emit('player_leave',{'name':creds},include_self=False)
 
 
