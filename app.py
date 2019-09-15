@@ -14,13 +14,13 @@ import os
 app = Flask(__name__)
 socketio = SocketIO(app)
 # heroku = Heroku(app)
-
+SESSION_TYPE = 'redis'
 app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 Session(app)
 
-# from models import Project, Request, Session, TemFile
+from models import Project, Request, Session, TemFile
 
 
 blueprint = make_github_blueprint(
