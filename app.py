@@ -192,6 +192,7 @@ def handle_edit(edit):
 
 @app.route("/directories",methods=['POST'])
 def directories():
+	print(dict(request.json))
 	sesh = Session.query.filter_by(id=int(request.json['sessionId'])).first()
 	if sesh == None: return
 	r = github.get("/repos/"+sesh.owner+"/"+sesh.repo+"/git/trees/"+sesh.sha+"?recursive=1,ref="+sesh.branch)
