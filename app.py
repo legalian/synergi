@@ -82,9 +82,9 @@ def gitcallback():
 
 @app.route("/files")
 def files():
-	session = Session.query.filter_by(id=request.json['sessionId']).first()
+	session = Session.query.filter_by(id=int(request.json['sessionId'])).first()
 	if session == None: return
-	book = TemFile.query.filter_by(session_id = session.id,path=request.json['path']).first()
+	book = TemFile.query.filter_by(session_id = int(session.id),path=str(request.json['path'])).first()
 	if book == None:
 		r = requests.get("https://api.github.com/repos/"+session.owner+"/"+session.repo+"/contents/"+request.json['path']+"?ref="+session.branch)
 		if r.status_code != 200:
@@ -106,9 +106,9 @@ def files():
 
 @socketio.on('edit')
 def handle_edit(edit):
-	session = Session.query.filter_by(id=request.json['sessionId']).first()
+	session = Session.query.filter_by(id=int(request.json['sessionId'])).first()
 	if session == None: return
-	book = TemFile.query.filter_by(session_id = session.id,path=request.json['path']).first()
+	book = TemFile.query.filter_by(session_id = int(session.id),path=str(request.json['path'])).first()
 	if book == None: return
 	book.content = book.content[:edit.delta.amt]+edit.delta.msg+book.content[edit.delta.amt:]
 	db.session.commit()
@@ -119,7 +119,7 @@ def handle_edit(edit):
 
 @app.route("/directories")
 def directories():
-	session = Session.query.filter_by(id=request.json['sessionId']).first()
+	session = Session.query.filter_by(id=int(request.json['sessionId'])).first()
 	if session == None: return
 	r = requests.get("https://api.github.com/repos/"+session.owner+"/"+session.repo+"/git/trees/"+session.sha+"?recursive=1,ref="+session.branch)
 	if r.status_code != 200:
@@ -130,10 +130,10 @@ def directories():
 
 @socketio.on('join')
 def on_join(data):
-	repo = Session.query.filter_by(owner=data['owner'],repo=data['repo']).first()
+	repo = Session.query.filter_by(owner=str(data['owner']),repo=str(data['repo'])).first()
 	if repo == None: return
 
-	sesh = Session.query.filter_by(project_id=repo.id).first()
+	sesh = Session.query.filter_by(project_id=int(repo.id)).first()
 	if sesh == None:
 		master = requests.get("https://api.github.com/repos/"+session.owner+"/"+session.repo+"/branches/master",headers={'Authorization':'token '+github_token})
 		head_tree_sha = master.json()['commit']['commit']['tree']['sha']
