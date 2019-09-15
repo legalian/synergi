@@ -78,9 +78,10 @@ var socket = io(window.location.origin.replace(/^http/, 'ws'),{transports: ['pol
 socket.on('connect', function() {
 $.ajax("/join", {
 	type: "POST",
-	data: {
+	contentType: "application/json",
+	data: ko.toJSON({
 		projectid:suhd
-	},
+	}),
 	success: function(data){
 
 
@@ -139,10 +140,11 @@ function File(data) {
 			};
 			$.ajax("/files", {
 				type: "GET",
-				data: {
+				data: ko.toJSON({
 					projectid:projectid,
 					path:self.path
-				},
+				}),
+				contentType: "application/json",
 				success: function(data){
 					self.content(data);
 					callback();
@@ -235,9 +237,10 @@ function AppViewModel() {
 
 	$.ajax("/directories", {
 		type: "GET",
-		data: {
+		contentType: "application/json",
+		data: ko.toJSON({
 			projectid:projectid
-		},
+		}),
 		success: function(data){
 			data.tree.forEach(function(ra){
 				ra.title = ra.path;
