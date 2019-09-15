@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request, jsonify, redirect
+from flask import Flask, render_template, request, jsonify, redirect, url_for
 from flask_socketio import SocketIO, send, emit, join_room, leave_room
 from flask_sqlalchemy import SQLAlchemy
+from flask_dance.contrib.github import make_github_blueprint, github
 import requests
 # from flask.ext.heroku import Heroku
 import os
@@ -15,8 +16,13 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 
-CLIENT_ID = os.environ['GITHUB_CLIENT_ID']
-CLIENT_SECRET = os.environ['GITHUB_CLIENT_SECRET']
+blueprint = make_github_blueprint(
+    client_id=os.environ['GITHUB_CLIENT_ID'],
+    client_secret=os.environ['GITHUB_CLIENT_SECRET'],
+)
+app.register_blueprint(blueprint, url_prefix="/gitcallback")
+
+
 
 
 
@@ -40,7 +46,14 @@ def editor():
 
 @app.route("/login")
 def login():
-	return redirect("https://github.com/login/oauth/authorize?scope=repo&client_id="+CLIENT_ID, code=302)
+    if not github.authorized:
+        return redirect(url_for("github.login"))
+    resp = github.get("/user")
+    assert resp.ok
+    print(resp.json())
+    return "You are @{login} on GitHub".format(login=resp.json()["login"])
+
+
 
 
 
@@ -49,35 +62,32 @@ def logout():
 	return "jw9ejfoweufj"
 
 
-@app.route("/gitcallback")
-def gitcallback():
-	session_code = request.args.get('code')
-	res = requests.post('https://github.com/login/oauth/access_token',params={'accept':'json'},data={'client_id':CLIENT_ID,'client_secret':CLIENT_SECRET,'code':session_code})
-	print(res.content)
-	res = res.json()
-	print(res)
-	access_token = res['access_token']
-	user = User(
-		path = request.json['path'],
-		content = con['content'],
-		sha = con['sha']
-	)
-	db.session.add(user)
-	db.session.commit()
+# @app.route("/gitcallback")
+# def gitcallback():
+# 	session_code = request.args.get('code')
+# 	res = requests.post('https://github.com/login/oauth/access_token',params={'accept':'json'},data={'client_id':CLIENT_ID,'client_secret':CLIENT_SECRET,'code':session_code})
+# 	access_token = res.content
+# 	user = User(
+# 		path = request.json['path'],
+# 		content = con['content'],
+# 		sha = con['sha']
+# 	)
+# 	db.session.add(user)
+# 	db.session.commit()
 
-	return redirect("/",code=302)
+# 	return redirect("/",code=302)
 
 
 
-	# session = User.query.filter_by(id=request.json['sessionId']).first()
+# 	# session = User.query.filter_by(id=request.json['sessionId']).first()
 
 
-	# extract the token and granted scopes
+# 	# extract the token and granted scopes
 
 
 
-	# requests.get('https://api.github.com/events',params=payload)
-	# requests.post('https://httpbin.org/post',params=payload,data={'key':'value'})
+# 	# requests.get('https://api.github.com/events',params=payload)
+# 	# requests.post('https://httpbin.org/post',params=payload,data={'key':'value'})
 
 
 
