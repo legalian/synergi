@@ -75,7 +75,7 @@ def repos():
 
 @app.route("/projects",methods=['POST'])
 def projects():
-	yam = request.json()
+	yam = request.form
 	proj = Project(
 		name       = str(yam['name']),
 		repo       = str(yam['repo']),
@@ -145,18 +145,19 @@ def sdahoufa():
 
 @app.route("/files")
 def files():
-	session = Session.query.filter_by(id=int(request.json['sessionId'])).first()
-	if session == None: return
-	book = TemFile.query.filter_by(session_id = int(session.id),path=str(request.json['path'])).first()
+	jak = request.json()
+	sesh = Session.query.filter_by(id=int(jak['sessionId'])).first()
+	if sesh == None: return
+	book = TemFile.query.filter_by(session_id = int(sesh.id),path=str(jak['path'])).first()
 	if book == None:
-		r = github.get("/repos/"+session.owner+"/"+session.repo+"/contents/"+request.json['path']+"?ref="+session.branch)
+		r = github.get("/repos/"+sesh.owner+"/"+sesh.repo+"/contents/"+jak['path']+"?ref="+sesh.branch)
 		if r.status_code != 200:
 			print(r.content)
 			return
 		con = r.json()
 		book = TemFile(
-			session_id = session.id,
-			path = request.json['path'],
+			session_id = sesh.id,
+			path = jak['path'],
 			content = con['content'],
 			sha = con['sha']
 		)
@@ -169,9 +170,9 @@ def files():
 
 @socketio.on('edit')
 def handle_edit(edit):
-	session = Session.query.filter_by(id=int(request.json['sessionId'])).first()
-	if session == None: return
-	book = TemFile.query.filter_by(session_id = int(session.id),path=str(request.json['path'])).first()
+	sesh = Session.query.filter_by(id=int(edit['sessionId'])).first()
+	if sesh == None: return
+	book = TemFile.query.filter_by(session_id = int(sesh.id),path=str(edit['path'])).first()
 	if book == None: return
 	book.content = book.content[:edit.delta.amt]+edit.delta.msg+book.content[edit.delta.amt:]
 	db.session.commit()
@@ -182,9 +183,9 @@ def handle_edit(edit):
 
 @app.route("/directories")
 def directories():
-	session = Session.query.filter_by(id=int(request.json['sessionId'])).first()
-	if session == None: return
-	r = github.get("/repos/"+session.owner+"/"+session.repo+"/git/trees/"+session.sha+"?recursive=1,ref="+session.branch)
+	sesh = Session.query.filter_by(id=int(request.json['sessionId'])).first()
+	if sesh == None: return
+	r = github.get("/repos/"+sesh.owner+"/"+sesh.repo+"/git/trees/"+sesh.sha+"?recursive=1,ref="+sesh.branch)
 	if r.status_code != 200:
 		print(r.content)
 		return
@@ -204,7 +205,7 @@ def on_join(data):
 	sesh = Session.query.filter_by(project_id=int(repo.id)).first()
 	print("SESSION GOT")
 	if sesh == None:
-		master = github.get("/repos/"+session.owner+"/"+session.repo+"/branches/master",headers={'Authorization':'token '+github_token})
+		master = github.get("/repos/"+sesh.owner+"/"+sesh.repo+"/branches/"+sesh.branch)
 		head_tree_sha = master.json()['commit']['commit']['tree']['sha']
 		print("COMMIT GOT")
 		sesh = Session(
