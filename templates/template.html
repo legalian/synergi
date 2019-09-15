@@ -74,7 +74,13 @@
 					<li {% if id == active_page %} class="current_page_item" {% endif %}><a href="{{href}}">{{caption}}</a></li>
 					{% endfor %}
 					<li {% if creds != none %} style="display: visible;" {% endif %}><a class="login trigger_popup_fricc" id="create_new_proj" href="#">Create New Project</a></li>
-					<li style="float:right;"><a class="login" id="login" style="" href="/gitlogin">Login</a></li>
+
+					{% if creds == None %}
+						<li style="float:right;"><a class="login" id="login" style="" href="/gitlogin">Login</a></li>
+					{% endif %}
+					{% if creds != None %}
+						<li style="float:right;"><a class="login" id="login" style="" href="/logout">{{creds}}</a></li>
+					{% endif %}
 				</ul>
 			</div>
 		</div>
