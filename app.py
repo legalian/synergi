@@ -31,7 +31,9 @@ app.register_blueprint(blueprint, url_prefix="/login")
 
 def gitcreds():
 	if not github.authorized: return None
+	print("sidjfoisdf")
 	resp = github.get("/user")
+	print("oiwjfeoiwjef")
 	return resp.json()["login"]
 
 
