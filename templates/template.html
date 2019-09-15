@@ -27,7 +27,9 @@
 	       $('.hover_bkgr_fricc').show();
 	    	});
 	    $('.hover_bkgr_fricc').click(function(){
-	        $('.hover_bkgr_fricc').hide();
+	        if ($('#elem').is(":hover") == false){
+	        	$('.hover_bkgr_fricc').hide();
+	        }
 	    	});
 	    $('.popupCloseButton').click(function(){
 	    	$('.hover_bkgr_fricc').hide();
@@ -61,9 +63,21 @@
 </div>
 <div class="hover_bkgr_fricc">
     <span class="helper"></span>
-    <div>
+    <div class = "popup_html_fricc">
         <div class="popupCloseButton">X</div>
-        <p>Add any HTML content<br />inside the popup box!</p>
+        <form data-bind="submit: [CREATE NEW REPO]">
+        	<ul>
+		        <li class = "popup_list">
+			        <p>GitHub Repository Link: </p>
+			        <input data-bind="value: [REPO LINK]" placeholder="Name"/>
+			    </li>
+			    <li class = "popup_list">
+			    	<p>Description:</p>
+			    	<input data-bind="value: [DESCRIPTION]" />
+			    </li>
+			        <button type="submit">Submit</button>
+		    </ul>
+	    </form>
     </div>
 </div>
 {% block body %}

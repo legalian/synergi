@@ -324,7 +324,7 @@
     text-align:center;
     top:0;
     width:100%;
-    z-index:10000;
+    z-index:42;
 }
 .hover_bkgr_fricc .helper{
     display:inline-block;
@@ -370,7 +370,12 @@
     display: inline-block;
     font-weight: bold;*/
 }
-
+.popup_html_fricc{
+	z-index: 10001;
+}
+.popup_list{
+	display: inline;
+}
 
 
 /*********************************************************************************/
