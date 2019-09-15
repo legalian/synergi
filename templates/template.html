@@ -16,7 +16,6 @@
 	<link href="https://fonts.googleapis.com/css?family=Varela" rel="stylesheet" />
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.0/knockout-min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
@@ -41,25 +40,28 @@
 </head>
 <body>
 	<div id="header-wrapper" style="">
-	<div id="header" class="container" style="">
-		<div id="logo" style="display: flex">
-			<div style="display: flex; flex-direction: column; justify-content: center;">
-				<img style = "float:left; width:50px; height:50px;" src="/static/Synergi_Logo.png" alt="Logo"/>
+
+		<div id="header" class="container" style="">
+			<div id="logo" style="display: flex">
+				<div style="display: flex; flex-direction: column; justify-content: center;">
+					<img style = "float:left; width:50px; height:50px;" src="/static/Synergi_Logo.png" alt="Logo"/>
+				</div>
+				<div style="display: flex; flex-direction: column; justify-content: center;">
+					<h1 style=""><a href="/" style="">Synergi</a></h1>
+				</div>
 			</div>
-			<div style="display: flex; flex-direction: column; justify-content: center;">
-				<h1 style=""><a href="/" style="">Synergi</a></h1>
+			<div id="menu" style=" width:60%; ">
+				<ul style=" width:100%">
+					{% for href, id, caption in navigation_bar%}
+					<li {% if id == active_page %} class="current_page_item" {% endif %}><a href="{{href}}">{{caption}}</a></li>
+					{% endfor %}
+					<li {% if creds != none %} style="display: visible;" {% endif %}><a class="login trigger_popup_fricc" id="create_new_proj" href="#">Create New Project</a></li>
+					<li style="float:right;"><a class="login" id="login" style="" href="/gitlogin">Login</a></li>
+				</ul>
 			</div>
-		</div>
-		<div id="menu" style=" width:60%; ">
-			<ul style=" width:100%">
-				{% for href, id, caption in navigation_bar%}
-				<li {% if id == active_page %} class="current_page_item" {% endif %}><a href="{{href}}">{{caption}}</a></li>
-				{% endfor %}
-				<li {% if creds != none %} style="display: visible;" {% endif %}><a class="login trigger_popup_fricc" id="create_new_proj" href="#">Create New Project</a></li>
-				<li style="float:right;"><a class="login" id="login" style="" href="/login">Login</a></li>
-			</ul>
 		</div>
 	</div>
+<<<<<<< HEAD
 </div>
 <div class="hover_bkgr_fricc">
     <span class="helper"></span>
@@ -85,6 +87,7 @@
 <div id="copyright" class="container">
 	<p>&copy; 2019 || Website by Sil Apostu, Eric Durbin, Vamsi Kolluri, Parker Lawrence || All rights reserved. || Design by <a href="http://templated.co" rel="nofollow">TEMPLATED</a>.</p>
 </div>
+</body>
 
 
 

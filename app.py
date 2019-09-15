@@ -2,29 +2,42 @@ from flask import Flask, render_template, request, jsonify, redirect, url_for
 from flask_socketio import SocketIO, send, emit, join_room, leave_room
 from flask_sqlalchemy import SQLAlchemy
 from flask_dance.contrib.github import make_github_blueprint, github
+from flask_session import Session
 import requests
 # from flask.ext.heroku import Heroku
 import os
+# import eventlet
+# eventlet.monkey_patch()
+
 
 
 app = Flask(__name__)
 socketio = SocketIO(app)
 # heroku = Heroku(app)
 
-# app.config.from_object(os.environ['APP_SETTINGS'])
-# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-# db = SQLAlchemy(app)
+app.config.from_object(os.environ['APP_SETTINGS'])
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+Session(app)
 
 # from models import Project, Request, Session, TemFile
 
 
-# blueprint = make_github_blueprint(
-#     client_id=os.environ['GITHUB_CLIENT_ID'],
-#     client_secret=os.environ['GITHUB_CLIENT_SECRET'],
-# )
-# app.register_blueprint(blueprint, url_prefix="/gitcallback")
+blueprint = make_github_blueprint(
+    client_id=os.environ['GITHUB_CLIENT_ID'],
+    client_secret=os.environ['GITHUB_CLIENT_SECRET'],
+)
+app.register_blueprint(blueprint, url_prefix="/login")
 
 
+
+def gitcreds(github):
+	if not github.authorized: return None
+	print("sidjfoisdf")
+	resp = github.get("/user").json()["login"]
+	session['githubuser'] = resp
+	print("oiwjfeoiwjef")
+	return resp
 
 
 
@@ -35,28 +48,78 @@ def frickyouParker():
 
 @app.route("/")
 def index():
-	return render_template('index.html')
-
-
+	return render_template('index.html',creds=gitcreds(github))
 
 @app.route("/projectlist")
 def projectlist():
-	return render_template('todolist.html')
+	return render_template('todolist.html',creds=gitcreds(github))
+
+
+
+@app.route("/repos")
+def repos():
+	openrepos = []
+	res = []
+	for i in github.get("/user/repos").json():
+		repo = Project.query.filter_by(owner=str(i['owner']['login']),repo=str(data['name'])).first()
+		if repo != None:
+			res.append(repo.serialize())
+		openrepos.append({
+			'owner':str(i['owner']['login']),
+			'name':str(data['name']),
+			'branches':[p.name for p in github.get("/repos/"+str(i['owner']['login'])+"/"+str(data['name'])+"/branches").json()]
+		})
+	return {'openrepos':openrepos,'res':res}
+
+
+
+@app.route("/projects",methods=['POST'])
+def projects():
+	yam = request.json()
+	proj = Project(
+		name       = str(yam['name']),
+		repo       = str(yam['repo']),
+		branch     = str(yam['branch']),
+		owner      = str(yam['owner']),
+		description = str(yam['description'])
+	)
+	db.session.add(proj)
+	db.session.commit()
+	return projectlist();
+
+
+
+# @app.route("/projects/<int:id>",methods=['GET','PUT','DELETE'])
+# def project(id):
+# 	if request.method == 'GET':
+
+
+
+
+
 
 @app.route("/editor")
 def editor():
-	return render_template('editor.html')
+	return render_template('editor.html',creds=gitcreds(github))
 
-@app.route("/login")
+
+
+@app.route("/gitlogin")
 def login():
-    if not github.authorized:
-        return redirect(url_for("github.login"))
-    resp = github.get("/user")
-    return redirect("/")
-    # assert resp.ok
-    # print(resp.json())
-    # return "You are @{login} on GitHub".format(login=resp.json()["login"])
+	if not github.authorized:
+		return redirect(url_for("github.login"))
+	resp = github.get("/user")
+	return redirect("/")
 
+# @app.route("/login")
+# def login():
+#     if not github.authorized:
+#         return redirect(url_for("github.login"))
+#     resp = github.get("/user")
+#     return redirect("/")
+#     # assert resp.ok
+#     # print(resp.json())
+#     # return "You are @{login} on GitHub".format(login=resp.json()["login"])
 
 
 
@@ -68,7 +131,13 @@ def logout():
 
 
 
-
+@socketio.on('connect')
+def sdahoufa():
+	print("fuck you");
+	print("fuck you");
+	print("fuck you");
+	print("fuck you");
+	print("fuck you");
 
 
 
@@ -124,29 +193,47 @@ def directories():
 
 @socketio.on('join')
 def on_join(data):
-	repo = Session.query.filter_by(owner=str(data['owner']),repo=str(data['repo'])).first()
+	print("JOIN GOT")
+	repo = Project.query.filter_by(id=int(data['projectId'])).first()
+	print("REPO GOT")
 	if repo == None: return
+	creds=session['githubuser']
+	print("CREDS GOT")
+	if creds == None: return
 
 	sesh = Session.query.filter_by(project_id=int(repo.id)).first()
+	print("SESSION GOT")
 	if sesh == None:
 		master = github.get("/repos/"+session.owner+"/"+session.repo+"/branches/master",headers={'Authorization':'token '+github_token})
 		head_tree_sha = master.json()['commit']['commit']['tree']['sha']
+		print("COMMIT GOT")
 		sesh = Session(
 			owner      = repo.owner,
 			repo       = repo.repo,
 			branch     = repo.branch,
 			sha        = head_tree_sha,
 			project_id = repo.id,
-			activemembers = str(request.sid)
+			activemembers = creds
 		)
 		db.session.add(sesh)
+		print("SESSION ADD")
 	else:
-		sesh.activemembers = sesh.activemembers+","+str(request.sid)
+		print("COMMIT EXISTS")
+		sesh.activemembers = sesh.activemembers+","+creds
+	print("PRECOMMIT")
 	db.session.commit()
+	print("POSTCOMMIT")
+
 
 	join_room(str(repo.id)+","+str(sesh.id))
 	emit('accept',{'sessionId':sesh.id,'activemembers':sesh.activemembers},room=request.sid)
-	emit('player_join',{'name':request.sid},room=str(repo.id)+","+str(sesh.id),include_self=False)
+	emit('player_join',{'name':creds},room=str(repo.id)+","+str(sesh.id),include_self=False)
+
+
+	print("fuck asdfjanskdfyou");
+	print("fuck kyou");
+	print("fuck ydjfnjdfnou");
+	print("fuck jdnfjndjfyou");
 
 
 
@@ -158,7 +245,8 @@ def on_disconnect():
 			jj.remove(request.sid)
 		sesh.activemembers = ",".join(jj)
 	db.session.commit()
-	emit('player_leave',{'name':request.sid},include_self=False)
+	creds=session['githubuser']
+	emit('player_leave',{'name':creds},include_self=False)
 
 
 
