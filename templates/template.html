@@ -4,56 +4,81 @@
 							 ('/editor', 'editor', 'Editor'),
 							 ('/projectlist', 'projectlist', 'Browse'),
 							 ('/template','template','Template')] %}
+	{% set creds = "df" %}
+</body>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="description" content="" />
 	<meta name="keywords" content="" />
 	<link rel="stylesheet" href="static/css/styles.css">
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<link rel="stylesheet" href="static/css/header.css">
+<<<<<<< HEAD
 	<link href="https://fonts.googleapis.com/css?family=Varela" rel="stylesheet" />
 	<link href="static/css/default.css" rel="stylesheet" type="text/css" media="all" />
 	<link href="static/css/fonts.css" rel="stylesheet" type="text/css" media="all" />
+=======
+	<link href="static/css/fonts.css" rel="stylesheet" type="text/css" media="all" />
+	<link href="static/css/default.css" rel="stylesheet" type="text/css" media="all" />
+	<link href="https://fonts.googleapis.com/css?family=Varela" rel="stylesheet" />
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.0/knockout-min.js"></script>
+>>>>>>> 9fdc6af57e2295db7008a934fa76f266b9e19449
+
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.0/knockout-min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.6/ace.js" integrity="sha256-CVkji/u32aj2TeC+D13f7scFSIfphw2pmu4LaKWMSY8=" crossorigin="anonymous"></script>
+	<script type="text/javascript">
+		$(window).on('load', function () {
+	    $(".trigger_popup_fricc").click(function(){
+	       $('.hover_bkgr_fricc').show();
+	    	});
+	    $('.hover_bkgr_fricc').click(function(){
+	        $('.hover_bkgr_fricc').hide();
+	    	});
+	    $('.popupCloseButton').click(function(){
+	    	$('.hover_bkgr_fricc').hide();
+	    	});
+		});
 
+	</script>
 	<title>Synergi Code Editor</title>
 </head>
 <body>
 	<div id="header-wrapper" style="">
+
 		<div id="header" class="container" style="">
-			<div id="logo">
-				<h1><a href="/" style="">Synergi</a></h1>
+			<div id="logo" style="display: flex">
+				<div style="display: flex; flex-direction: column; justify-content: center;">
+					<img style = "float:left; width:50px; height:50px;" src="/static/Synergi_Logo.png" alt="Logo"/>
+				</div>
+				<div style="display: flex; flex-direction: column; justify-content: center;">
+					<h1 style=""><a href="/" style="">Synergi</a></h1>
+				</div>
 			</div>
 			<div id="menu" style=" width:60%; ">
 				<ul style=" width:100%">
 					{% for href, id, caption in navigation_bar%}
 					<li {% if id == active_page %} class="current_page_item" {% endif %}><a href="{{href}}">{{caption}}</a></li>
 					{% endfor %}
-					{% if creds == None %}
-						<li style="float:right;"><a class="login" id="login" style="" href="/gitlogin">Login</a></li>
-					{% endif %}
-					<li style="float:right;"><a class="login" id="login" style="" href="/logout">{{creds}}</a></li>
-
-					<!-- 
-					<li class=""><a href="/" accesskey="1" title="">Homepage</a></li>
-					<li><a href="/editor" accesskey="2" title="">Editor</a></li>
-					<li><a href="/projectlist" accesskey="3" title="">Browse</a></li>
-					<li class="current_page_item"><a href="/template" accesskey="4" title="">Template</a></li>
-					<li><a href="#" accesskey="5" title="">Contact Us</a></li> -->
+					<li {% if creds != none %} style="display: visible;" {% endif %}><a class="login trigger_popup_fricc" id="create_new_proj" href="#">Create New Project</a></li>
+					<li style="float:right;"><a class="login" id="login" style="" href="/gitlogin">Login</a></li>
 				</ul>
 			</div>
 		</div>
 	</div>
-{% block body %}
-{% endblock %}
+	<div class="hover_bkgr_fricc">
+	    <span class="helper"></span>
+	    <div>
+	        <div class="popupCloseButton">X</div>
+	        <p>Add any HTML content<br />inside the popup box!</p>
+	    </div>
+	</div>
+	{% block body %}
+	{% endblock %}
 	<div id="copyright" class="container">
-		<p>&copy; Untitled. All rights reserved. | Photos by <a href="http://fotogrph.com/">Fotogrph</a> | Design by <a href="http://templated.co" rel="nofollow">TEMPLATED</a>.</p>
+		<p>&copy; 2019 || Website by Sil Apostu, Eric Durbin, Vamsi Kolluri, Parker Lawrence || All rights reserved. || Design by <a href="http://templated.co" rel="nofollow">TEMPLATED</a>.</p>
 	</div>
 </body>
-
 
 
 

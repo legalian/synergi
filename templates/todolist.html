@@ -3,15 +3,75 @@
 {% set active_page = "projectlist" %}
 {% block body %}
 
+<style>
+	.project {
+		background: #EEE;
+		margin-top: 40px;
+		margin-left: 20%;
+		margin-right:20%;
+		border-radius: 8px;
+	}
+	.project ul{
+
+	}
+	.project ul li{
+		display: inline-block;
+		padding: 10px;
+		/*border-color: red;border-style: solid;border-width: 2px;*/
+
+	}
+	.edit{
+		float:right;
+	}
+	.edit a{
+		font-size: 1.5em;
+		box-shadow: none !important;
+		transition: none;
+		text-decoration: none;
+		color: inherit;
+		line-height: 1.8em;
+
+	}
+	.name {
+		font-size: 2em;
+	}
+
+	.expander{
+		float:left;
+	}
+	.dropdown {
+	  position: relative;
+	  display: inline-block;
+	}
+
+	.dropdown-content {
+	  display: none;
+	  position: absolute;
+	  background-color: #f9f9f9;
+	  min-width: 160px;
+	  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+	  padding: 12px 16px;
+	  z-index: 1;
+	}
+
+
+</style>
 
 <div id="extra" class="container" data-bind="foreach:results">
-	<div style="width: 80%;background-color:grey;">
-		Name:<div data-bind="text:name"></div>
-		Description:<div data-bind="text:description"></div>
-		repo:<div data-bind="text:repo"></div>
-		branch:<div data-bind="text:branch"></div>
-		<a data-bind="href='/editor?projectId='+id">edit</a>
-	</div>
+	<div class = "project">
+		<ul>
+			<li class="expander-edit" style=""><a href="">+</a></li>
+			<li class = "name">Name</li>
+			<li class="edit"><a data-bind="attr:{href:'/editor?projectId='+id}">Edit</a></li>		
+		</ul>
+		<ul>
+			<li><div data-bind="text:name"></div></li>
+			<li><div data-bind="text:description"></div></li>
+			<li>        <li>
+			<li>        <li>
+			<li><div data-bind="text:repo"></div><div data-bind="text:branch"></div></li>
+		</ul>
+	</div>	
 </div>
 
 <div id="myModal" class="modal">
@@ -37,6 +97,9 @@
 		</div>
 	</div>
 </div>
+
+
+	
 
 
 <script>
@@ -110,6 +173,9 @@ function AppViewModel() {
 ko.applyBindings(justice);
 
 </script>
+
+
+
 
 
 

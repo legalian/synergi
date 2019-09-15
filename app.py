@@ -20,7 +20,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 Session(app)
 
-from models import Project, Request, Session, TemFile
+# from models import Project, Request, Session, TemFile
 
 
 blueprint = make_github_blueprint(
@@ -41,6 +41,9 @@ def gitcreds(github):
 
 
 
+@app.route('/template')
+def frickyouParker():
+	return render_template('/template.html')
 
 
 @app.route("/")
