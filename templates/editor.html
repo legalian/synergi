@@ -187,7 +187,6 @@ function AppViewModel() {
 
 	socket.on('edit',function(data){
 		console.log("event edit",data)
-		var data = data.data;
 		if (self.activefile()==null) {return}
 		self.tabs().forEach(function(item){
 			if (item.path == self.activefile().path) {
@@ -210,11 +209,11 @@ function AppViewModel() {
 		self.activefile().content(yaya);
 		var amt = nthIndex(yaya,"\n",delta.start.row)+1+delta.start.column;
 		var msg = delta.lines.join("\n")
-		socket.emit('edit', {data:{
+		socket.emit('edit', {
 			delta:{amt:amt,msg:msg},
 			path:self.activefile().path,
 			sessionId:projectid
-		}});
+		});
 	});
 
 	self.activefile = ko.observable(null);
