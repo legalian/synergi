@@ -152,7 +152,7 @@ def sdahoufa():
 
 
 
-@app.route("/files")
+@app.route("/files",methods=['POST'])
 def files():
 	jak = request.json
 	sesh = Session.query.filter_by(id=int(jak['sessionId'])).first()

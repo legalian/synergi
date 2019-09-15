@@ -141,7 +141,7 @@ function File(data) {
 				callback();
 			};
 			$.ajax("/files", {
-				type: "GET",
+				type: "POST",
 				data: ko.toJSON({
 					sessionId:projectid,
 					path:self.path
