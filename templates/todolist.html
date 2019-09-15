@@ -61,11 +61,11 @@
 	<div class = "project">
 		<ul>
 			<li class="expander-edit" style=""><a href="">+</a></li>
-			<li class = "name">Name</li>
+			<li class = "name" data-bind="text:name">Name</li>
 			<li class="edit"><a data-bind="attr:{href:'/editor?projectId='+id}">Edit</a></li>		
 		</ul>
 		<ul>
-			<li><div data-bind="text:name"></div></li>
+			<li><div data-bind="text:owner"></div></li>
 			<li><div data-bind="text:description"></div></li>
 			<li>        <li>
 			<li>        <li>
