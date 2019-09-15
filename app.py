@@ -24,6 +24,11 @@ from models import Session, TemFile
 
 
 
+@app.route("/")
+def index():
+	return render_template('template.html')
+
+
 
 @app.route("/projectlist")
 def projectlist():
@@ -48,6 +53,7 @@ def logout():
 def gitcallback():
 	session_code = request.args.get('code')
 	res = requests.post('https://github.com/login/oauth/access_token',params={'accept':'json'},data={'client_id':CLIENT_ID,'client_secret':CLIENT_SECRET,'code':session_code})
+	print(res.content)
 	res = res.json()
 	print(res)
 	access_token = res['access_token']
@@ -58,6 +64,8 @@ def gitcallback():
 	)
 	db.session.add(user)
 	db.session.commit()
+
+	return redirect("/",code=302)
 
 
 
