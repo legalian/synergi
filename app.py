@@ -216,7 +216,7 @@ def joinjoin():
 	sesh = Session.query.filter_by(project_id=int(repo.id)).first()
 	print("SESSION GOT")
 	if sesh == None:
-		master = github.get("/repos/"+sesh.owner+"/"+sesh.repo+"/branches/"+sesh.branch)
+		master = github.get("/repos/"+repo.owner+"/"+repo.repo+"/branches/"+repo.branch)
 		head_tree_sha = master.json()['commit']['commit']['tree']['sha']
 		print("COMMIT GOT")
 		sesh = Session(
