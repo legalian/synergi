@@ -53,18 +53,43 @@ def projectlist():
 
 
 
+@app.route("/repos")
+def repos():
+	openrepos = []
+	res = []
+	for i in github.get("/user/repos").json():
+		repo = Project.query.filter_by(owner=str(i['owner']['login']),repo=str(data['name'])).first()
+		if repo != None:
+			res.append(repo.serialize())
+		openrepos.append({
+			'owner':str(i['owner']['login']),
+			'name':str(data['name']),
+			'branches':[p.name for p in github.get("/repos/"+str(i['owner']['login'])+"/"+str(data['name'])+"/branches").json()]
+		})
+	return {'openrepos':openrepos,'res':res}
 
-@app.route("/projects",methods=['GET','POST'])
+
+
+@app.route("/projects",methods=['POST'])
 def projects():
-	if request.method == 'GET':
+	yam = request.json()
+	proj = Project(
+		name       = str(yam['name']),
+		repo       = str(yam['repo']),
+		branch     = str(yam['branch']),
+		owner      = str(yam['owner']),
+		description = str(yam['description'])
+	)
+	db.session.add(proj)
+	db.session.commit()
+	return projectlist();
 
-	else:
 
 
-@app.route("/projects/<int:id>",methods=['GET','PUT','DELETE'])
-def project(id):
-	if request.method == 'GET':
-		
+# @app.route("/projects/<int:id>",methods=['GET','PUT','DELETE'])
+# def project(id):
+# 	if request.method == 'GET':
+
 
 
 
@@ -166,7 +191,7 @@ def directories():
 @socketio.on('join')
 def on_join(data):
 	print("JOIN GOT")
-	repo = Session.query.filter_by(owner=str(data['owner']),repo=str(data['repo'])).first()
+	repo = Project.query.filter_by(id=int(data['projectId'])).first()
 	print("REPO GOT")
 	if repo == None: return
 	creds=session['githubuser']

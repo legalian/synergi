@@ -61,8 +61,7 @@ $.urlParam = function (name) {
     return (results !== null) ? results[1] || 0 : false;
 }
 
-var owner = $.urlParam('owner')
-var repo  = $.urlParam('repo')
+var suhd = $.urlParam('projectId')
 
 var COLORS = shuffle([
     '#e21400', '#91580f', '#f8a700', '#f78b00',
@@ -77,15 +76,12 @@ var colori = 0;
 var socket = io(window.location.origin.replace(/^http/, 'ws'),{transports: ['polling']});//,{query:'loggeduser=user1'}
 
 socket.on('connect', function() {
-socket.emit('join',{owner:owner,repo:repo})
+socket.emit('join',{projectId:suhd})
 socket.on('accept',function(servedata){
 
 var projectid = servedata.sessionId
 
 var justice = new AppViewModel();
-
-
-//GET /repos/:owner/:repo/git/trees/:tree_sha?recursive=1
 
 
 
