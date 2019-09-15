@@ -38,7 +38,7 @@ def gitcreds(github):
 	print("sidjfoisdf")
 	resp = github.get("/user").json()["login"]
 	session['githubuser'] = resp
-	print(session.get('github_oath_token'))
+	print(session.get('github_oauth'))
 	# session['github'] = github
 	print("oiwjfeoiwjef")
 	return resp
