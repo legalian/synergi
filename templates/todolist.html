@@ -108,8 +108,8 @@
 
 <div id="extra" class="container" data-bind="foreach:results">
 	<div class = "project wrap-collabsible">
-		<input id="collapsible" class="toggle" type="checkbox">
-		<label for="collapsible" class="lbl-toggle" data-bind="text:name">[Name]</label>
+		<input data-bind="id:$index()" class="toggle" type="checkbox">
+		<label data-bind="attr:{for:$index()}" class="lbl-toggle" data-bind="text:name">[Name]</label>
 		<div class="collapsible-content">
 			<ul>
 				<li class = "name" data-bind="text:name">Name</li>
