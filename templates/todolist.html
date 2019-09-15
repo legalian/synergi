@@ -87,21 +87,21 @@
 <div id="extra" class="container" data-bind="foreach:results">
 	<div class = "project wrap-collabsible">
 		<input id="collapsible" class="toggle" type="checkbox">
-		<label for="collapsible" class="lbl-toggle">[Name]</label>
+		<label for="collapsible" class="lbl-toggle" data-bind="text:name">[Name]</label>
 		<div class="collapsible-content">
-		<ul>
-			<li class = "name">Name</li>
-			<li class="edit"><a data-bind="attr:{href:'/editor?projectId='+id}">Edit</a></li>	
-		</ul>
-		<ul class ="content-inner">
-			<li><div>Description:  </div></li>
-			<li><div data-bind="text:description"></div></li>
-			<li>Repository:  <div data-bind="text:repo"></div>Branch:  <div data-bind="text:branch"></div></li>
-		</ul>
-	</div>	
+			<ul>
+				<li class = "name" data-bind="text:name">Name</li>
+				<li class="edit"><a data-bind="attr:{href:'/editor?projectId='+id}">Edit</a></li>	
+			</ul>
+			<ul class ="content-inner">
+				<li><div>Description:  </div></li>
+				<li><div data-bind="text:description"></div></li>
+				<li>Repository:  <div data-bind="text:repo"></div>Branch:  <div data-bind="text:branch"></div></li>
+			</ul>
+		</div>	
+	</div>
 </div>
-</div>
-<div id="extra" class="container">
+<!-- <div id="extra" class="container">
 	<div class = "project wrap-collabsible">
 		<input id="collapsible" class="toggle" type="checkbox">
 		<label for="collapsible" class="lbl-toggle">[Name]</label>
@@ -116,23 +116,9 @@
 			<li><div id="repo">Repository:    legalian</div><div id = "branch">Branch:    synergi</div></li>
 		</ul>
 	</div>
-	</div>	
-</div>
-
-<!-- <div id="myModal" class="modal">
-
-	<div class="modal-content">
-		<div class="modal-header">
-			<span class="close">&times;</span>
-			<h2>Import Repo</h2>
-		</div>
-		<div class="modal-body">
-		</div>
-		<div class="modal-footer">
-		</div>
 	</div>
-</div>
- -->
+</div> -->
+
 
 	
 
@@ -181,7 +167,7 @@ function AppViewModel() {
 		return self.repos()[ind].branches
 	})
 	self.owner = ko.computed(function(){
-		var ind = self.repochoices().indexOf(self.activerepo)
+		var ind = self.repochoices().indexOf(self.activerepo())
 		if (ind == -1) {return null}
 		return self.repos()[ind].owner
 	});

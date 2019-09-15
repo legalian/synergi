@@ -76,7 +76,21 @@ var colori = 0;
 var socket = io(window.location.origin.replace(/^http/, 'ws'),{transports: ['polling']});//,{query:'loggeduser=user1'}
 
 socket.on('connect', function() {
+$.ajax("/join", {
+	type: "POST",
+	contentType: "application/json",
+	data: ko.toJSON({
+		projectId:suhd
+	}),
+	success: function(data){
+
+
+
+
 socket.emit('join',{projectId:suhd})
+
+
+
 socket.on('accept',function(servedata){
 
 var projectid = servedata.sessionId
@@ -128,10 +142,11 @@ function File(data) {
 			};
 			$.ajax("/files", {
 				type: "GET",
-				data: {
+				data: ko.toJSON({
 					projectid:projectid,
 					path:self.path
-				},
+				}),
+				contentType: "application/json",
 				success: function(data){
 					self.content(data);
 					callback();
@@ -195,7 +210,7 @@ function AppViewModel() {
 		socket.emit('edit', {data:{
 			delta:{amt:amt,msg:msg},
 			path:self.activefile().path,
-			projectid:projectid
+			projectId:projectid
 		}});
 	});
 
@@ -223,10 +238,11 @@ function AppViewModel() {
 	self.users = ko.observableArray([]);
 
 	$.ajax("/directories", {
-		type: "GET",
-		data: {
-			projectid:projectid
-		},
+		type: "POST",
+		contentType: "application/json",
+		data: ko.toJSON({
+			projectId:projectid
+		}),
 		success: function(data){
 			data.tree.forEach(function(ra){
 				ra.title = ra.path;
@@ -250,6 +266,8 @@ function AppViewModel() {
 ko.applyBindings(justice);
 
 
+});
+}
 });
 });
 

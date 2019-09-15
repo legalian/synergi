@@ -62,7 +62,6 @@
 </head>
 <body>
 	<div id="header-wrapper" style="">
-
 		<div id="header" class="container" style="">
 			<div id="logo" style="display: flex">
 				<div style="display: flex; flex-direction: column; justify-content: center;">
@@ -78,7 +77,12 @@
 					<li {% if id == active_page %} class="current_page_item" {% endif %}><a href="{{href}}">{{caption}}</a></li>
 					{% endfor %}
 					<li {% if active_page != 'projectlist' %} style="display:none;" {% endif %}><a class="login trigger_popup_fricc" id="create_new_proj" href="#">Create New Project</a></li>
-					<li style="float:right;"><a class="login" id="login" style="" href="/gitlogin">Login</a></li>
+					{% if creds == None %}
+						<li style="float:right;"><a class="login" id="login" style="" href="/gitlogin">Login</a></li>
+					{% endif %}
+					{% if creds != None %}
+						<li style="float:right;"><a class="login" id="login" style="" href="/logout">{{creds}}</a></li>
+					{% endif %}
 				</ul>
 			</div>
 		</div>
@@ -108,18 +112,10 @@
 			Name of Project: <input class="input_" type="text" name="name"><br>
 				Description: <input class="input_" type="text" name="description"><br>
 				<span class="custom-dropdown">
-				Repo: <select name="repo" data-bind="options: repochoices()">
-					<option>1</option>
-					<option>2</option>
-					<option>3</option>
-				</select>
+				Repo: <select name="repo" data-bind="options: repochoices()"></select>
 			</span>
 			<span class="custom-dropdown">
-				Branch: <select name="branch" data-bind="options: branches()">
-					<option>1</option>
-					<option>2</option>
-					<option>3</option>
-				</select>
+				Branch: <select name="branch" data-bind="options: branches()"></select>
 				</span>
 				<input id="" class="btn" type="submit" value="Import Project">
 			</form>

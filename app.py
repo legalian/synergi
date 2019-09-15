@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, redirect, url_for
+from flask import Flask, render_template, request, jsonify, redirect, url_for, session
 from flask_socketio import SocketIO, send, emit, join_room, leave_room
 from flask_sqlalchemy import SQLAlchemy
 from flask_dance.contrib.github import make_github_blueprint, github
@@ -10,22 +10,24 @@ import os
 # eventlet.monkey_patch()
 
 
+# from flask_dance.consumer.storage import BaseStorage
+
+
 
 app = Flask(__name__)
 socketio = SocketIO(app)
 # heroku = Heroku(app)
-
-# app.config.from_object(os.environ['APP_SETTINGS'])
+app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 Session(app)
 
-# from models import Project, Request, Session, TemFile
+from models import Project, Session, TemFile
 
 
 blueprint = make_github_blueprint(
-    # client_id=os.environ['GITHUB_CLIENT_ID'],
-    # client_secret=os.environ['GITHUB_CLIENT_SECRET'],
+    client_id=os.environ['GITHUB_CLIENT_ID'],
+    client_secret=os.environ['GITHUB_CLIENT_SECRET'],
 )
 app.register_blueprint(blueprint, url_prefix="/login")
 
@@ -36,6 +38,8 @@ def gitcreds(github):
 	print("sidjfoisdf")
 	resp = github.get("/user").json()["login"]
 	session['githubuser'] = resp
+	print(session.get('github_oauth'))
+	# session['github'] = github
 	print("oiwjfeoiwjef")
 	return resp
 
@@ -61,13 +65,18 @@ def repos():
 	openrepos = []
 	res = []
 	for i in github.get("/user/repos").json():
-		repo = Project.query.filter_by(owner=str(i['owner']['login']),repo=str(data['name'])).first()
+		print("accessing:"+str(i['owner']['login'])+","+str(i['name']))
+		print([k.serialize() for k in Project.query.all()])
+
+
+		repo = Project.query.filter_by(owner=str(i['owner']['login']),repo=str(i['name'])).first()
 		if repo != None:
 			res.append(repo.serialize())
+
 		openrepos.append({
 			'owner':str(i['owner']['login']),
-			'name':str(data['name']),
-			'branches':[p.name for p in github.get("/repos/"+str(i['owner']['login'])+"/"+str(data['name'])+"/branches").json()]
+			'name':str(i['name']),
+			'branches':[p['name'] for p in github.get("/repos/"+str(i['owner']['login'])+"/"+str(i['name'])+"/branches").json()]
 		})
 	return {'openrepos':openrepos,'res':res}
 
@@ -75,7 +84,7 @@ def repos():
 
 @app.route("/projects",methods=['POST'])
 def projects():
-	yam = request.json()
+	yam = request.form
 	proj = Project(
 		name       = str(yam['name']),
 		repo       = str(yam['repo']),
@@ -145,18 +154,19 @@ def sdahoufa():
 
 @app.route("/files")
 def files():
-	session = Session.query.filter_by(id=int(request.json['sessionId'])).first()
-	if session == None: return
-	book = TemFile.query.filter_by(session_id = int(session.id),path=str(request.json['path'])).first()
+	jak = request.json
+	sesh = Session.query.filter_by(id=int(jak['sessionId'])).first()
+	if sesh == None: return
+	book = TemFile.query.filter_by(session_id = int(sesh.id),path=str(jak['path'])).first()
 	if book == None:
-		r = github.get("/repos/"+session.owner+"/"+session.repo+"/contents/"+request.json['path']+"?ref="+session.branch)
+		r = github.get("/repos/"+sesh.owner+"/"+sesh.repo+"/contents/"+jak['path']+"?ref="+sesh.branch)
 		if r.status_code != 200:
 			print(r.content)
 			return
 		con = r.json()
 		book = TemFile(
-			session_id = session.id,
-			path = request.json['path'],
+			session_id = sesh.id,
+			path = jak['path'],
 			content = con['content'],
 			sha = con['sha']
 		)
@@ -169,9 +179,9 @@ def files():
 
 @socketio.on('edit')
 def handle_edit(edit):
-	session = Session.query.filter_by(id=int(request.json['sessionId'])).first()
-	if session == None: return
-	book = TemFile.query.filter_by(session_id = int(session.id),path=str(request.json['path'])).first()
+	sesh = Session.query.filter_by(id=int(edit['sessionId'])).first()
+	if sesh == None: return
+	book = TemFile.query.filter_by(session_id = int(sesh.id),path=str(edit['path'])).first()
 	if book == None: return
 	book.content = book.content[:edit.delta.amt]+edit.delta.msg+book.content[edit.delta.amt:]
 	db.session.commit()
@@ -180,15 +190,49 @@ def handle_edit(edit):
 
 	
 
-@app.route("/directories")
+@app.route("/directories",methods=['POST'])
 def directories():
-	session = Session.query.filter_by(id=int(request.json['sessionId'])).first()
-	if session == None: return
-	r = github.get("/repos/"+session.owner+"/"+session.repo+"/git/trees/"+session.sha+"?recursive=1,ref="+session.branch)
+	sesh = Session.query.filter_by(id=int(request.json['sessionId'])).first()
+	if sesh == None: return
+	r = github.get("/repos/"+sesh.owner+"/"+sesh.repo+"/git/trees/"+sesh.sha+"?recursive=1,ref="+sesh.branch)
 	if r.status_code != 200:
 		print(r.content)
 		return
 	return r.json()
+
+
+
+@app.route("/join", methods=['POST'])
+def joinjoin():
+	data = request.json
+	print("JOIN GOT")
+	repo = Project.query.filter_by(id=int(data['projectId'])).first()
+	print("REPO GOT")
+	if repo == None: return
+	creds=session['githubuser']
+	print("CREDS GOT")
+	if creds == None: return
+
+	sesh = Session.query.filter_by(project_id=int(repo.id)).first()
+	print("SESSION GOT")
+	if sesh == None:
+		master = github.get("/repos/"+repo.owner+"/"+repo.repo+"/branches/"+repo.branch)
+		head_tree_sha = master.json()['commit']['commit']['tree']['sha']
+		print("COMMIT GOT")
+		sesh = Session(
+			owner      = repo.owner,
+			repo       = repo.repo,
+			branch     = repo.branch,
+			sha        = head_tree_sha,
+			project_id = repo.id,
+			activemembers = ""
+		)
+		db.session.add(sesh)
+		print("SESSION ADD")
+		db.session.commit()
+	return "OK"
+
+
 
 
 @socketio.on('join')
@@ -202,24 +246,8 @@ def on_join(data):
 	if creds == None: return
 
 	sesh = Session.query.filter_by(project_id=int(repo.id)).first()
-	print("SESSION GOT")
-	if sesh == None:
-		master = github.get("/repos/"+session.owner+"/"+session.repo+"/branches/master",headers={'Authorization':'token '+github_token})
-		head_tree_sha = master.json()['commit']['commit']['tree']['sha']
-		print("COMMIT GOT")
-		sesh = Session(
-			owner      = repo.owner,
-			repo       = repo.repo,
-			branch     = repo.branch,
-			sha        = head_tree_sha,
-			project_id = repo.id,
-			activemembers = creds
-		)
-		db.session.add(sesh)
-		print("SESSION ADD")
-	else:
-		print("COMMIT EXISTS")
-		sesh.activemembers = sesh.activemembers+","+creds
+	if sesh == None: return
+	sesh.activemembers = sesh.activemembers+","+creds
 	print("PRECOMMIT")
 	db.session.commit()
 	print("POSTCOMMIT")
