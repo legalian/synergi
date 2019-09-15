@@ -115,7 +115,7 @@ function Directory(data){
 				self.children.push(new Directory(ra));
 			}
 		} else {
-			self.children[self.children().length-1].radd(ra);
+			self.children()[self.children().length-1].radd(ra);
 		}
 	}
 	self.click = function(){}
@@ -255,7 +255,7 @@ function AppViewModel() {
 						self.children.push(new Directory(ra));
 					}
 				} else {
-					self.children[self.children().length-1].radd(ra);
+					self.children()[self.children().length-1].radd(ra);
 				}
 			});
 		}
