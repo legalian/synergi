@@ -3,6 +3,7 @@ from flask_socketio import SocketIO, send, emit, join_room, leave_room
 from flask_sqlalchemy import SQLAlchemy
 from flask_dance.contrib.github import make_github_blueprint, github
 from flask_session import Session
+import base64
 import requests
 # from flask.ext.heroku import Heroku
 import os
@@ -170,7 +171,7 @@ def files():
 		book = TemFile(
 			session_id = sesh.id,
 			path = jak['path'],
-			content = con['content'],
+			content = base64.decodestring(con['content']),
 			sha = con['sha']
 		)
 		print("book added")

@@ -213,7 +213,7 @@ function AppViewModel() {
 		socket.emit('edit', {data:{
 			delta:{amt:amt,msg:msg},
 			path:self.activefile().path,
-			projectId:projectid
+			sessionId:projectid
 		}});
 	});
 
