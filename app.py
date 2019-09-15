@@ -28,7 +28,9 @@ socketio = SocketIO(app)
 
 
 
-
+@app.route('/template')
+def frickyouParker():
+	return render_template('/template.html')
 
 
 @app.route("/")
