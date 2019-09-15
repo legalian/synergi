@@ -5,6 +5,9 @@ from flask_dance.contrib.github import make_github_blueprint, github
 import requests
 # from flask.ext.heroku import Heroku
 import os
+import eventlet
+eventlet.monkey_patch()
+
 
 
 app = Flask(__name__)
