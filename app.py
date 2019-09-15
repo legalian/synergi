@@ -56,6 +56,8 @@ def index():
 
 @app.route("/projectlist")
 def projectlist():
+	if not github.authorized:
+		return redirect(url_for("github.login"))
 	return render_template('todolist.html',creds=gitcreds(github))
 
 
