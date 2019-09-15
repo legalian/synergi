@@ -1,9 +1,8 @@
 <html>
 <head>
 	{% set navigation_bar = [('/', 'index', 'Index'),
-							 ('/editor', 'editor', 'Editor'),
-							 ('/projectlist', 'projectlist', 'Browse'),
-							 ('/template','template','Template')] %}
+							 ('/projectlist', 'projectlist', 'Browse')] %}
+	
 </body>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="description" content="" />
@@ -73,7 +72,7 @@
 					{% for href, id, caption in navigation_bar%}
 					<li {% if id == active_page %} class="current_page_item" {% endif %}><a href="{{href}}">{{caption}}</a></li>
 					{% endfor %}
-					<li {% if creds != none %} style="display: visible;" {% endif %}><a class="login trigger_popup_fricc" id="create_new_proj" href="#">Create New Project</a></li>
+					<li {% if active_page != 'projectlist' %} style="display:none;" {% endif %}><a class="login trigger_popup_fricc" id="create_new_proj" href="#">Create New Project</a></li>
 					<li style="float:right;"><a class="login" id="login" style="" href="/gitlogin">Login</a></li>
 				</ul>
 			</div>
@@ -81,19 +80,43 @@
 	</div>
 
 </div>
+
+<!-- <span class="custom-dropdown">
+    <select>
+        <option>Sherlock Holmes</option>
+        <option>The Great Gatsby</option>  
+        <option>V for Vendetta</option>
+        <option>The Wolf of Wallstreet</option>
+        <option>Quantum of Solace</option>
+    </select>
+</span> -->
+
+
+
 <div class="hover_bkgr_fricc">
     <span class="helper"></span>
     <div class = "popup_html_fricc">
         <div class="popupCloseButton">X</div>
         <form action = "/projects" method = "POST">
-
-				<input type="hidden" name="owner" data-bind="owner">
-				Name of Project: <input type="text" name="name"><br>
-				Description: <input type="text" name="description"><br>
-				Repo: <select name="repo" data-bind="options: repochoices()"></select>
-				Branch: <select name="branch" data-bind="options: branches()"></select>
-
-				<input type="submit" value="Import Project">
+        	<h2>Import Project</h2>
+			<input type="hidden" name="owner" data-bind="owner">
+			Name of Project: <input class="input_" type="text" name="name"><br>
+				Description: <input class="input_" type="text" name="description"><br>
+				<span class="custom-dropdown">
+				Repo: <select name="repo" data-bind="options: repochoices()">
+					<option>1</option>
+					<option>2</option>
+					<option>3</option>
+				</select>
+			</span>
+			<span class="custom-dropdown">
+				Branch: <select name="branch" data-bind="options: branches()">
+					<option>1</option>
+					<option>2</option>
+					<option>3</option>
+				</select>
+				</span>
+				<input id="" class="btn" type="submit" value="Import Project">
 			</form>
     </div>
 </div>
