@@ -1,1 +1,9 @@
 __pycache__
+get-pip.py
+venv
+__pycache__/
+env/
+*.pyc
+.DS_Store
+.env
+
