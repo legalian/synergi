@@ -171,7 +171,7 @@ def files():
 		book = TemFile(
 			session_id = sesh.id,
 			path = jak['path'],
-			content = base64.b64decode(con['content']),
+			content = con['content'],
 			sha = con['sha']
 		)
 		print("book added")
