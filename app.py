@@ -78,7 +78,11 @@ def logout():
 
 @socketio.on('connect')
 def sdahoufa():
-	pass
+	print("fuck you");
+	print("fuck you");
+	print("fuck you");
+	print("fuck you");
+	print("fuck you");
 
 
 
