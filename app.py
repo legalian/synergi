@@ -160,6 +160,7 @@ def files():
 	sesh = Session.query.filter_by(id=int(jak['sessionId'])).first()
 	if sesh == None: return
 	book = TemFile.query.filter_by(session_id = int(sesh.id),path=str(jak['path'])).first()
+	print(book)
 	if book == None:
 		r = github.get("/repos/"+sesh.owner+"/"+sesh.repo+"/contents/"+jak['path']+"?ref="+sesh.branch)
 		if r.status_code != 200:
@@ -172,6 +173,7 @@ def files():
 			content = con['content'],
 			sha = con['sha']
 		)
+		print("book added")
 		db.session.add(book)
 		db.session.commit()
 	return book.content
@@ -208,20 +210,15 @@ def directories():
 @app.route("/join", methods=['POST'])
 def joinjoin():
 	data = request.json
-	print("JOIN GOT")
 	repo = Project.query.filter_by(id=int(data['projectId'])).first()
-	print("REPO GOT")
 	if repo == None: return
 	creds=session['githubuser']
-	print("CREDS GOT")
 	if creds == None: return
 
 	sesh = Session.query.filter_by(project_id=int(repo.id)).first()
-	print("SESSION GOT")
 	if sesh == None:
 		master = github.get("/repos/"+repo.owner+"/"+repo.repo+"/branches/"+repo.branch)
 		head_tree_sha = master.json()['commit']['commit']['tree']['sha']
-		print("COMMIT GOT")
 		sesh = Session(
 			owner      = repo.owner,
 			repo       = repo.repo,
@@ -231,7 +228,6 @@ def joinjoin():
 			activemembers = ""
 		)
 		db.session.add(sesh)
-		print("SESSION ADD")
 		db.session.commit()
 	return "OK"
 
@@ -240,31 +236,21 @@ def joinjoin():
 
 @socketio.on('join')
 def on_join(data):
-	print("JOIN GOT")
 	repo = Project.query.filter_by(id=int(data['projectId'])).first()
-	print("REPO GOT")
 	if repo == None: return
 	creds=session['githubuser']
-	print("CREDS GOT")
 	if creds == None: return
 
 	sesh = Session.query.filter_by(project_id=int(repo.id)).first()
 	if sesh == None: return
 	sesh.activemembers = sesh.activemembers+","+creds
-	print("PRECOMMIT")
 	db.session.commit()
-	print("POSTCOMMIT")
 
 
 	join_room(str(repo.id)+","+str(sesh.id))
 	emit('accept',{'sessionId':sesh.id,'activemembers':sesh.activemembers},room=request.sid)
 	emit('player_join',{'name':creds},room=str(repo.id)+","+str(sesh.id),include_self=False)
 
-
-	print("fuck asdfjanskdfyou");
-	print("fuck kyou");
-	print("fuck ydjfnjdfnou");
-	print("fuck jdnfjndjfyou");
 
 
 

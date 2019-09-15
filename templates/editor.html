@@ -186,6 +186,7 @@ function AppViewModel() {
 	self.listening = 0;
 
 	socket.on('edit',function(data){
+		console.log("event edit",data)
 		var data = data.data;
 		if (self.activefile()==null) {return}
 		self.tabs().forEach(function(item){
@@ -201,8 +202,10 @@ function AppViewModel() {
 		}
 	});
 	self.editor.session.on('change', function(delta) {
+		console.log("change edit(B)",data)
 		if (self.activefile()==null) {return}
 		if (self.listening != 0) {return}
+		console.log("change edit",data)
 		var yaya = self.editor.getValue()
 		self.activefile().content(yaya);
 		var amt = nthIndex(yaya,"\n",delta.start.row)+1+delta.start.column;
