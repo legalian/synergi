@@ -61,9 +61,9 @@ def repos():
 	res = []
 	for i in github.get("/user/repos").json():
 		print("accessing:"+str(i['owner']['login'])+","+str(i['name']))
-		print(Project.query.all())
+		print([k.serialize() for k in Project.query.all()])
 
-		
+
 		repo = Project.query.filter_by(owner=str(i['owner']['login']),repo=str(i['name'])).first()
 		if repo != None:
 			res.append(repo.serialize())
