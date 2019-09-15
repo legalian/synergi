@@ -165,6 +165,12 @@ def on_join(data):
 	emit('player_join',{'name':creds},room=str(repo.id)+","+str(sesh.id),include_self=False)
 
 
+	print("fuck asdfjanskdfyou");
+	print("fuck kyou");
+	print("fuck ydjfnjdfnou");
+	print("fuck jdnfjndjfyou");
+
+
 
 @socketio.on('disconnect')
 def on_disconnect():
