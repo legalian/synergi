@@ -74,7 +74,7 @@ var colori = 0;
 // var host = window.location.origin.replace(/^http/, 'ws');
 // this.connection = new WebSocket(host);
 
-var socket = io(window.location.origin,{transports: ['websocket']});//,{query:'loggeduser=user1'}
+var socket = io(window.location.origin.replace(/^http/, 'ws'),{transports: ['websocket']});//,{query:'loggeduser=user1'}
 
 socket.on('connect', function() {
 socket.emit('join',{owner:owner,repo:repo})
