@@ -76,7 +76,7 @@ var colori = 0;
 var socket = io(window.location.origin.replace(/^http/, 'ws'),{transports: ['polling']});//,{query:'loggeduser=user1'}
 
 socket.on('connect', function() {
-$.ajax("/files", {
+$.ajax("/join", {
 	type: "POST",
 	data: {
 		projectid:suhd
