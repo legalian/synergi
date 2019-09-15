@@ -63,10 +63,11 @@ def repos():
 		repo = Project.query.filter_by(owner=str(i['owner']['login']),repo=str(i['name'])).first()
 		if repo != None:
 			res.append(repo.serialize())
+
 		openrepos.append({
 			'owner':str(i['owner']['login']),
 			'name':str(i['name']),
-			'branches':[p.name for p in github.get("/repos/"+str(i['owner']['login'])+"/"+str(i['name'])+"/branches").json()]
+			'branches':[p['name'] for p in github.get("/repos/"+str(i['owner']['login'])+"/"+str(i['name'])+"/branches").json()]
 		})
 	return {'openrepos':openrepos,'res':res}
 
