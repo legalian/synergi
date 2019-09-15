@@ -76,7 +76,18 @@ var colori = 0;
 var socket = io(window.location.origin.replace(/^http/, 'ws'),{transports: ['polling']});//,{query:'loggeduser=user1'}
 
 socket.on('connect', function() {
+$.ajax("/files", {
+	type: "POST",
+	data: {
+		projectid:projectid
+	},
+	success: function(data){
+
+
 socket.emit('join',{projectId:suhd})
+
+
+
 socket.on('accept',function(servedata){
 
 var projectid = servedata.sessionId
@@ -250,6 +261,8 @@ function AppViewModel() {
 ko.applyBindings(justice);
 
 
+});
+}
 });
 });
 

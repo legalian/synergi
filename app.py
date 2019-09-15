@@ -201,8 +201,10 @@ def directories():
 	return r.json()
 
 
-@socketio.on('join')
-def on_join(data):
+
+@app.route("/join", methods=['POST'])
+def joinjoin():
+	data = request.json()
 	print("JOIN GOT")
 	repo = Project.query.filter_by(id=int(data['projectId'])).first()
 	print("REPO GOT")
@@ -223,13 +225,29 @@ def on_join(data):
 			branch     = repo.branch,
 			sha        = head_tree_sha,
 			project_id = repo.id,
-			activemembers = creds
+			activemembers = ""
 		)
 		db.session.add(sesh)
 		print("SESSION ADD")
-	else:
-		print("COMMIT EXISTS")
-		sesh.activemembers = sesh.activemembers+","+creds
+		db.session.commit()
+	return "OK"
+
+
+
+
+@socketio.on('join')
+def on_join(data):
+	print("JOIN GOT")
+	repo = Project.query.filter_by(id=int(data['projectId'])).first()
+	print("REPO GOT")
+	if repo == None: return
+	creds=session['githubuser']
+	print("CREDS GOT")
+	if creds == None: return
+
+	sesh = Session.query.filter_by(project_id=int(repo.id)).first()
+	if sesh == None: return
+	sesh.activemembers = sesh.activemembers+","+creds
 	print("PRECOMMIT")
 	db.session.commit()
 	print("POSTCOMMIT")
