@@ -22,7 +22,7 @@ blueprint = make_github_blueprint(
     client_id=os.environ['GITHUB_CLIENT_ID'],
     client_secret=os.environ['GITHUB_CLIENT_SECRET'],
 )
-app.register_blueprint(blueprint, url_prefix="/gitcallback")
+app.register_blueprint(blueprint, url_prefix="/login")
 
 
 
@@ -45,16 +45,22 @@ def projectlist():
 def editor():
 	return render_template('editor.html')
 
-@app.route("/login")
+@app.route("/gitlogin")
 def login():
-    if not github.authorized:
-        return redirect(url_for("github.login"))
-    resp = github.get("/user")
-    return redirect("/")
-    # assert resp.ok
-    # print(resp.json())
-    # return "You are @{login} on GitHub".format(login=resp.json()["login"])
+	if not github.authorized:
+		return redirect(url_for("github.login"))
+	resp = github.get("/user")
+	return redirect("/")
 
+# @app.route("/login")
+# def login():
+#     if not github.authorized:
+#         return redirect(url_for("github.login"))
+#     resp = github.get("/user")
+#     return redirect("/")
+#     # assert resp.ok
+#     # print(resp.json())
+#     # return "You are @{login} on GitHub".format(login=resp.json()["login"])
 
 
 
@@ -66,7 +72,9 @@ def logout():
 
 
 
-
+@socketio.on('connect')
+def sdahoufa():
+	pass
 
 
 
