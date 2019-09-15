@@ -82,16 +82,6 @@
 			<h2>Import Repo</h2>
 		</div>
 		<div class="modal-body">
-			<form action = "/projects" method = "POST">
-
-				<input type="hidden" name="owner" data-bind="owner">
-				Project Name: <input type="text" name="name"><br>
-				Description: <input type="text" name="description"><br>
-				Repo: <select name="repo" data-bind="options: repochoices()"></select>
-				Branch: <select name="branch" data-bind="options: branches()"></select>
-
-				<input type="submit" value="Import Project">
-			</form>
 		</div>
 		<div class="modal-footer">
 		</div>
@@ -108,20 +98,20 @@
 
 
 
-var modal = document.getElementById("myModal");
-var span = document.getElementsByClassName("close")[0].onclick = function() {
-  modal.style.display = "none";
-}
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
+// var modal = document.getElementById("myModal");
+// var span = document.getElementsByClassName("close")[0].onclick = function() {
+//   modal.style.display = "none";
+// }
+// window.onclick = function(event) {
+//   if (event.target == modal) {
+//     modal.style.display = "none";
+//   }
+// }
 
 
 
 
-modal.style.display = "block";
+// modal.style.display = "block";
 
 
 
