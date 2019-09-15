@@ -32,9 +32,10 @@ app.register_blueprint(blueprint, url_prefix="/login")
 def gitcreds(github):
 	if not github.authorized: return None
 	print("sidjfoisdf")
-	resp = github.get("/user")
+	resp = github.get("/user").json()["login"]
+	request.githubuser = resp
 	print("oiwjfeoiwjef")
-	return resp.json()["login"]
+	return resp
 
 
 
@@ -147,7 +148,7 @@ def on_join(data):
 	repo = Session.query.filter_by(owner=str(data['owner']),repo=str(data['repo'])).first()
 	print("REPO GOT")
 	if repo == None: return
-	creds=gitcreds(github)
+	creds=request.githubuser
 	print("CREDS GOT")
 	if creds == None: return
 
@@ -195,7 +196,7 @@ def on_disconnect():
 			jj.remove(request.sid)
 		sesh.activemembers = ",".join(jj)
 	db.session.commit()
-	creds=gitcreds(github)
+	creds=request.githubuser
 	emit('player_leave',{'name':creds},include_self=False)
 
 
