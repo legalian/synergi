@@ -154,7 +154,7 @@ def sdahoufa():
 
 @app.route("/files")
 def files():
-	jak = request.json()
+	jak = request.json
 	sesh = Session.query.filter_by(id=int(jak['sessionId'])).first()
 	if sesh == None: return
 	book = TemFile.query.filter_by(session_id = int(sesh.id),path=str(jak['path'])).first()
@@ -204,7 +204,7 @@ def directories():
 
 @app.route("/join", methods=['POST'])
 def joinjoin():
-	data = request.json()
+	data = request.json
 	print("JOIN GOT")
 	repo = Project.query.filter_by(id=int(data['projectId'])).first()
 	print("REPO GOT")
