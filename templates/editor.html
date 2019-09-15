@@ -197,7 +197,7 @@ function AppViewModel() {
 			}
 		});
 		if (self.activefile().path == data.path){
-			self.activefile().notifySubscribers();
+			self.activefile.notifySubscribers();
 		}
 	});
 	self.editor.session.on('change', function(delta) {
