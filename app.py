@@ -49,9 +49,10 @@ def login():
     if not github.authorized:
         return redirect(url_for("github.login"))
     resp = github.get("/user")
-    assert resp.ok
-    print(resp.json())
-    return "You are @{login} on GitHub".format(login=resp.json()["login"])
+    return redirect("/")
+    # assert resp.ok
+    # print(resp.json())
+    # return "You are @{login} on GitHub".format(login=resp.json()["login"])
 
 
 
@@ -104,7 +105,7 @@ def files():
 	if session == None: return
 	book = TemFile.query.filter_by(session_id = int(session.id),path=str(request.json['path'])).first()
 	if book == None:
-		r = requests.get("https://api.github.com/repos/"+session.owner+"/"+session.repo+"/contents/"+request.json['path']+"?ref="+session.branch)
+		r = github.get("/repos/"+session.owner+"/"+session.repo+"/contents/"+request.json['path']+"?ref="+session.branch)
 		if r.status_code != 200:
 			print(r.content)
 			return
@@ -139,7 +140,7 @@ def handle_edit(edit):
 def directories():
 	session = Session.query.filter_by(id=int(request.json['sessionId'])).first()
 	if session == None: return
-	r = requests.get("https://api.github.com/repos/"+session.owner+"/"+session.repo+"/git/trees/"+session.sha+"?recursive=1,ref="+session.branch)
+	r = github.get("/repos/"+session.owner+"/"+session.repo+"/git/trees/"+session.sha+"?recursive=1,ref="+session.branch)
 	if r.status_code != 200:
 		print(r.content)
 		return
@@ -153,7 +154,7 @@ def on_join(data):
 
 	sesh = Session.query.filter_by(project_id=int(repo.id)).first()
 	if sesh == None:
-		master = requests.get("https://api.github.com/repos/"+session.owner+"/"+session.repo+"/branches/master",headers={'Authorization':'token '+github_token})
+		master = github.get("/repos/"+session.owner+"/"+session.repo+"/branches/master",headers={'Authorization':'token '+github_token})
 		head_tree_sha = master.json()['commit']['commit']['tree']['sha']
 		sesh = Session(
 			owner      = repo.owner,
