@@ -51,6 +51,25 @@ def index():
 def projectlist():
 	return render_template('todolist.html',creds=gitcreds(github))
 
+
+
+
+@app.route("/projects",methods=['GET','POST'])
+def projects():
+	if request.method == 'GET':
+
+	else:
+
+
+@app.route("/projects/<int:id>",methods=['GET','PUT','DELETE'])
+def project(id):
+	if request.method == 'GET':
+		
+
+
+
+
+
 @app.route("/editor")
 def editor():
 	return render_template('editor.html',creds=gitcreds(github))
