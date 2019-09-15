@@ -190,7 +190,7 @@ def handle_edit(edit):
 	if book == None: return
 	book.content = book.content[:edit['delta']['amt']]+edit['delta']['msg']+book.content[edit['delta']['amt']:]
 	db.session.commit()
-	emit('edit',edit,include_self=False)
+	emit('edit',edit,broadcast=True,include_self=False)
 
 
 	
