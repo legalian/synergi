@@ -29,7 +29,7 @@ app.register_blueprint(blueprint, url_prefix="/login")
 
 
 
-def gitcreds():
+def gitcreds(github):
 	if not github.authorized: return None
 	print("sidjfoisdf")
 	resp = github.get("/user")
@@ -42,15 +42,15 @@ def gitcreds():
 
 @app.route("/")
 def index():
-	return render_template('index.html',creds=gitcreds())
+	return render_template('index.html',creds=gitcreds(github))
 
 @app.route("/projectlist")
 def projectlist():
-	return render_template('todolist.html',creds=gitcreds())
+	return render_template('todolist.html',creds=gitcreds(github))
 
 @app.route("/editor")
 def editor():
-	return render_template('editor.html',creds=gitcreds())
+	return render_template('editor.html',creds=gitcreds(github))
 
 
 
@@ -147,7 +147,7 @@ def on_join(data):
 	repo = Session.query.filter_by(owner=str(data['owner']),repo=str(data['repo'])).first()
 	print("REPO GOT")
 	if repo == None: return
-	creds=gitcreds()
+	creds=gitcreds(github)
 	print("CREDS GOT")
 	if creds == None: return
 
@@ -195,7 +195,7 @@ def on_disconnect():
 			jj.remove(request.sid)
 		sesh.activemembers = ",".join(jj)
 	db.session.commit()
-	creds=gitcreds()
+	creds=gitcreds(github)
 	emit('player_leave',{'name':creds},include_self=False)
 
 
