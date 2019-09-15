@@ -141,15 +141,20 @@ def directories():
 
 @socketio.on('join')
 def on_join(data):
+	print("JOIN GOT")
 	repo = Session.query.filter_by(owner=str(data['owner']),repo=str(data['repo'])).first()
+	print("REPO GOT")
 	if repo == None: return
 	creds=gitcreds()
+	print("CREDS GOT")
 	if creds == None: return
 
 	sesh = Session.query.filter_by(project_id=int(repo.id)).first()
+	print("SESSION GOT")
 	if sesh == None:
 		master = github.get("/repos/"+session.owner+"/"+session.repo+"/branches/master",headers={'Authorization':'token '+github_token})
 		head_tree_sha = master.json()['commit']['commit']['tree']['sha']
+		print("COMMIT GOT")
 		sesh = Session(
 			owner      = repo.owner,
 			repo       = repo.repo,
@@ -159,9 +164,14 @@ def on_join(data):
 			activemembers = creds
 		)
 		db.session.add(sesh)
+		print("SESSION ADD")
 	else:
+		print("COMMIT EXISTS")
 		sesh.activemembers = sesh.activemembers+","+creds
+	print("PRECOMMIT")
 	db.session.commit()
+	print("POSTCOMMIT")
+
 
 	join_room(str(repo.id)+","+str(sesh.id))
 	emit('accept',{'sessionId':sesh.id,'activemembers':sesh.activemembers},room=request.sid)
