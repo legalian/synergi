@@ -188,7 +188,8 @@
 	{
 		display: inline-block;
 		padding: 0em 3em;
-		background: #009E2D;
+		/*background: #009E2D;*/
+		background: #05a8b3;
 		letter-spacing: 0.20em;
 		line-height: 4em;
 		text-decoration: none;
@@ -354,12 +355,12 @@
 		/*top: 2em;*/
 		right: 0;
 		margin-bottom: 0px;
-
 	}
 	
 	#menu ul
 	{
 		display: inline-block;
+
 	}
 	
 	#menu li
@@ -382,12 +383,15 @@
 	#menu li:hover a, #menu li.active a, #menu li.active span
 	{
 		color: #FFF;
-		background-color:red;
+		background-color: #292929;
+		transition: background-color .2s;
+		-webkit-transition: background-color .2s;
 	}
 	
 	#menu .current_page_item a
 	{
-		background: #009E2D;
+		/*background: #009E2D;*/
+		background: #05a8b3 !important ;/*blue*/
 		color: #FFF;
 	}
 	
@@ -412,9 +416,9 @@
 	.login
 	{
 		text-decoration: none;
-		color: red;
+		/*color: red;*/
 		text-align:right;
-		border-color: red;border-style: solid;border-width: 2px;
+		/*border-color: red;border-style: solid;border-width: 2px;*/
 	}
 
 
@@ -451,7 +455,8 @@
 	#banner .button
 	{
 		margin-top: 3em;
-		background: #009E2D !important;
+		/*background: #009E2D !important;*/
+		background: : #05a8b3 !important;
 	}
 
 /*********************************************************************************/
@@ -527,7 +532,8 @@
 	{
 		overflow: hidden;
 		padding: 5em 0em;
-		background: #009E2D;
+		/*background: #009E2D;*/
+		background: #05a8b3;
 		color: rgba(255,255,255,.8);
 		text-align: center;
 	}
@@ -542,7 +548,8 @@
 		background: #FFF;
 		margin-top: 3em;
 		font-size: 1em;
-		color: #009E2D;
+		/*color: #009E2D;*/
+		color: #05a8b3;
 	}
 
 	#featured .title

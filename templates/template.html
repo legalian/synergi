@@ -11,7 +11,7 @@
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<link rel="stylesheet" href="static/css/header.css">
 	<link href="static/css/fonts.css" rel="stylesheet" type="text/css" media="all" />
-	<link href="http://fonts.googleapis.com/css?family=Varela" rel="stylesheet" />
+	<link href="https://fonts.googleapis.com/css?family=Varela" rel="stylesheet" />
 	<link href="static/css/default.css" rel="stylesheet" type="text/css" media="all" />
 	<link href="static/css/fonts.css" rel="stylesheet" type="text/css" media="all" />
 
@@ -28,7 +28,7 @@
 		<div id="logo">
 			<h1><a href="/" style="">Synergi</a></h1>
 		</div>
-		<div id="menu" style=" width:60%;">
+		<div id="menu" style=" width:60%; ">
 			<ul style=" width:100%">
 				{% for href, id, caption in navigation_bar%}
 				<li {% if id == active_page %} class="current_page_item" {% endif %}><a href="{{href}}">{{caption}}</a></li>
