@@ -96,7 +96,7 @@
 			Name of Project: <input class="input_" type="text" name="name"><br>
 				Description: <input class="input_" type="text" name="description"><br>
 				<span class="custom-dropdown">
-				Repo: <select name="repo" data-bind="options: repochoices()"></select>
+				Repo: <select name="repo" data-bind="options: repochoices(),value:activerepo"></select>
 			</span>
 			<span class="custom-dropdown">
 				Branch: <select name="branch" data-bind="options: branches()"></select>

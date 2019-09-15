@@ -244,6 +244,7 @@ function AppViewModel() {
 			sessionId:projectid
 		}),
 		success: function(data){
+			console.log(data);
 			data.tree.forEach(function(ra){
 				ra.title = ra.path;
 				console.log(ra.title);
