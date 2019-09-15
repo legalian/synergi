@@ -1,10 +1,8 @@
 <html>
 <head>
 	{% set navigation_bar = [('/', 'index', 'Index'),
-							 ('/editor', 'editor', 'Editor'),
-							 ('/projectlist', 'projectlist', 'Browse'),
-							 ('/template','template','Template')] %}
-	{% set creds = "df" %}
+							 ('/projectlist', 'projectlist', 'Browse')] %}
+	
 </body>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="description" content="" />
@@ -16,54 +14,111 @@
 	<link href="https://fonts.googleapis.com/css?family=Varela" rel="stylesheet" />
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.0/knockout-min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.6/ace.js" integrity="sha256-CVkji/u32aj2TeC+D13f7scFSIfphw2pmu4LaKWMSY8=" crossorigin="anonymous"></script>
+
+
+	<script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+	
+
 	<script type="text/javascript">
 		$(window).on('load', function () {
 	    $(".trigger_popup_fricc").click(function(){
 	       $('.hover_bkgr_fricc').show();
 	    	});
 	    $('.hover_bkgr_fricc').click(function(){
-	        $('.hover_bkgr_fricc').hide();
+	        if ($('#elem').is(":hover") == false){
+	        	$('.hover_bkgr_fricc').hide();
+	        }
 	    	});
 	    $('.popupCloseButton').click(function(){
 	    	$('.hover_bkgr_fricc').hide();
 	    	});
 		});
 
+
+		// var justice = new ViewModel();
+
+		// function ViewModel(){
+		// 	var self = this;
+		// 	self.repoLink = ko.observable("");
+		// 	self.desc = ko.observable("");
+		// 	self.createNewRepo = function(name, repo, branch = "master", owner, description){
+		// 		$.ajax('/projects', {
+		// 			data: {''} ,
+		// 			type: 'POST',
+		// 			content-type: 'application/json',
+		// 			success: function(result){console.log(result)}
+		// 		});
+		// 	}
+		// }
+		
+		// ko.applyBindings(justice);
+
 	</script>
 	<title>Synergi Code Editor</title>
 </head>
 <body>
 	<div id="header-wrapper" style="">
-	<div id="header" class="container" style="">
-		<div id="logo" style="display: flex">
-			<div style="display: flex; flex-direction: column; justify-content: center;">
-				<img style = "float:left; width:50px; height:50px;" src="/static/Synergi_Logo.png" alt="Logo"/>
+		<div id="header" class="container" style="">
+			<div id="logo" style="display: flex">
+				<div style="display: flex; flex-direction: column; justify-content: center;">
+					<img style = "float:left; width:50px; height:50px;" src="/static/Synergi_Logo.png" alt="Logo"/>
+				</div>
+				<div style="display: flex; flex-direction: column; justify-content: center;">
+					<h1 style=""><a href="/" style="">Synergi</a></h1>
+				</div>
 			</div>
-			<div style="display: flex; flex-direction: column; justify-content: center;">
-				<h1 style=""><a href="/" style="">Synergi</a></h1>
+			<div id="menu" style=" width:60%; ">
+				<ul style=" width:100%">
+					{% for href, id, caption in navigation_bar%}
+					<li {% if id == active_page %} class="current_page_item" {% endif %}><a href="{{href}}">{{caption}}</a></li>
+					{% endfor %}
+					<li {% if active_page != 'projectlist' %} style="display:none;" {% endif %}><a class="login trigger_popup_fricc" id="create_new_proj" href="#">Create New Project</a></li>
+					{% if creds == None %}
+						<li style="float:right;"><a class="login" id="login" style="" href="/gitlogin">Login</a></li>
+					{% endif %}
+					{% if creds != None %}
+						<li style="float:right;"><a class="login" id="login" style="" href="/logout">{{creds}}</a></li>
+					{% endif %}
+				</ul>
 			</div>
-		</div>
-		<div id="menu" style=" width:60%; ">
-			<ul style=" width:100%">
-				{% for href, id, caption in navigation_bar%}
-				<li {% if id == active_page %} class="current_page_item" {% endif %}><a href="{{href}}">{{caption}}</a></li>
-				{% endfor %}
-				<li {% if creds != none %} style="display: visible;" {% endif %}><a class="login trigger_popup_fricc" id="create_new_proj" href="#">Create New Project</a></li>
-				<li style="float:right;"><a class="login" id="login" style="" href="/login">Login</a></li>
-			</ul>
 		</div>
 	</div>
+
 </div>
+
+<!-- <span class="custom-dropdown">
+    <select>
+        <option>Sherlock Holmes</option>
+        <option>The Great Gatsby</option>  
+        <option>V for Vendetta</option>
+        <option>The Wolf of Wallstreet</option>
+        <option>Quantum of Solace</option>
+    </select>
+</span> -->
+
+
+
 <div class="hover_bkgr_fricc">
     <span class="helper"></span>
-    <div>
+    <div class = "popup_html_fricc">
         <div class="popupCloseButton">X</div>
-        <p>Add any HTML content<br />inside the popup box!</p>
+        <form action = "/projects" method = "POST">
+        	<h2>Import Project</h2>
+			<input type="hidden" name="owner" data-bind="owner">
+			Name of Project: <input class="input_" type="text" name="name"><br>
+				Description: <input class="input_" type="text" name="description"><br>
+				<span class="custom-dropdown">
+				Repo: <select name="repo" data-bind="options: repochoices()"></select>
+			</span>
+			<span class="custom-dropdown">
+				Branch: <select name="branch" data-bind="options: branches()"></select>
+				</span>
+				<input id="" class="btn" type="submit" value="Import Project">
+			</form>
     </div>
 </div>
 {% block body %}
@@ -71,6 +126,7 @@
 <div id="copyright" class="container">
 	<p>&copy; 2019 || Website by Sil Apostu, Eric Durbin, Vamsi Kolluri, Parker Lawrence || All rights reserved. || Design by <a href="http://templated.co" rel="nofollow">TEMPLATED</a>.</p>
 </div>
+</body>
 
 
 

@@ -27,34 +27,11 @@ class Project(db.Model):
             'name': self.name,
             'description': self.description,
             'created_date': self.created_date,
-            'likes':self.likes,
             'owner':self.owner,
             'repo':self.repo,
-            'branch':self.branch,
+            'branch':self.branch
         }
 
-class Request(db.Model):
-    __tablename__ = 'request'
-
-    id = db.Column(db.Integer, primary_key=True)
-    message = db.Column(db.String())
-    author = db.Column(db.Integer, db.ForeignKey('user.id'))
-    project_id = db.Column(db.Integer, db.ForeignKey('project.id'))
-
-    def __init__(self, message, author, project):
-        self.message = message
-        self.author = author
-        self.project_id = project
-
-    def __repr__(self):
-        return '<id {}>'.format(self.id)
-    
-    def serialize(self):
-        return {
-            'id': self.id, 
-            'message': self.message,
-            'author': self.author
-        }
 
 
 class Session(db.Model):
