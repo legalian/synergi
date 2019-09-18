@@ -5,32 +5,18 @@ from flask_dance.contrib.github import make_github_blueprint, github
 from flask_session import Session
 import base64
 import requests
-# from flask.ext.heroku import Heroku
 import os
-# import eventlet
-# eventlet.monkey_patch()
 
 
+from app_factory import db,app,blueprint,socketio
 # from flask_dance.consumer.storage import BaseStorage
 
 
 
-app = Flask(__name__)
-socketio = SocketIO(app)
-# heroku = Heroku(app)
-app.config.from_object(os.environ['APP_SETTINGS'])
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
-Session(app)
 
 from models import Project, Session, TemFile
 
 
-blueprint = make_github_blueprint(
-    client_id=os.environ['GITHUB_CLIENT_ID'],
-    client_secret=os.environ['GITHUB_CLIENT_SECRET'],
-)
-app.register_blueprint(blueprint, url_prefix="/login")
 
 
 
@@ -41,7 +27,7 @@ def gitcreds(github):
 	session['githubuser'] = resp
 	print(session.get('github_oauth'))
 	# session['github'] = github
-	print("oiwjfeoiwjef")
+	# print("oiwjfeoiwjef")
 	return resp
 
 
@@ -304,7 +290,8 @@ def on_disconnect():
 
 
 if __name__ == '__main__':
-    socketio.run(app,debug=True)
+    # context = ('local.crt', 'local.key')#certificate and key files
+    socketio.run(app,debug=True,keyfile='key.pem', certfile='cert.pem')
 
 
 
