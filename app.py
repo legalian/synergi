@@ -17,17 +17,17 @@ import os
 app = Flask(__name__)
 socketio = SocketIO(app)
 # heroku = Heroku(app)
-app.config.from_object(os.environ['APP_SETTINGS'])
+# app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 Session(app)
 
-from models import Project, Session, TemFile
+# from models import Project, Session, TemFile
 
 
 blueprint = make_github_blueprint(
-    client_id=os.environ['GITHUB_CLIENT_ID'],
-    client_secret=os.environ['GITHUB_CLIENT_SECRET'],
+    # client_id=os.environ['GITHUB_CLIENT_ID'],
+    # client_secret=os.environ['GITHUB_CLIENT_SECRET'],
 )
 app.register_blueprint(blueprint, url_prefix="/login")
 

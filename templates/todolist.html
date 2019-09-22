@@ -2,22 +2,6 @@
 {% extends "template.html"%}
 {% set active_page = "projectlist" %}
 {% block body %}
-<script>
-// var coll = document.getElementsByClassName("collapsible");
-// var i;
-
-// for (i = 0; i < coll.length; i++) {
-//   coll[i].addEventListener("click", function() {
-//     this.classList.toggle("active");
-//     var content = this.nextElementSibling;
-//     if (content.style.display === "block") {
-//       content.style.display = "none";
-//     } else {
-//       content.style.display = "block";
-//     }
-//   });
-// }
-</script>
 <style>
 	.project {
 		background: #EEE;
@@ -68,22 +52,9 @@
 	  padding: 12px 16px;
 	  z-index: 1;
 	}
-
-
 </style>
-<!-- <div class="wrap-collabsible">
-  <input id="collapsible" class="toggle" type="checkbox">
-  <label for="collapsible" class="lbl-toggle">More Info</label>
-  <div class="collapsible-content">
-    <div class="content-inner">
-      <p>
-        QUnit is by calling one of the object that are embedded in JavaScript, and faster JavaScript program could also used with
-        its elegant, well documented, and functional programming using JS, HTML pages Modernizr is a popular browsers without
-        plug-ins. Test-Driven Development.
-      </p>
-    </div>
-  </div>
-</div> -->
+
+
 <div id="extra" class="container" data-bind="foreach:results">
 	<div class = "project wrap-collabsible">
 		<input id="collapsible" class="toggle" type="checkbox">
@@ -101,7 +72,7 @@
 		</div>	
 	</div>
 </div>
-<!-- <div id="extra" class="container">
+<div id="extra" class="container">
 	<div class = "project wrap-collabsible">
 		<input id="collapsible" class="toggle" type="checkbox">
 		<label for="collapsible" class="lbl-toggle">[Name]</label>
@@ -117,39 +88,27 @@
 		</ul>
 	</div>
 	</div>
-</div> -->
+</div>
 
-
-	
-
+<div id="extra" class="container">
+	<div class = "project wrap-collabsible">
+		<input id="12341234134634256" class="toggle" type="checkbox">
+		<label for="12341234134634256" class="lbl-toggle">[Name]</label>
+		<div class="collapsible-content">
+		<ul>
+			<li class = "name">Name</li>
+			<li class="edit"><a href="#">Edit</a></li>		
+		</ul>
+		<ul class ="content-inner">
+			<li><div id = "desc_title">Description:</div></li>
+			<li><div id = "description">This project's purpose is to basically make google docs but with code </div></li>
+			<li><div id="repo">Repository:    legalian</div><div id = "branch">Branch:    synergi</div></li>
+		</ul>
+	</div>
+	</div>
+</div>
 
 <script>
-
-
-
-
-
-// var modal = document.getElementById("myModal");
-// var span = document.getElementsByClassName("close")[0].onclick = function() {
-//   modal.style.display = "none";
-// }
-// window.onclick = function(event) {
-//   if (event.target == modal) {
-//     modal.style.display = "none";
-//   }
-// }
-
-
-
-
-// modal.style.display = "block";
-
-
-
-
-
-
-
 
 var justice = new AppViewModel();
 
@@ -196,10 +155,4 @@ ko.applyBindings(justice);
 </script>
 
 
-
-
-
-
 {% endblock %}
-
-

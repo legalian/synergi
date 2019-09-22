@@ -1,5 +1,6 @@
 TODO
---
+-- close tabs
+-- fix bugs
 
 
 
