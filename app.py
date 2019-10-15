@@ -7,17 +7,30 @@ import base64
 import requests
 import os
 
-
 from app_factory import db,app,blueprint,socketio
 # from flask_dance.consumer.storage import BaseStorage
 
-
-
-
 from models import Project, Session, TemFile
 
+app.config['ssl_verify_client_cert'] = True
+
+##################################
+# app = Flask(__name__)
+
+@app.route('/components')
+def components():
+	return render_template('components.html')
+
+@app.route('/animation')
+def animation():
+	return render_template('animationeditor.html')
+
+@app.route('/music')
+def music():
+	return render_template('grapheditor.html')
 
 
+##################################
 
 
 def gitcreds(github):
@@ -290,8 +303,7 @@ def on_disconnect():
 
 
 if __name__ == '__main__':
-    # context = ('local.crt', 'local.key')#certificate and key files
-    socketio.run(app,debug=True,keyfile='key.pem', certfile='cert.pem')
-
-
-
+	ssl_verify_client_cert = True
+	# context = ('local.crt', 'local.key')#certificate and key files
+	socketio.run(app,debug=True,keyfile='key.pem', certfile='cert.pem')
+	#eventlet.monkey_patch(socket=False)
