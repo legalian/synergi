@@ -19,7 +19,7 @@ app.config['ssl_verify_client_cert'] = True
 
 @app.route('/components')
 def components():
-	return render_template('components.html')
+	return render_template('test.html')
 
 @app.route('/animation')
 def animation():
