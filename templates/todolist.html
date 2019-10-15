@@ -55,10 +55,47 @@
 </style>
 
 
+
+<!-- <div class="wrap-collabsible">
+  <input id="collapsible" class="toggle" type="checkbox">
+  <label for="collapsible" class="lbl-toggle">More Info</label>
+  <div class="collapsible-content">
+    <div class="content-inner">
+      <p>
+        QUnit is by calling one of the object that are embedded in JavaScript, and faster JavaScript program could also used with
+        its elegant, well documented, and functional programming using JS, HTML pages Modernizr is a popular browsers without
+        plug-ins. Test-Driven Development.
+      </p>
+    </div>
+  </div>
+</div> -->
+
+
+<div class="hover_bkgr_fricc">
+    <span class="helper"></span>
+    <div class = "popup_html_fricc">
+        <div class="popupCloseButton">X</div>
+        <form action = "/projects" method = "POST">
+        	<h2>Import Project</h2>
+			<input type="hidden" name="owner" data-bind="value:owner">
+			Name of Project: <input class="input_" type="text" name="name"><br>
+				Description: <input class="input_" type="text" name="description"><br>
+				<span class="custom-dropdown">
+				Repo: <select name="repo" data-bind="options: repochoices(),value:activerepo"></select>
+			</span>
+			<span class="custom-dropdown">
+				Branch: <select name="branch" data-bind="options: branches()"></select>
+				</span>
+				<input id="" class="btn" type="submit" value="Import Project">
+			</form>
+    </div>
+</div>
+
+
 <div id="extra" class="container" data-bind="foreach:results">
 	<div class = "project wrap-collabsible">
-		<input id="collapsible" class="toggle" type="checkbox">
-		<label for="collapsible" class="lbl-toggle" data-bind="text:name">[Name]</label>
+		<input data-bind="attr:{id:$index()}" class="toggle" type="checkbox">
+		<label data-bind="attr:{for:$index()},text:name" class="lbl-toggle">[Name]</label>
 		<div class="collapsible-content">
 			<ul>
 				<li class = "name" data-bind="text:name">Name</li>

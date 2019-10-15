@@ -1,5 +1,6 @@
-from app import db
+
 import datetime
+from app_factory import db
 
 class Project(db.Model):
     __tablename__ = 'project'

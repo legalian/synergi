@@ -3,35 +3,16 @@ from flask_socketio import SocketIO, send, emit, join_room, leave_room
 from flask_sqlalchemy import SQLAlchemy
 from flask_dance.contrib.github import make_github_blueprint, github
 from flask_session import Session
+import base64
 import requests
-# from flask.ext.heroku import Heroku
 import os
-# import eventlet
-# eventlet.monkey_patch()
 
-
+from app_factory import db,app,blueprint,socketio
 # from flask_dance.consumer.storage import BaseStorage
 
+from models import Project, Session, TemFile
 
-
-app = Flask(__name__)
-socketio = SocketIO(app)
-# heroku = Heroku(app)
-# app.config.from_object(os.environ['APP_SETTINGS'])
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
-Session(app)
-
-# from models import Project, Session, TemFile
-
-
-blueprint = make_github_blueprint(
-    # client_id=os.environ['GITHUB_CLIENT_ID'],
-    # client_secret=os.environ['GITHUB_CLIENT_SECRET'],
-)
-app.register_blueprint(blueprint, url_prefix="/login")
-
-
+app.config['ssl_verify_client_cert'] = True
 
 def gitcreds(github):
 	if not github.authorized: return None
@@ -40,7 +21,7 @@ def gitcreds(github):
 	session['githubuser'] = resp
 	print(session.get('github_oauth'))
 	# session['github'] = github
-	print("oiwjfeoiwjef")
+	# print("oiwjfeoiwjef")
 	return resp
 
 
@@ -56,6 +37,8 @@ def index():
 
 @app.route("/projectlist")
 def projectlist():
+	if not github.authorized:
+		return redirect(url_for("github.login"))
 	return render_template('todolist.html',creds=gitcreds(github))
 
 
@@ -152,12 +135,13 @@ def sdahoufa():
 
 
 
-@app.route("/files")
+@app.route("/files",methods=['POST'])
 def files():
 	jak = request.json
 	sesh = Session.query.filter_by(id=int(jak['sessionId'])).first()
 	if sesh == None: return
 	book = TemFile.query.filter_by(session_id = int(sesh.id),path=str(jak['path'])).first()
+	print(book)
 	if book == None:
 		r = github.get("/repos/"+sesh.owner+"/"+sesh.repo+"/contents/"+jak['path']+"?ref="+sesh.branch)
 		if r.status_code != 200:
@@ -170,6 +154,7 @@ def files():
 			content = con['content'],
 			sha = con['sha']
 		)
+		print("book added")
 		db.session.add(book)
 		db.session.commit()
 	return book.content
@@ -183,15 +168,19 @@ def handle_edit(edit):
 	if sesh == None: return
 	book = TemFile.query.filter_by(session_id = int(sesh.id),path=str(edit['path'])).first()
 	if book == None: return
-	book.content = book.content[:edit.delta.amt]+edit.delta.msg+book.content[edit.delta.amt:]
+	if edit['mode'] == 'insert':
+		book.content = book.content[:edit['delta']['amt']]+edit['delta']['msg']+book.content[edit['delta']['amt']:]
+	elif edit['mode'] == 'remove':
+		book.content = book.content[:edit['delta']['amt']]+book.content[edit['delta']['amt']+len(edit['delta']['msg']):]
 	db.session.commit()
-	emit('edit',edit,include_self=False)
+	emit('edit',edit,broadcast=True,include_self=False)
 
 
 	
 
 @app.route("/directories",methods=['POST'])
 def directories():
+	print(dict(request.json))
 	sesh = Session.query.filter_by(id=int(request.json['sessionId'])).first()
 	if sesh == None: return
 	r = github.get("/repos/"+sesh.owner+"/"+sesh.repo+"/git/trees/"+sesh.sha+"?recursive=1,ref="+sesh.branch)
@@ -205,20 +194,15 @@ def directories():
 @app.route("/join", methods=['POST'])
 def joinjoin():
 	data = request.json
-	print("JOIN GOT")
 	repo = Project.query.filter_by(id=int(data['projectId'])).first()
-	print("REPO GOT")
 	if repo == None: return
 	creds=session['githubuser']
-	print("CREDS GOT")
 	if creds == None: return
 
 	sesh = Session.query.filter_by(project_id=int(repo.id)).first()
-	print("SESSION GOT")
 	if sesh == None:
 		master = github.get("/repos/"+repo.owner+"/"+repo.repo+"/branches/"+repo.branch)
 		head_tree_sha = master.json()['commit']['commit']['tree']['sha']
-		print("COMMIT GOT")
 		sesh = Session(
 			owner      = repo.owner,
 			repo       = repo.repo,
@@ -228,7 +212,6 @@ def joinjoin():
 			activemembers = ""
 		)
 		db.session.add(sesh)
-		print("SESSION ADD")
 		db.session.commit()
 	return "OK"
 
@@ -237,20 +220,15 @@ def joinjoin():
 
 @socketio.on('join')
 def on_join(data):
-	print("JOIN GOT")
 	repo = Project.query.filter_by(id=int(data['projectId'])).first()
-	print("REPO GOT")
 	if repo == None: return
 	creds=session['githubuser']
-	print("CREDS GOT")
 	if creds == None: return
 
 	sesh = Session.query.filter_by(project_id=int(repo.id)).first()
 	if sesh == None: return
 	sesh.activemembers = sesh.activemembers+","+creds
-	print("PRECOMMIT")
 	db.session.commit()
-	print("POSTCOMMIT")
 
 
 	join_room(str(repo.id)+","+str(sesh.id))
@@ -258,22 +236,17 @@ def on_join(data):
 	emit('player_join',{'name':creds},room=str(repo.id)+","+str(sesh.id),include_self=False)
 
 
-	print("fuck asdfjanskdfyou");
-	print("fuck kyou");
-	print("fuck ydjfnjdfnou");
-	print("fuck jdnfjndjfyou");
-
 
 
 @socketio.on('disconnect')
 def on_disconnect():
+	creds=session['githubuser']
 	for sesh in Session.query:
 		jj = sesh.activemembers.split(",")
-		if request.sid in jj:
-			jj.remove(request.sid)
+		if creds in jj:
+			jj.remove(creds)
 		sesh.activemembers = ",".join(jj)
 	db.session.commit()
-	creds=session['githubuser']
 	emit('player_leave',{'name':creds},include_self=False)
 
 
@@ -311,7 +284,7 @@ def on_disconnect():
 
 
 if __name__ == '__main__':
-    socketio.run(app,debug=True)
-
-
-
+	ssl_verify_client_cert = True
+	# context = ('local.crt', 'local.key')#certificate and key files
+	socketio.run(app,debug=True,keyfile='key.pem', certfile='cert.pem')
+	#eventlet.monkey_patch(socket=False)
