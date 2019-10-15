@@ -2,6 +2,8 @@ __pycache__
 get-pip.py
 venv
 __pycache__/
+flask_session
+flask_session/
 env/
 *.pyc
 .DS_Store
