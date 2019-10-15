@@ -1,0 +1,91 @@
+
+{% extends 'template.html' %}
+
+{% block body %}
+
+<script id="layerNode" type="text/html">
+  <div class="layerbox" draggable="true" data-bind="click:takefocus,event:{dragstart:$root.sdrag,mouseup:function(){enddrag($parent)}}">
+    <div style="width:30px;text-align: center;" data-bind="if:type=='grouping'">
+      <i data-bind="class:expanded()?'material-icons rotate-90':'material-icons',click:function(){expanded(!expanded())}">play_arrow</i>
+    </div>
+    <div style="flex:1">
+      <!-- ko ifnot: editingname-->
+      <span class = "unhighlight" data-bind="text:name,event:{dblclick:beginEditName}"></span>
+      <!-- /ko -->
+      <!-- ko if: editingname-->
+      <input data-bind="value:name,click:function(data,event){event.stopPropagation();}" />
+      <!-- /ko -->
+    </div>
+    <div style="align-self:flex-end;height:40px;" data-bind="html:'<svg style=\x22height:40px;width:40px;\x22 viewBox=\x22'+compubounds()+'\x22>'+svg()+'</svg>'"></div>
+  </div>
+  <!-- ko if: type == "grouping" && expanded() -->
+    <div style="margin-left:20px;">
+    <!-- ko template:{name: 'layerNode',foreach: children } -->
+    <!-- /ko -->    
+    </div>
+  <!-- /ko -->
+</script>
+
+<h1>2D Animation Editor</h1>
+<div class="row">
+  <div id="target" style="width:602px;height:602px;"
+    data-bind="html:'\
+      <svg style=\x22height:601px;width:601px;\x22 viewBox=\x220 0 601 601\x22>\
+      <rect width=\x22100%\x22 height=\x22100%\x22 fill=\x22url(#grid)\x22/>\
+      '+svg()+'</svg>'"
+  ></div>
+  <div style="flex:1;display:flex;flex-direction:column;height:602px">
+    <div class = "iobox">
+      <button>Save</button>
+      <button>Load</button>
+    </div>
+    <div class = "toolbox">
+      <button data-bind="click:function(){layers.splice(0,0,new Polylayer())}">Add Polygon</button>
+      <button data-bind="click:function(){layers.splice(0,0,new Bezlayer())}">Add Bezier Curve</button>
+      <button data-bind="click:function(){layers.splice(0,0,new Grouping())}">Add Empty Group</button>
+    </div>
+    <div class = "propbox" data-bind="with:activelayer()" style="position:relative;">
+      <i class="material-icons" style="position:absolute;right:5px;top:5px;color:red;" data-bind="click:$parent.deletelayer">delete_forever</i>
+      <!-- ko ifnot: editingname-->
+      <span data-bind="text:name,event:{dblclick:beginEditName}"></span> Properties:<br/>
+      <!-- /ko -->
+      <!-- ko if: editingname -->
+      <input data-bind="value:name,click:function(data,event){event.stopPropagation();}" /> Properties:<br/>
+      <!-- /ko -->
+      <!-- ko if: hascolors -->
+        Fill color:   <input type="color" data-bind="value:fillcolor"/><br/>
+        Stroke color: <input type="color" data-bind="value:strokecolor"/><br/>
+        Stroke width: <input type="range" min="0" max="15" data-bind="value:strokewidth"/><br/>
+        Deformable:   <input type="checkbox" data-bind="checked:deformable"/><br/>
+        Closed:       <input type="checkbox" data-bind="checked:closed"/><br/>
+        Filled:       <input type="checkbox" data-bind="checked:filled"/><br/>
+      <!-- /ko -->
+
+      <button>Add Keyframe</button>
+
+    </div>
+  </div>
+  <div style="flex:1;" data-bind="template: {name:'layerNode',foreach:layers}">
+  </div>
+</div>
+<div class="row">
+  <svg style="flex:1" height="200" xmlns="http://www.w3.org/2000/svg" id="timeline" viewBox="0 0 801 801" preserveAspectRatio="none">
+    <defs>
+      <pattern id="smallvGrid" width="8" height="8" patternUnits="userSpaceOnUse">
+        <path d="M 0 0 L 0 8" fill="none" stroke="gray" stroke-width="1"/>
+      </pattern>
+      <pattern id="vgrid" width="80" height="80" patternUnits="userSpaceOnUse">
+        <rect width="80" height="80" fill="url(#smallvGrid)"/>
+        <path d="M 0 0 L 0 80" fill="none" stroke="gray" stroke-width="2"/>
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#vgrid)"/>
+  </svg>
+
+<script src="static/script/clickdrag.js"></script>
+<script src="static/script/animation.js"></script>
+
+</div>
+
+{% endblock %}
+

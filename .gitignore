@@ -8,4 +8,5 @@ env/
 *.pyc
 .DS_Store
 .env
-
+/static/bower_components/
+/static/bower_components

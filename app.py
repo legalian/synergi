@@ -14,6 +14,25 @@ from models import Project, Session, TemFile
 
 app.config['ssl_verify_client_cert'] = True
 
+##################################
+# app = Flask(__name__)
+
+@app.route('/components')
+def components():
+	return render_template('components.html')
+
+@app.route('/animation')
+def animation():
+	return render_template('animationeditor.html')
+
+@app.route('/music')
+def music():
+	return render_template('grapheditor.html')
+
+
+##################################
+
+
 def gitcreds(github):
 	if not github.authorized: return None
 	print("sidjfoisdf")

@@ -1,0 +1,71 @@
+
+{% extends 'template.html' %}
+
+{% block body %}
+
+
+<h1>Directed graph editor</h1>
+<div class="row">
+  <div id="target" style="width:602px;height:602px;"
+    data-bind="html:'\
+      <svg style=\x22height:601px;width:601px;\x22 viewBox=\x220 0 601 601\x22>\
+      <rect width=\x22100%\x22 height=\x22100%\x22 fill=\x22url(#grid)\x22/>\
+      '+svg()+'</svg>'"
+  ></div>
+  <div style="flex:1;display:flex;flex-direction:column;height:602px">
+    <div class = "iobox">
+      <a download="directedGraph.json" data-bind="attr:{href:bloburl()}"><button>Save</button></a>
+      <input data-bind="event: {change: fileUpload}" type="file" class="fileChooser"/>
+    </div>
+    <div class = "toolbox">
+      <button data-bind="click:addMode,disable:mode()==='add'">Add Nodes</button>
+      <button data-bind="click:drawMode,disable:mode()==='draw'">Draw edges</button>
+      <button data-bind="click:editMode,disable:mode()==='edit'">Edit data</button>
+      <button data-bind="click:deleteMode,disable:mode()==='delete'">Delete elements</button>
+    </div>
+    <div class = "propbox" data-bind="with:activelayer() " style="position:relative;">
+      <i class="material-icons" style="position:absolute;right:5px;top:5px;color:red;" data-bind="click:$root.deleteObject">delete_forever</i>
+      <!-- ko ifnot: editingname-->
+      <span data-bind="text:name,event:{dblclick:beginEditName}"></span> Properties:<br/>
+      <!-- /ko -->
+      <!-- ko if: editingname -->
+      <input data-bind="value:name,click:function(data,event){event.stopPropagation();}" /> Properties:<br/>
+      <!-- /ko -->
+      <!-- ko ifnot:isedge -->
+        Notes:
+        <ul data-bind="foreach:notes">
+          <li><input type="number" data-bind="value:numeric"/><div style="float:left" data-bind="click:$parent.remove">-</div></li>
+        </ul>
+        <div data-bind="click:addnew">+</div>
+      <!-- /ko -->
+      <!-- ko if: isedge -->
+        Edge weight:   <input type="range" min="0" max="100" data-bind="value:weight"/><br/>
+        Octave change: <input type="number" data-bind="value:octavechange" min="-1" max="1"/><br/>
+      <!-- /ko -->
+      <!-- ko childrenComplete:onload -->
+        <div data-bind="attr:{id:'stave'+uuid}" style="height:50px;width:100%;"></div>
+      <!-- /ko -->
+    </div>
+  </div>
+</div>
+<div class="row">
+  <svg style="flex:1" height="200" xmlns="http://www.w3.org/2000/svg" id="timeline" viewBox="0 0 801 801" preserveAspectRatio="none">
+    <defs>
+      <pattern id="smallvGrid" width="8" height="8" patternUnits="userSpaceOnUse">
+        <path d="M 0 0 L 0 8" fill="none" stroke="gray" stroke-width="1"/>
+      </pattern>
+      <pattern id="vgrid" width="80" height="80" patternUnits="userSpaceOnUse">
+        <rect width="80" height="80" fill="url(#smallvGrid)"/>
+        <path d="M 0 0 L 0 80" fill="none" stroke="gray" stroke-width="2"/>
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#vgrid)"/>
+  </svg>
+</div>
+
+<script src="static/bower_components/vexflow/releases/vexflow-min.js"></script>
+<script src="static/script/clickdrag.js"></script>
+<script src="static/script/music.js"></script>
+
+
+{% endblock %}
