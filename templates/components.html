@@ -1,88 +1,23 @@
 
 
-<style>
-	html, body {
-		height: 100%;
-		min-height: 100%;
-		margin: 0;
-		padding: 0;
-	}
-	.split-pane-divider {
-		background-color:gray;
-	}
+
+
+
+
+
+{% macro importDivider() %}
+<link rel="stylesheet" href="static/bower_components/split-pane/split-pane.css">
+<link rel="stylesheet" href="static/bower_components/split-pane/pretty-split-pane.css">
+<script src="static/bower_components/angular/angular.js"></script>
+<script src="static/bower_components/split-pane/split-pane.js"></script>
+<style type="text/css">
+	.split-pane-divider {background-color:gray;}
 	.static-pane-horizontal {position: relative;height:100%;}
 	.static-pane-vertical {position: relative;height:100%;}
 	.static-pane-horizontal .static-pane-component {left:0;right:0;}
 	.static-pane-vertical .static-pane-component {bottom:0;top:0;}
 	.static-pane-component {position: absolute;}
-
-
-
-	.tabs {height:100%;display: flex;}
-	.tab {
-		position:relative;
-		height:100%;
-		text-align:center;
-		background-color:lightgrey;
-		border-style: solid;
-		border-width: 1px;
-		border-color: black;
-		border-top-right-radius:5px;
-		border-top-left-radius:5px;
-		/*display: inline-block;*/
-		text-align: center;
-	}
-	.littlex {
-		position:absolute;
-		right:5px;
-		bottom: 50%;
-		width: 12px;
-		height: 12px;
-		font-size: 12px !important;
-	}
-
-	.innertabtext {
-		display: inline-block;
-		height:100%;
-		margin-left:20px;
-		margin-right:20px;
-	}
-	.innertabtext:before {
-		content: "";
-		display: inline-block;
-		height: 100%;
-		vertical-align: middle;
-	}
-	.tab.selected {
-		background-color: grey;
-	}
-	
-
-
 </style>
-
-<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-<link rel="stylesheet" href="static/bower_components/split-pane/split-pane.css">
-<link rel="stylesheet" href="static/bower_components/split-pane/pretty-split-pane.css">
-<link rel="stylesheet" href="static/bower_components/dragula.js/dist/dragula.min.css">
-<script src="static/bower_components/knockout/dist/knockout.js"></script>
-<script src="static/bower_components/jquery/dist/jquery.min.js"></script>
-<script src="static/bower_components/angular/angular.js"></script>
-<script src="static/bower_components/split-pane/split-pane.js"></script>
-<script src="static/bower_components/dragula.js/dist/dragula.min.js"></script>
-
-<script src="static/bower_components/ace/lib/ace/ace.js"></script>
-
-
-
-
-<div data-bind="template:{name:node.template,data:node,afterRender:node.onLoad}" style="height:100%"></div>
-
-
-
-
-
-
 <script type="text/html" id="resizeable-area">
 	<div data-bind="class:resizeable?'split-pane '+type:'static-pane-'+align,attr:{id:id}">
 		<div data-bind="class:resizeable?'split-pane-component':'static-pane-component',template:{name:first().template,data:first(), afterRender:first().onLoad},style:style0"></div>
@@ -92,7 +27,7 @@
 		<div data-bind="class:resizeable?'split-pane-component':'static-pane-component',template:{name:second().template,data:second(),afterRender:second().onLoad},style:style2"></div>
 	</div>
 </script>
-<script>
+<script type="text/javascript">
 function Divider(props) {
 	var self = this;
 	props = Object.assign({initialmeasure:"10em",resizeable:true,type:"fixed-top",first:null,second:null,id:""},props)
@@ -129,9 +64,22 @@ function Divider(props) {
 		break;
 		default: throw "unrecognized type";
 	}
-	self.onLoad = function() {$('div.split-pane').splitPane();};
+	self.vresize = function() {
+		self.first().vresize();
+		self.second().vresize();
+	}
+	self.onLoad = function(a) {
+		$(a[1]).splitPane();
+		$(a[1]).on('splitpaneresize', function(event) {
+			var target = event.target === document ? window : event.target;
+			if (target === a[1]) {
+				self.vresize();
+			}
+		});
+	};
 }
 </script>
+{% endmacro %}
 
 
 
@@ -139,8 +87,48 @@ function Divider(props) {
 
 
 
-
-
+{% macro importTabs() %}
+<link rel="stylesheet" href="static/bower_components/dragula.js/dist/dragula.min.css">
+<script src="static/bower_components/dragula.js/dist/dragula.min.js"></script>
+<style type="text/css">
+	.tabs {height:100%;display: flex;}
+	.tab {
+		position:relative;
+		height:100%;
+		text-align:center;
+		background-color:lightgrey;
+		border-style: solid;
+		border-width: 1px;
+		border-color: black;
+		border-top-right-radius:5px;
+		border-top-left-radius:5px;
+		/*display: inline-block;*/
+		text-align: center;
+	}
+	.littlex {
+		position:absolute;
+		right:5px;
+		bottom: 50%;
+		width: 12px;
+		height: 12px;
+		font-size: 12px !important;
+	}
+	.innertabtext {
+		display: inline-block;
+		height:100%;
+		margin-left:20px;
+		margin-right:20px;
+	}
+	.innertabtext:before {
+		content: "";
+		display: inline-block;
+		height: 100%;
+		vertical-align: middle;
+	}
+	.tab.selected {
+		background-color: grey;
+	}
+</style>
 <script type="text/html" id="tabs-area">
 	<div class="tabs" data-bind="foreach:tabs,attr:{id:id}">
 		<div class="tab" data-bind="attr:{index:$index()},class:$index()==$parent.selected()?'selected':'',style:$parent.fill?{flex:1}:{},click:function(){$parent.select($index(),$data);}">
@@ -151,8 +139,8 @@ function Divider(props) {
 		</div>
 	</div>
 </script>
-<script>
-function TabsComponent(props) {
+<script type="text/javascript">
+function Tabs(props) {
 	var self = this;
 	props = Object.assign({closeable:false,rearrangeable:false,fill:false,tabs:null,id:"",didSelect:null,selected:null},props);
 	self.template = "tabs-area";
@@ -162,6 +150,7 @@ function TabsComponent(props) {
 	self.id = props.id;
 	self.fill = props.fill;
 	self.selected = ko.observable(props.selected);
+	self.vresize = function() {}
 	self.remove = function(item,blod) {
 		var matabs = self.tabs();
 		if (matabs.length==1) {self.selected(null);}
@@ -201,23 +190,93 @@ function TabsComponent(props) {
 	};
 }
 </script>
+{% endmacro %}
 
 
 
 
+
+
+
+{% macro importTextArea() %}
+<script src="static/bower_components/ace/build/src/ace.js"></script>
+<style type="text/css">
+	.editor {
+		position:relative;
+		width:100%;
+		height:100%;
+	}
+</style>
 <script type="text/html" id="text-area">
-	<div>
+	<div class="editor" data-bind="text:text"></div>
+</script>
+<script type="text/javascript">
+function TextArea(props){
+	var self = this;
+	props = Object.assign({text:null},props);
+	// editor.session.setMode("ace/mode/javascript");
+	self.template="text-area";
+	self.text = props.text
+	self.editor = null;
+	self.vresize = function() {
+		if (self.editor != null) {self.editor.resize();}
+	}
+	self.onLoad = function(a) {
+		self.editor = ace.edit(a[1]);
+	}
+}
+</script>
+{% endmacro %}
+
+
+
+
+
+
+
+<!-- 
+<script type="text/html" id="stave-area">
+	<div class="staves">
 	</div>
 </script>
 <script>
-function TextArea(props){
-
+function StaveArea(props){
+	var self = this;
+	props = Object.assign({text:null},props);
+	// editor.session.setMode("ace/mode/javascript");
+	self.template="text-area";
+	self.text = props.text
+	self.editor = null;
+	self.vresize = function() {
+		if (self.editor != null) {self.editor.resize();}
+	}
+	self.onLoad = function(a) {
+		self.editor = ace.edit(a[1]);
+	}
 }
 </script>
 
 
+ -->
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 
 <script>
 
 
@@ -231,21 +290,21 @@ function ViewModel() {
 	self.node = new Divider({
 		type:"fixed-right",
 		resizeable:true,
-		// first:new TabsComponent(),
+		// first:new Tabs(),
 		first:new Divider({
 			type:"fixed-bottom",
 			resizeable:true,
-			first:new TabsComponent({tabs:ko.observableArray(["sok","eidj","eosfj","dijfd"])}),
-			second:new TabsComponent({tabs:ko.observableArray(["sodsfk","ergidj","jfsiodjf"])})
+			first:new Tabs({tabs:ko.observableArray(["sok","eidj","eosfj","dijfd"])}),
+			second:new TextArea()
 		}),
-		second:new TabsComponent({tabs:ko.observableArray(["weft","yyrw","idjfidjid","fdj","dijf"])})
+		second:new TextArea()
 	});
 }
 
 ko.applyBindings(justice);
 
 </script>
-
+ -->
 
 
 

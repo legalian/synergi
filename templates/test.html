@@ -1,0 +1,43 @@
+
+
+{% extends "template.html" %}
+{% set active_page = "editor" %}
+{% import "components.html" as components %}
+
+{% block body %}
+
+{{components.importDivider()}}
+{{components.importTabs()}}
+{{components.importTextArea()}}
+
+<div data-bind="template:{name:node.template,data:node,afterRender:node.onLoad}" style="height:100%"></div>
+<script>
+
+var justice = new ViewModel();
+
+function ViewModel() {
+	var self = this;
+	self.node = new Divider({
+		type:"fixed-right",
+		resizeable:true,
+		// first:new Tabs(),
+		first:new Divider({
+			type:"fixed-bottom",
+			resizeable:true,
+			first:new Tabs({tabs:ko.observableArray(["sok","eidj","eosfj","dijfd"])}),
+			second:new TextArea()
+		}),
+		second:new TextArea()
+	});
+}
+
+ko.applyBindings(justice);
+
+</script>
+
+
+{% endblock %}
+{% block footer %}
+{% endblock %}
+
+
