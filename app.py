@@ -6,10 +6,6 @@ from flask_session import Session
 import base64
 import requests
 import os
-import quopri
-import codecs
-import urlfetch
-import json
 
 from app_factory import db,app,blueprint,socketio
 # from flask_dance.consumer.storage import BaseStorage
@@ -39,10 +35,10 @@ def music():
 
 def gitcreds(github):
 	if not github.authorized: return None
-	print("sidjfoisdf")
+	# print("sidjfoisdf")
 	resp = github.get("/user").json()["login"]
 	session['githubuser'] = resp
-	print(session.get('github_oauth'))
+	# print(session.get('github_oauth'))
 	# session['github'] = github
 	# print("oiwjfeoiwjef")
 	return resp
@@ -186,11 +182,8 @@ def logout():
 
 @socketio.on('connect')
 def sdahoufa():
-	print("fuck you");
-	print("fuck you");
-	print("fuck you");
-	print("fuck you");
-	print("fuck you");
+	pass
+	
 
 
 
@@ -212,31 +205,16 @@ def files():
 		con = json.loads(r.content)
 
 		#json.loads(result.content)
-		# decode_hex = codecs.getdecoder("hex_codec")
-		# base6 = require('js-base64').Base64;
 		decoded = str(base64.b64decode(con['content']).decode("utf-8"))
-		# print("\n\n\n\n\n\n\n\n\n\n\n\n")
-		print(decoded)
-		# print("\n\n\n\n\n\n\n\n\n\n\n\n")
-		# byte = con['content'].encode()
-		# decoded = quopri.decodestring(byte, decode= True).decode("utf-8")
-
-		# decoded = base64.b16decode(str(decode))
-		# decoded = decode_hex(decode)[0]
 		book = TemFile(
 			session_id = sesh.id,
 			path = jak['path'],
 			content = decoded,
 			sha = con['sha']
 		)
-		print("\n\n\n\n\n\n\n\n\n\n\n\n")
-		print(book.content)
-		print("\n\n\n\n\n\n\n\n\n\n\n\n")
-		print("book added")
+
 		db.session.add(book)
 		db.session.commit()
-
-		print(TemFile.query.filter_by(session_id=int(sesh.id)).first().content)
 	return book.content
 
 
@@ -259,7 +237,7 @@ def handle_edit(edit):
 
 @app.route("/directories",methods=['POST'])
 def directories():
-	print(dict(request.json))
+	# print(dict(request.json))
 	sesh = Session.query.filter_by(id=int(request.json['sessionId'])).first()
 	if sesh == None: return
 	r = github.get("/repos/"+sesh.owner+"/"+sesh.repo+"/git/trees/"+sesh.sha+"?recursive=1,ref="+sesh.branch)
@@ -351,12 +329,8 @@ def on_disconnect():
 
 
 
-
-
 # def getfiles():
 # 	response = requests.get("http://127.0.0.1:5000")
-
-
 
 
 
@@ -366,3 +340,15 @@ if __name__ == '__main__':
 	# context = ('local.crt', 'local.key')#certificate and key files
 	socketio.run(app,debug=True,keyfile='key.pem', certfile='cert.pem')
 	#eventlet.monkey_patch(socket=False)
+
+
+
+
+
+
+
+
+
+
+
+

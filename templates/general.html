@@ -1,5 +1,6 @@
 
 
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.0/knockout-min.js"></script>
 
 <h3>Tasks</h3>
@@ -39,6 +40,7 @@ ko.subscribable.fn.subscribeChanged = function (callback) {
     return this.subscribe(function (latestValue) {
         var oldValue = savedValue;
         savedValue = [...latestValue];
+        console.log(latestValue);
         callback(latestValue, oldValue);
     });
 };
@@ -109,7 +111,7 @@ function reconstruct(props,syncs,changedInterval,vlaprops) {
 		var nlength = (props.keys?key.length+2+props.assign.length:0)+value.oldmsglength
 		if (vlaprops!=null && data.start==start && data.length==nlength) {
 			var sob = data.data.length==0?[]:[vlaprops.parser(data.data)];
-			vlaprops.objects.splice(i,1,sob);
+			vlaprops.objects.splice(i,1,...sob);
 			value.endpointUp=null;value.endpointDown=null;
 			syncs.splice(i,1,...sob.map(vlaprops.serializer));
 			vlaprops.resync();
@@ -146,12 +148,12 @@ function reconstruct(props,syncs,changedInterval,vlaprops) {
 		if (vlaprops==null || props.keys) {throw "Formatting broken; cannot add or remove properties to objects."}
 		if (second==first) {
 			var sof = rows.slice(1).map(vlaprops.parser);
-			vlaprops.objects.splice(first+1,0,sof);
+			vlaprops.objects.splice(first+1,0,...sof);
 			syncs.splice(first+1,0,...sof.map(vlaprops.serializer));
 			vlaprops.resync();
 		} else {
 			var sof = rows.slice(1,rows.length-1).map(vlaprops.parser);
-			vlaprops.objects.splice(first+1,second-first-1,sof);
+			vlaprops.objects.splice(first+1,second-first-1,...sof);
 			syncs.slice(first+1,second-(first+1)).forEach(function(item){item.endpointUp=null;item.endpointDown=null;});
 			syncs.splice(first+1,second-(first+1),...sof.map(vlaprops.serializer));
 			vlaprops.resync();
@@ -447,6 +449,7 @@ function TaskListViewModel() {
 	var synchronizer = SyncObservable.fromcsv({},
 		self.tasks,
 		function(string){
+			console.log(JSON.parse(string));
 			return new Task(JSON.parse(string));
 		},
 		function(obj){
@@ -461,6 +464,7 @@ function TaskListViewModel() {
 	var cosynchronizer = SyncObservable.fromcsv({},
 		self.cotasks,
 		function(ser){
+			console.log(JSON.parse(ser));
 			return new Task(JSON.parse(ser));
 		},
 		function(obj){

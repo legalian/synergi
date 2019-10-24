@@ -1,232 +1,345 @@
 
 
-
-
-
-
-
-{% macro importDivider() %}
+{% macro importscripts() %}
 <link rel="stylesheet" href="static/bower_components/split-pane/split-pane.css">
 <link rel="stylesheet" href="static/bower_components/split-pane/pretty-split-pane.css">
 <script src="static/bower_components/angular/angular.js"></script>
 <script src="static/bower_components/split-pane/split-pane.js"></script>
-<style type="text/css">
-	.split-pane-divider {background-color:gray;}
-	.static-pane-horizontal {position: relative;height:100%;}
-	.static-pane-vertical {position: relative;height:100%;}
-	.static-pane-horizontal .static-pane-component {left:0;right:0;}
-	.static-pane-vertical .static-pane-component {bottom:0;top:0;}
-	.static-pane-component {position: absolute;}
-</style>
-<script type="text/html" id="resizeable-area">
-	<div data-bind="class:resizeable?'split-pane '+type:'static-pane-'+align,attr:{id:id}">
-		<div data-bind="class:resizeable?'split-pane-component':'static-pane-component',template:{name:first().template,data:first(), afterRender:first().onLoad},style:style0"></div>
-		<!-- ko if:resizeable -->
-		<div class="split-pane-divider" data-bind="style:style1"></div>
-		<!-- /ko -->
-		<div data-bind="class:resizeable?'split-pane-component':'static-pane-component',template:{name:second().template,data:second(),afterRender:second().onLoad},style:style2"></div>
-	</div>
-</script>
-<script type="text/javascript">
-function Divider(props) {
-	var self = this;
-	props = Object.assign({initialmeasure:"10em",resizeable:true,type:"fixed-top",first:null,second:null,id:""},props)
-	self.resizeable = props.resizeable;
-	self.initialmeasure = props.initialmeasure;
-	self.id = props.id;
-	self.type = props.type;//fixed-bottom, fixed-right, fixed-left, fixed-top, horizontal-percent, vertical-percent
-	self.align = ["fixed-bottom","fixed-top","horizontal-percent"].includes(self.type)?"horizontal":"vertical";
-	self.template = "resizeable-area";
-	self.first  = ko.observable(props.first);
-	self.second = ko.observable(props.second);
-	switch (self.type) {
-		case "horizontal-percent":
-		case "fixed-left":
-			self.style0 = {left:0,width:props.initialmeasure};
-			self.style1 = {left:props.initialmeasure,width:'5px'};
-			self.style2 = {right:0,left:props.initialmeasure,marginLeft:'5px'};
-		break;
-		case "fixed-right":
-			self.style0 = {left:0,right:props.initialmeasure};
-			self.style1 = {right:props.initialmeasure,width:'5px'};
-			self.style2 = {right:0,width:props.initialmeasure,marginLeft:'5px'};
-		break;
-		case "vertical-percent":
-		case "fixed-top":
-			self.style0 = {top:0,height:props.initialmeasure};
-			self.style1 = {top:props.initialmeasure,height:'5px'};
-			self.style2 = {bottom:0,top:props.initialmeasure,marginTop:'5px'};
-		break;
-		case "fixed-bottom":
-			self.style0 = {top:0,bottom:props.initialmeasure};
-			self.style1 = {bottom:props.initialmeasure,height:'5px'};
-			self.style2 = {bottom:0,height:props.initialmeasure,marginTop:'5px'};
-		break;
-		default: throw "unrecognized type";
-	}
-	self.vresize = function() {
-		self.first().vresize();
-		self.second().vresize();
-	}
-	self.onLoad = function(a) {
-		$(a[1]).splitPane();
-		$(a[1]).on('splitpaneresize', function(event) {
-			var target = event.target === document ? window : event.target;
-			if (target === a[1]) {
-				self.vresize();
-			}
-		});
-	};
-}
-</script>
-{% endmacro %}
-
-
-
-
-
-
-
-{% macro importTabs() %}
 <link rel="stylesheet" href="static/bower_components/dragula.js/dist/dragula.min.css">
 <script src="static/bower_components/dragula.js/dist/dragula.min.js"></script>
-<style type="text/css">
-	.tabs {height:100%;display: flex;}
-	.tab {
-		position:relative;
-		height:100%;
-		text-align:center;
-		background-color:lightgrey;
-		border-style: solid;
-		border-width: 1px;
-		border-color: black;
-		border-top-right-radius:5px;
-		border-top-left-radius:5px;
-		/*display: inline-block;*/
-		text-align: center;
-	}
-	.littlex {
-		position:absolute;
-		right:5px;
-		bottom: 50%;
-		width: 12px;
-		height: 12px;
-		font-size: 12px !important;
-	}
-	.innertabtext {
-		display: inline-block;
-		height:100%;
-		margin-left:20px;
-		margin-right:20px;
-	}
-	.innertabtext:before {
-		content: "";
-		display: inline-block;
-		height: 100%;
-		vertical-align: middle;
-	}
-	.tab.selected {
-		background-color: grey;
-	}
-</style>
-<script type="text/html" id="tabs-area">
-	<div class="tabs" data-bind="foreach:tabs,attr:{id:id}">
-		<div class="tab" data-bind="attr:{index:$index()},class:$index()==$parent.selected()?'selected':'',style:$parent.fill?{flex:1}:{},click:function(){$parent.select($index(),$data);}">
-			<div class="innertabtext" data-bind="text:$data"></div>
-			<!-- ko if:$parent.closeable -->
-			<i class="material-icons littlex" data-bind="click:function(){$parent.remove($index(),$data)},clickBubble:false">close</i>
+<script src="static/bower_components/ace/build/src/ace.js"></script>
+{% endmacro %}
+
+{% macro importDivider() %}
+	<style type="text/css">
+		.split-pane-divider {background-color:gray;}
+		.static-pane-horizontal {position: relative;height:100%;}
+		.static-pane-vertical {position: relative;height:100%;}
+		.static-pane-horizontal .static-pane-component {left:0;right:0;}
+		.static-pane-vertical .static-pane-component {bottom:0;top:0;}
+		.static-pane-component {position: absolute;}
+	</style>
+	<script type="text/html" id="resizeable-area">
+		<div data-bind="class:resizeable?'split-pane '+type:'static-pane-'+align,attr:{id:id}">
+			<div data-bind="class:resizeable?'split-pane-component':'static-pane-component',template:{name:first().template,data:first(), afterRender:first().onLoad},style:style0"></div>
+			<!-- ko if:resizeable -->
+			<div class="split-pane-divider" data-bind="style:style1"></div>
 			<!-- /ko -->
+			<div data-bind="class:resizeable?'split-pane-component':'static-pane-component',template:{name:second().template,data:second(),afterRender:second().onLoad},style:style2"></div>
 		</div>
-	</div>
-</script>
-<script type="text/javascript">
-function Tabs(props) {
-	var self = this;
-	props = Object.assign({closeable:false,rearrangeable:false,fill:false,tabs:null,id:"",didSelect:null,selected:null},props);
-	self.template = "tabs-area";
-	self.rearrangeable = props.rearrangeable;
-	self.closeable = props.closeable;
-	self.tabs = props.tabs;
-	self.id = props.id;
-	self.fill = props.fill;
-	self.selected = ko.observable(props.selected);
-	self.vresize = function() {}
-	self.remove = function(item,blod) {
-		var matabs = self.tabs();
-		if (matabs.length==1) {self.selected(null);}
-		else if (self.selected()==item && item == matabs.length-1 || self.selected()>item) {
-			self.selected(self.selected()-1)
+	</script>
+	<script type="text/javascript">
+	function Divider(props) {
+		var self = this;
+		props = Object.assign({initialmeasure:"10em",resizeable:true,type:"fixed-top",first:null,second:null,id:""},props)
+		self.resizeable = props.resizeable;
+		self.initialmeasure = props.initialmeasure;
+		self.id = props.id;
+		self.type = props.type;//fixed-bottom, fixed-right, fixed-left, fixed-top, horizontal-percent, vertical-percent
+		self.align = ["fixed-bottom","fixed-top","horizontal-percent"].includes(self.type)?"horizontal":"vertical";
+		self.template = "resizeable-area";
+		self.first  = ko.observable(props.first);
+		self.second = ko.observable(props.second);
+		switch (self.type) {
+			case "horizontal-percent":
+			case "fixed-left":
+				self.style0 = {left:0,width:props.initialmeasure};
+				self.style1 = {left:props.initialmeasure,width:'5px'};
+				self.style2 = {right:0,left:props.initialmeasure,marginLeft:'5px'};
+			break;
+			case "fixed-right":
+				self.style0 = {left:0,right:props.initialmeasure};
+				self.style1 = {right:props.initialmeasure,width:'5px'};
+				self.style2 = {right:0,width:props.initialmeasure,marginLeft:'5px'};
+			break;
+			case "vertical-percent":
+			case "fixed-top":
+				self.style0 = {top:0,height:props.initialmeasure};
+				self.style1 = {top:props.initialmeasure,height:'5px'};
+				self.style2 = {bottom:0,top:props.initialmeasure,marginTop:'5px'};
+			break;
+			case "fixed-bottom":
+				self.style0 = {top:0,bottom:props.initialmeasure};
+				self.style1 = {bottom:props.initialmeasure,height:'5px'};
+				self.style2 = {bottom:0,height:props.initialmeasure,marginTop:'5px'};
+			break;
+			default: throw "unrecognized type";
 		}
-		matabs.splice(item,1);
-		self.tabs(matabs);
-	};
-	self.select = function(bwow,blod) {
-		if (self.tabs()[bwow]!=blod) {return;}
-		self.selected(bwow);
-	};
-	self.onLoad = function(a) {
-		if (self.rearrangeable) {
-			dragula([a[1]]).on('drop', function (el,_,_,sibling) {
-				var fordex;
-				if (sibling == null) {
-					fordex = self.tabs().length;
-				} else {
-					fordex = parseInt(sibling.getAttribute('index'));
-				}
-				var eldex = parseInt(el.getAttribute('index'));
-				if (eldex<fordex) {fordex--;}
-				var matabs = self.tabs()
-				matabs.splice(fordex,0,...matabs.splice(eldex,1));
-				self.tabs(matabs);
-				if (self.selected()==eldex) {
-					self.selected(fordex);
-				} else {
-					if (self.selected()>fordex) {self.selected(self.selected()+1)}
-					if (self.selected()>eldex)  {self.selected(self.selected()-1)}
-					else if (self.selected()==fordex) {self.selected(self.selected()+1)}
+		self.vresize = function() {
+			self.first().vresize();
+			self.second().vresize();
+		}
+		self.onLoad = function(a) {
+			$(a[1]).splitPane();
+			$(a[1]).on('splitpaneresize', function(event) {
+				var target = event.target === document ? window : event.target;
+				if (target === a[1]) {
+					self.vresize();
 				}
 			});
-		}
-	};
-}
-</script>
+		};
+	}
+	</script>
 {% endmacro %}
 
-
-
-
-
-
+{% macro importTabs() %}
+	<style type="text/css">
+		.tabs {height:100%;display: flex;}
+		.tab {
+			position:relative;
+			height:100%;
+			text-align:center;
+			background-color:lightgrey;
+			border-style: solid;
+			border-width: 1px;
+			border-color: black;
+			border-top-right-radius:5px;
+			border-top-left-radius:5px;
+			/*display: inline-block;*/
+			text-align: center;
+		}
+		.littlex {
+			position:absolute;
+			right:5px;
+			bottom: 50%;
+			width: 12px;
+			height: 12px;
+			font-size: 12px !important;
+		}
+		.innertabtext {
+			display: inline-block;
+			height:100%;
+			margin-left:20px;
+			margin-right:20px;
+		}
+		.innertabtext:before {
+			content: "";
+			display: inline-block;
+			height: 100%;
+			vertical-align: middle;
+		}
+		.tab.selected {
+			background-color: grey;
+		}
+	</style>
+	<script type="text/html" id="tabs-area">
+		<div class="tabs" data-bind="foreach:tabs,attr:{id:id}">
+			<div class="tab" data-bind="attr:{index:$index()},class:$index()==$parent.selected()?'selected':'',style:$parent.fill?{flex:1}:{},click:function(){$parent.select($index(),$data);}">
+				<div class="innertabtext" data-bind="text:$data"></div>
+				<!-- ko if:$parent.closeable -->
+				<i class="material-icons littlex" data-bind="click:function(){$parent.remove($index(),$data)},clickBubble:false">close</i>
+				<!-- /ko -->
+			</div>
+		</div>
+	</script>
+	<script type="text/javascript">
+	function Tabs(props) {
+		var self = this;
+		props = Object.assign({closeable:false,rearrangeable:true,fill:false,tabs:null,id:"",didSelect:null,selected:null},props);
+		self.template = "tabs-area";
+		self.rearrangeable = props.rearrangeable;
+		self.closeable = props.closeable;
+		self.tabs = props.tabs;
+		self.id = props.id;
+		self.fill = props.fill;
+		self.selected = ko.observable(props.selected);
+		self.vresize = function() {}
+		self.remove = function(item,blod) {
+			var matabs = self.tabs();
+			if (matabs.length==1) {self.selected(null);}
+			else if (self.selected()==item && item == matabs.length-1 || self.selected()>item) {
+				self.selected(self.selected()-1)
+			}
+			matabs.splice(item,1);
+			self.tabs(matabs);
+		};
+		self.select = function(bwow,blod) {
+			if (self.tabs()[bwow]!=blod) {return;}
+			self.selected(bwow);
+		};
+		self.onLoad = function(a) {
+			if (self.rearrangeable) {
+				dragula([a[1]]).on('drop', function (el,source,dest,sibling) {
+					var fordex = self.tabs().length;
+					if (sibling != null) {fordex = parseInt(sibling.getAttribute('index'));}
+					var eldex = parseInt(el.getAttribute('index'));
+					if (eldex<fordex) {fordex--;}
+					var matabs = self.tabs()
+					matabs.splice(fordex,0,...matabs.splice(eldex,1));
+					self.tabs(matabs);
+					if (self.selected()==eldex) {
+						self.selected(fordex);
+					} else {
+						if (self.selected()>fordex) {self.selected(self.selected()+1)}
+						if (self.selected()>eldex)  {self.selected(self.selected()-1)}
+						else if (self.selected()==fordex) {self.selected(self.selected()+1)}
+					}
+				});
+			}
+		};
+	}
+	</script>
+{% endmacro %}
 
 {% macro importTextArea() %}
-<script src="static/bower_components/ace/build/src/ace.js"></script>
-<style type="text/css">
-	.editor {
-		position:relative;
-		width:100%;
-		height:100%;
+	<style type="text/css">
+		.editor {
+			position:relative;
+			width:100%;
+			height:100%;
+		}
+	</style>
+	<script type="text/html" id="text-area">
+		<div class="editor" data-bind="text:text"></div>
+	</script>
+	<script type="text/javascript">
+	function TextArea(props){
+		var self = this;
+		props = Object.assign({text:null},props);
+		// editor.session.setMode("ace/mode/javascript");
+		self.template="text-area";
+		self.text = props.text
+		self.editor = null;
+		self.vresize = function() {
+			if (self.editor != null) {self.editor.resize();}
+		}
+		self.onLoad = function(a) {
+			self.editor = ace.edit(a[1]);
+		}
 	}
-</style>
-<script type="text/html" id="text-area">
-	<div class="editor" data-bind="text:text"></div>
-</script>
-<script type="text/javascript">
-function TextArea(props){
-	var self = this;
-	props = Object.assign({text:null},props);
-	// editor.session.setMode("ace/mode/javascript");
-	self.template="text-area";
-	self.text = props.text
-	self.editor = null;
-	self.vresize = function() {
-		if (self.editor != null) {self.editor.resize();}
-	}
-	self.onLoad = function(a) {
-		self.editor = ace.edit(a[1]);
-	}
-}
-</script>
+	</script>
 {% endmacro %}
+
+{% macro importRecursiveArea() %}
+	
+	<script type="text/html" id="recursive-area">
+		<div style="margin-left:20px;margin-bottom:5px;" data-bind="attr:{index:index}">
+			<!-- ko foreach:data -->
+			<div data-bind="attr:{index:$parent.index.concat([$index()])}">
+				<div class="recursiveelement" style="display: flex">
+					<div style="width:30px;text-align: center;" data-bind="if:$data.data">
+						<i data-bind="class:expanded()?'material-icons rotate-90':'material-icons',click:function(){expanded(!expanded())}">play_arrow</i>
+					</div>
+					<div style="flex:1">
+						<span>wakwakawwkawkaw</span>
+					</div>
+				</div>
+				<!-- ko if:$data.data -->
+					<div data-bind="visible: expanded()">
+					<!-- ko template:{
+						name: 'recursive-area',
+						data:{drags:$parent.drags,data:$data,index:$parent.index.concat([$index()])},
+						afterRender:function(a,b,c,d){$parent.drags.push(a[1]);console.log("debug");}} -->
+					<!-- /ko -->
+					</div>
+				<!-- /ko -->
+			</div>
+			<!-- /ko -->
+		</div>
+	</script>
+	<script type="text/javascript">
+	function RecursiveArea(props){
+		var self = this;
+		props = Object.assign({data:null,id:""},props);
+		self.index = [];
+		self.drags = [];
+		self.template = "recursive-area";
+
+		self.expanded = ko.observable(false);
+		self.data = ko.observableArray([
+			{
+				expanded:ko.observable(false),
+				data:ko.observableArray([
+					{
+						expanded:ko.observable(false),
+						data:ko.observableArray([{},{},{}])
+					}
+				]),
+			},
+			{
+				expanded:ko.observable(false),
+				data:ko.observableArray([{}])
+			}
+		]);
+		// self.selected = ko.observable(null);
+		self.vresize = function() {}
+		self.onLoad = function(a) {
+			dragula(self.drags.concat([a[1]]),{
+				moves: function (el, source, handle,sibling) {
+					// console.log(el,source,handle,sibling)
+					while(handle.getAttribute('index') == null) {
+						handle = handle.parentElement;
+					}
+					return handle.getAttribute('index')==el.getAttribute('index');
+				},
+				accepts: function (el, dest, source,sibling) {
+					// console.log(el,source,dest,sibling)
+					var onetext = dest.getAttribute('index')
+					var twotext = el.getAttribute('index')
+					var onear = onetext==""?[]:onetext.split(",").map(function(item){return parseInt(item);})
+					var twoar = twotext==""?[]:twotext.split(",").map(function(item){return parseInt(item);})
+					var val = false;
+					twoar.forEach(function(item,index){
+						if (index>=onear.length || onear[index] != item) {val=true;}
+					});
+					return val; // elements are always draggable by default
+				},
+			}).on('drop', function (el,source,dest,sibling) {
+				function pathof(i) {var j=i.getAttribute('index');return j==""?[]:j.split(",").map(function(item){return parseInt(item);})}
+				function insert(p,data,n) {
+					// console.log(data(),p)
+					// console.log("asdfasdf",p,p.length,p[p.length-1],data()[p[p.length-1]]);
+					if (p.length==1) {data(data().slice(0,p[0]-1).concat([n]).concat(data().slice(p[0]-1)));}
+					else {
+						// console.log("ifjs",data()[p[p.length-1]].data);
+						insert(p.slice(1),data()[p[0]].data,n);
+					}
+				};
+				function pop(p,data) {
+					if (p.length==1) {var dats = data();var res = dats.splice(p[0],1);data([...dats]);return res[0];}
+					else {return pop(p.slice(1),data()[p[0]].data);}
+				};
+				function get(p,data) {
+					if (p.length==1) {return data()[p[0]];}
+					else {return get(p.slice(1),data()[p[0]].data);}
+				};
+				var vat;
+				var elpath = pathof(el);
+				var sibpath;
+				if (sibling==null) {
+					sibpath = pathof(dest);
+					vat = sibpath.length;
+					console.log("inferred");
+					sibpath.push(get(sibpath,self.data).data().length-1);
+				} else {
+					sibpath = pathof(sibling);
+					console.log(elpath,sibpath);
+					vat = sibpath.length;
+				};
+				var i=0;
+				while (i<Math.min(elpath.length,vat) && elpath[i]==sibpath[i]) {i++}
+				if (i<Math.min(elpath.length,vat) && elpath[i]<sibpath[i]) {sibpath[i]--;}
+				insert(sibpath,self.data,pop(elpath,self.data));
+				function recprint(i,data) {
+					i++;
+					return data.map(function(data){
+						var ltabs = "";
+						for (var u=0;u<i;u++) {ltabs = ltabs+"==";}
+						ltabs += "0\n";
+						if (data.data != undefined) {
+							ltabs += recprint(i+1,data.data())
+						}
+						return ltabs
+					}).join("")
+				}
+				console.log(recprint(0,self.data()));
+			});
+			self.drags = [];
+		}
+	}
+	</script>
+{% endmacro %}
+
 
 
 

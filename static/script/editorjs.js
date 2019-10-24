@@ -79,7 +79,6 @@ function File(data) {
 	}
 	self.requestload = function(callback) {
 		console.log("RequestLoad")
-		console.log(self.content().getValue)
 		if (!self.loaded) {
 			self.loaded = true;
 			function aye(data) {
@@ -97,7 +96,6 @@ function File(data) {
 					console.log("Success")
 					console.log(data)
 					console.log(self.content(data).getValue)
-					// self.editor
 					self.content(data);
 					callback();
 				}
@@ -127,7 +125,6 @@ function AppViewModel() {
 	self.editor = ace.edit("editor");
 	self.editor.setTheme("ace/theme/monokai");
 	self.editor.session.setMode("ace/mode/javascript");
-	// var beautify = ace.require("ace/ext/beautify");
 	self.listening = 0;
 	socket.on('edit',function(data){
 		console.log("event edit",data)

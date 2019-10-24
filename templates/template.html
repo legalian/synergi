@@ -40,60 +40,62 @@
 	<title>Synergi Code Editor</title>
 </head>
 <body>
-	<div id="header-wrapper" style="">
-		<div id="header" class="container" style="">
-			<div id="logo" style="display: flex">
-				<div style="display: flex; flex-direction: column; justify-content: center;">
-					<img style = "float:left; width:50px; height:50px;" src="/static/Synergi_Logo.png" alt="Logo"/>
+	<div id="fulwrap">
+		<div id="header-wrapper" style="">
+			<div id="header" class="container" style="">
+				<div id="logo" style="display: flex">
+					<div style="display: flex; flex-direction: column; justify-content: center;">
+						<img style = "float:left; width:50px; height:50px;" src="/static/Synergi_Logo.png" alt="Logo"/>
+					</div>
+					<div style="display: flex; flex-direction: column; justify-content: center;">
+						<h1 style=""><a href="/" style="">Synergi</a></h1>
+					</div>
 				</div>
-				<div style="display: flex; flex-direction: column; justify-content: center;">
-					<h1 style=""><a href="/" style="">Synergi</a></h1>
+				<div id="menu" style=" width:60%; ">
+					<ul style=" width:100%">
+						{% for href, id, caption in navigation_bar%}
+						<li {% if id == active_page %} class="current_page_item" {% endif %}><a href="{{href}}">{{caption}}</a></li>
+						{% endfor %}
+						<li {% if active_page != 'projectlist' %} style="display:none;" {% endif %}><a class="login trigger_popup_fricc" id="create_new_proj" href="#">Create New Project</a></li>
+						{% if creds == None %}
+							<li style="float:right;"><a class="login" id="login" style="" href="/gitlogin">Login</a></li>
+						{% endif %}
+						{% if creds != None %}
+							<li style="float:right;"><a class="login" id="login" style="" href="/logout">{{creds}}</a></li>
+						{% endif %}
+					</ul>
 				</div>
-			</div>
-			<div id="menu" style=" width:60%; ">
-				<ul style=" width:100%">
-					{% for href, id, caption in navigation_bar%}
-					<li {% if id == active_page %} class="current_page_item" {% endif %}><a href="{{href}}">{{caption}}</a></li>
-					{% endfor %}
-					<li {% if active_page != 'projectlist' %} style="display:none;" {% endif %}><a class="login trigger_popup_fricc" id="create_new_proj" href="#">Create New Project</a></li>
-					{% if creds == None %}
-						<li style="float:right;"><a class="login" id="login" style="" href="/gitlogin">Login</a></li>
-					{% endif %}
-					{% if creds != None %}
-						<li style="float:right;"><a class="login" id="login" style="" href="/logout">{{creds}}</a></li>
-					{% endif %}
-				</ul>
 			</div>
 		</div>
-	</div>
 
 
 
-<!-- parkers junk code -->
-<!-- 
-  <svg width="0" height="0" style="position:absolute;" viewBox="0 0 0 0">
-    <defs>
-      <pattern id="smallGrid" width="6" height="6" patternUnits="userSpaceOnUse">
-        <path d="M 8 0 L 0 0 0 6" fill="none" stroke="gray" stroke-width="0.5"/>
-      </pattern>
-      <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
-        <rect width="60" height="60" fill="url(#smallGrid)"/>
-        <path d="M 60 0 L 0 0 0 60" fill="none" stroke="gray" stroke-width="1"/>
-      </pattern>
-    </defs>
-  </svg>
--->
+	<!-- parkers junk code -->
+	<!-- 
+	  <svg width="0" height="0" style="position:absolute;" viewBox="0 0 0 0">
+	    <defs>
+	      <pattern id="smallGrid" width="6" height="6" patternUnits="userSpaceOnUse">
+	        <path d="M 8 0 L 0 0 0 6" fill="none" stroke="gray" stroke-width="0.5"/>
+	      </pattern>
+	      <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+	        <rect width="60" height="60" fill="url(#smallGrid)"/>
+	        <path d="M 60 0 L 0 0 0 60" fill="none" stroke="gray" stroke-width="1"/>
+	      </pattern>
+	    </defs>
+	  </svg>
+	-->
 
-<!-- ///////////////// -->
-	<div id="bodycontent">
-		{% block body %}
+	<!-- ///////////////// -->
+		<div id="bodycontent">
+			{% block body %}
+			{% endblock %}
+		</div>
+		{% block footer %}
+		<div id="copyright" class="container">
+			<p>&copy; 2019 || Website by Sil Apostu, Eric Durbin, Vamsi Kolluri, Parker Lawrence || All rights reserved. || Design by <a href="http://templated.co" rel="nofollow">TEMPLATED</a>.</p>
+		</div>
 		{% endblock %}
 	</div>
-	{% block footer %}
-	<div id="copyright" class="container">
-		<p>&copy; 2019 || Website by Sil Apostu, Eric Durbin, Vamsi Kolluri, Parker Lawrence || All rights reserved. || Design by <a href="http://templated.co" rel="nofollow">TEMPLATED</a>.</p>
-	</div>
-	{% endblock %}
 </body>
 
 
