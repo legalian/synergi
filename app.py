@@ -6,6 +6,10 @@ from flask_session import Session
 import base64
 import requests
 import os
+import quopri
+import codecs
+import urlfetch
+import json
 
 from app_factory import db,app,blueprint,socketio
 # from flask_dance.consumer.storage import BaseStorage
@@ -45,9 +49,9 @@ def gitcreds(github):
 
 
 
-@app.route('/template')
-def frickyouParker():
-	return render_template('/template.html')
+# @app.route('/template')
+# def frickyouParker():
+# 	return render_template('/template.html')
 
 
 @app.route("/")
@@ -67,12 +71,11 @@ def repos():
 	openrepos = []
 	res = []
 	for i in github.get("/user/repos").json():
-		print("accessing:"+str(i['owner']['login'])+","+str(i['name']))
-		print([k.serialize() for k in Project.query.all()])
+		# print("accessing:"+str(i['owner']['login'])+","+str(i['name']))
+		# print([k.serialize() for k in Project.query.all()])
 
 
-		repo = Project.query.filter_by(owner=str(i['owner']['login']),repo=str(i['name'])).first()
-		if repo != None:
+		for repo in Project.query.filter_by(owner=str(i['owner']['login']),repo=str(i['name'])).all():
 			res.append(repo.serialize())
 
 		openrepos.append({
@@ -82,11 +85,50 @@ def repos():
 		})
 	return {'openrepos':openrepos,'res':res}
 
+@app.route("/deleteObject", methods=['POST'])
+def deleteObject():
+	data = request.json
+	print(".")
+	print(".")
+	print(".")
+	print(".")
+	print(".")
+	print("Data:")
+	print(data)
+
+	# for yams in Project.query.all():
+	# 	print("project ",yams.serialize())
+	# else:
+	# 	print("Nothing to project delete before")
+	# for yams in Session.query.all():
+	# 	print("session ",yams.serialize())
+	# else:
+	# 	print("Nothing tosession delete before")
+
+
+	for sesh in Session.query.filter_by(project_id = data["projectid"]).all():
+		TemFile.query.filter_by(session_id = sesh.id).delete()
+	Session.query.filter_by(project_id = data["projectid"]).delete()
+	Project.query.filter_by(id = data["projectid"]).delete()
+
+
+
+	db.session.commit()
+
+	for yams in Project.query.filter_by(id = data["projectid"]).all():
+		print(yams.serialize())
+	else:
+		print("Nothing to delete after")
+
+
+
+	return "200"
 
 
 @app.route("/projects",methods=['POST'])
 def projects():
 	yam = request.form
+	print("OAIJDFOIAJDOIASJDOFIJSDFOIJSDLKFJSLKDFJLSKDFJLKSDJFLKSDFJLKSDFJ\n\n\n\n")
 	proj = Project(
 		name       = str(yam['name']),
 		repo       = str(yam['repo']),
@@ -96,8 +138,8 @@ def projects():
 	)
 	db.session.add(proj)
 	db.session.commit()
-	return projectlist();
-
+	return "200"
+# 
 
 
 # @app.route("/projects/<int:id>",methods=['GET','PUT','DELETE'])
@@ -166,18 +208,36 @@ def files():
 		if r.status_code != 200:
 			print(r.content)
 			return
-		con = r.json()
+		# con = r.json()
+		con = json.loads(r.content)
+
+		#json.loads(result.content)
+		# decode_hex = codecs.getdecoder("hex_codec")
+		# base6 = require('js-base64').Base64;
+		decoded = str(base64.b64decode(con['content']).decode("utf-8"))
+		# print("\n\n\n\n\n\n\n\n\n\n\n\n")
+		print(decoded)
+		# print("\n\n\n\n\n\n\n\n\n\n\n\n")
+		# byte = con['content'].encode()
+		# decoded = quopri.decodestring(byte, decode= True).decode("utf-8")
+
+		# decoded = base64.b16decode(str(decode))
+		# decoded = decode_hex(decode)[0]
 		book = TemFile(
 			session_id = sesh.id,
 			path = jak['path'],
-			content = con['content'],
+			content = decoded,
 			sha = con['sha']
 		)
+		print("\n\n\n\n\n\n\n\n\n\n\n\n")
+		print(book.content)
+		print("\n\n\n\n\n\n\n\n\n\n\n\n")
 		print("book added")
 		db.session.add(book)
 		db.session.commit()
-	return book.content
 
+		print(TemFile.query.filter_by(session_id=int(sesh.id)).first().content)
+	return book.content
 
 
 
@@ -248,7 +308,6 @@ def on_join(data):
 	if sesh == None: return
 	sesh.activemembers = sesh.activemembers+","+creds
 	db.session.commit()
-
 
 	join_room(str(repo.id)+","+str(sesh.id))
 	emit('accept',{'sessionId':sesh.id,'activemembers':sesh.activemembers},room=request.sid)

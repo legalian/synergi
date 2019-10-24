@@ -99,7 +99,8 @@
 		<div class="collapsible-content">
 			<ul>
 				<li class = "name" data-bind="text:name">Name</li>
-				<li class="edit"><a data-bind="attr:{href:'/editor?projectId='+id}">Edit</a></li>	
+				<li class="edit"><a data-bind="attr:{href:'/editor?projectId='+id}">Edit</a></li>
+				<li class="delete"><a data-bind = "click: deleteObject">Delete</a></li>
 			</ul>
 			<ul class ="content-inner">
 				<li><div>Description:  </div></li>
@@ -114,7 +115,24 @@
 <script>
 
 var justice = new AppViewModel();
-
+function deleteObject(dat) {
+		console.log("trying to delete")
+		console.log(".")
+		console.log(".")
+		console.log(".")
+		console.log(".")
+		$.ajax("/deleteObject", {
+					type: "POST",
+					data: ko.toJSON({
+						projectid:dat.id
+					}),
+					contentType: "application/json",
+					success: function(data){
+						console.log("Deleted")
+						justice.results.remove(dat);
+					}
+				});
+	}
 
 function AppViewModel() {
 	var self =	this;
@@ -136,7 +154,7 @@ function AppViewModel() {
 
 
 	self.results  = ko.observableArray([]);
-
+	
 
 	
 	$.ajax("/repos", {
