@@ -35,10 +35,10 @@ def music():
 
 def gitcreds(github):
 	if not github.authorized: return None
-	print("sidjfoisdf")
+	# print("sidjfoisdf")
 	resp = github.get("/user").json()["login"]
 	session['githubuser'] = resp
-	print(session.get('github_oauth'))
+	# print(session.get('github_oauth'))
 	# session['github'] = github
 	# print("oiwjfeoiwjef")
 	return resp
@@ -67,8 +67,8 @@ def repos():
 	openrepos = []
 	res = []
 	for i in github.get("/user/repos").json():
-		print("accessing:"+str(i['owner']['login'])+","+str(i['name']))
-		print([k.serialize() for k in Project.query.all()])
+		# print("accessing:"+str(i['owner']['login'])+","+str(i['name']))
+		# print([k.serialize() for k in Project.query.all()])
 
 
 		repo = Project.query.filter_by(owner=str(i['owner']['login']),repo=str(i['name'])).first()
@@ -144,11 +144,8 @@ def logout():
 
 @socketio.on('connect')
 def sdahoufa():
-	print("fuck you");
-	print("fuck you");
-	print("fuck you");
-	print("fuck you");
-	print("fuck you");
+	pass
+	
 
 
 
@@ -173,7 +170,7 @@ def files():
 			content = con['content'],
 			sha = con['sha']
 		)
-		print("book added")
+		# print("book added")
 		db.session.add(book)
 		db.session.commit()
 	return book.content
@@ -199,7 +196,7 @@ def handle_edit(edit):
 
 @app.route("/directories",methods=['POST'])
 def directories():
-	print(dict(request.json))
+	# print(dict(request.json))
 	sesh = Session.query.filter_by(id=int(request.json['sessionId'])).first()
 	if sesh == None: return
 	r = github.get("/repos/"+sesh.owner+"/"+sesh.repo+"/git/trees/"+sesh.sha+"?recursive=1,ref="+sesh.branch)
@@ -292,12 +289,8 @@ def on_disconnect():
 
 
 
-
-
 # def getfiles():
 # 	response = requests.get("http://127.0.0.1:5000")
-
-
 
 
 
@@ -307,3 +300,15 @@ if __name__ == '__main__':
 	# context = ('local.crt', 'local.key')#certificate and key files
 	socketio.run(app,debug=True,keyfile='key.pem', certfile='cert.pem')
 	#eventlet.monkey_patch(socket=False)
+
+
+
+
+
+
+
+
+
+
+
+

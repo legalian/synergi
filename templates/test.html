@@ -5,10 +5,11 @@
 {% import "components.html" as components %}
 
 {% block body %}
-
+{{components.importscripts()}}
 {{components.importDivider()}}
 {{components.importTabs()}}
 {{components.importTextArea()}}
+{{components.importRecursiveArea()}}
 
 <div data-bind="template:{name:node.template,data:node,afterRender:node.onLoad}" style="height:100%"></div>
 <script>
@@ -22,10 +23,10 @@ function ViewModel() {
 		resizeable:true,
 		// first:new Tabs(),
 		first:new Divider({
-			type:"fixed-bottom",
+			type:"fixed-top",
 			resizeable:true,
 			first:new Tabs({tabs:ko.observableArray(["sok","eidj","eosfj","dijfd"])}),
-			second:new TextArea()
+			second:new RecursiveArea()
 		}),
 		second:new TextArea()
 	});

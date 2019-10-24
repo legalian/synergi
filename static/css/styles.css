@@ -10,8 +10,9 @@ html, body {
   margin: 0;
   padding: 0;
 }
-body {
+#fulwrap {
   display: table;
+  height:100%;
 }
 
 #header-wrapper {
