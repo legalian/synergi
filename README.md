@@ -4,8 +4,6 @@ TODO
 -- fix bugs
 -- md5 hash
 -- beautify dropdown menus in browse
--- redirect on project creation
--- 
 
 Stretch Goals
 -- change filename from todolist to browse

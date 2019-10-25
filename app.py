@@ -6,6 +6,7 @@ from flask_session import Session
 import base64
 import requests
 import os
+import json
 import hashlib
 
 from app_factory import db,app,blueprint,socketio
@@ -104,7 +105,8 @@ def projects():
 	)
 	db.session.add(proj)
 	db.session.commit()
-	return "200"
+	return redirect("/projectlist")
+	
 
 
 @app.route("/editor")
@@ -232,9 +234,15 @@ def on_join(data):
 
 	sesh = Session.query.filter_by(project_id=int(repo.id)).first()
 	if sesh == None: return
-	sesh.activemembers = sesh.activemembers+","+creds
+	yam =  sesh.activemembers
+	jj = [] if yam=="" else yam.split(",") 
+	if creds not in jj:
+		jj.append(creds)
+		sesh.activemembers = ",".join(jj)
+
 	db.session.commit()
 
+	session['sessionId'] = sesh.id
 	join_room(str(repo.id)+","+str(sesh.id))
 	emit('accept',{'sessionId':sesh.id,'activemembers':sesh.activemembers},room=request.sid)
 	emit('player_join',{'name':creds},room=str(repo.id)+","+str(sesh.id),include_self=False)
@@ -245,10 +253,14 @@ def on_join(data):
 @socketio.on('disconnect')
 def on_disconnect():
 	creds=session['githubuser']
-	for sesh in Session.query:
+	for sesh in Session.query.filter_by(id=int(session['sessionId'])).all():
 		jj = sesh.activemembers.split(",")
 		if creds in jj:
+			print("\n\n\nfound ", jj, creds )
 			jj.remove(creds)
+			print("\n\n\nremoved ", jj, creds)
+		else:
+			print("\n\n\nnot found: ", jj, creds )
 		sesh.activemembers = ",".join(jj)
 	db.session.commit()
 	emit('player_leave',{'name':creds},include_self=False)

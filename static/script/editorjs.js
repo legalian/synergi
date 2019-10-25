@@ -107,6 +107,7 @@ function File(data) {
 	}
 }
 function User(data) {
+	var self = this;
 	self.name = data;
 	self.color = COLORS[colori];
 	colori = (colori+1)%12;
@@ -115,11 +116,14 @@ function AppViewModel() {
 	var self =	this;
 	self.children = ko.observableArray([]);
 	self.tabs = ko.observableArray([]);
+	console.log(servedata['activemembers'])
 	self.activeusers = ko.observableArray(servedata['activemembers'].split(",").map(function(item){return new User(item);}));
 	socket.on('player_join',function(data){
+		console.log("Player joined: " + data.name)
 		self.activeusers.push(data.name);
 	});
 	socket.on('player_leave',function(data){
+		console.log("Player left: " + data.name)
 		self.activeusers.remove(data.name);
 	});
 	self.editor = ace.edit("editor");

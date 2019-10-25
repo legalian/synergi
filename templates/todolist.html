@@ -52,6 +52,12 @@
 	  padding: 12px 16px;
 	  z-index: 1;
 	}
+
+	.border {
+		border-width: 2px;
+		border-style: solid;
+		border-color: red;
+	}
 </style>
 
 
@@ -103,9 +109,10 @@
 				<li class="delete"><a data-bind = "click: deleteObject">Delete</a></li>
 			</ul>
 			<ul class ="content-inner">
-				<li><div>Description:  </div></li>
-				<li><div data-bind="text:description"></div></li>
-				<li>Repository:  <div data-bind="text:repo"></div>Branch:  <div data-bind="text:branch"></div></li>
+				<li class = "border">Repository:  <div data-bind="text:repo"></div></li>
+				<li class = "border">Branch:  <div data-bind="text:branch"></div></li>
+				<li class = "border"><div>Description:  </div></li>
+				<li class = "border"><div data-bind="text:description"></div></li>
 			</ul>
 		</div>	
 	</div>
