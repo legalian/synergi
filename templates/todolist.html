@@ -73,7 +73,11 @@
 	.content-right {
 		width:50%;
 	}
-</style>
+	.value {
+		margin: 0 2% 10% 5%;
+
+	}
+	</style>
 
 
 
@@ -113,6 +117,12 @@
 </div>
 
 
+
+
+<!-- 
+	collapsable project container
+
+ -->
 <div id="extra" class="container" data-bind="foreach:results">
 	<div class = "project wrap-collabsible">
 		<input data-bind="attr:{id:$index()}" class="toggle" type="checkbox">
@@ -124,17 +134,17 @@
 				<li class="delete edit"><a data-bind = "click: deleteObject">Delete</a></li>
 			</ul>
 			<ul class ="flex-h content-inner">
-				<div class = "flex-v content-left border">
+				<div class = "flex-v content-left">
 					<div class = "flex-h">
-						<div>Repository:&nbsp; </div>
+						<div class = "">Repository:&nbsp; </div>
 						<div class="value" data-bind="text:repo">[repo]</div>
 					</div>
 					<div class = "flex-h">
-						<div>Branch:&nbsp; </div>
+						<div class = "">Branch:&nbsp; </div>
 						<div class="value" data-bind="text:branch">[branch]</div>
 					</div>
 				</div>
-				<div class = "flex-v content-right border">
+				<div class = "flex-v content-right">
 					<li class = ""><div>Description:  </div></li>
 					<li class = ""><div data-bind="text:description"></div></li>
 				</div>				
