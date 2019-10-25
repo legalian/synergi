@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="static/bower_components/dragula.js/dist/dragula.min.css">
 <script src="static/bower_components/dragula.js/dist/dragula.min.js"></script>
 <script src="static/bower_components/ace/build/src/ace.js"></script>
+<script src="static/bower_components/knockout-dragula/dist/knockout-dragula.min.js"></script>
 {% endmacro %}
 
 {% macro importDivider() %}
@@ -38,8 +39,8 @@
 		self.type = props.type;//fixed-bottom, fixed-right, fixed-left, fixed-top, horizontal-percent, vertical-percent
 		self.align = ["fixed-bottom","fixed-top","horizontal-percent"].includes(self.type)?"horizontal":"vertical";
 		self.template = "resizeable-area";
-		self.first  = ko.observable(props.first);
-		self.second = ko.observable(props.second);
+		self.first  = props.first;
+		self.second = props.second;
 		switch (self.type) {
 			case "horizontal-percent":
 			case "fixed-left":
@@ -98,6 +99,10 @@
 			/*display: inline-block;*/
 			text-align: center;
 		}
+		.recursiveexpander {
+			width:30px;
+			text-align: center;
+		}
 		.littlex {
 			position:absolute;
 			right:5px;
@@ -123,58 +128,54 @@
 		}
 	</style>
 	<script type="text/html" id="tabs-area">
-		<div class="tabs" data-bind="foreach:tabs,attr:{id:id}">
-			<div class="tab" data-bind="attr:{index:$index()},class:$index()==$parent.selected()?'selected':'',style:$parent.fill?{flex:1}:{},click:function(){$parent.select($index(),$data);}">
-				<div class="innertabtext" data-bind="text:$data"></div>
+		<!-- ko if: rearrangeable -->
+		<div class="tabs" data-bind="dragula:{data:tabs,group:draggroup},attr:{id:id}">
+			<div class="tab" data-bind="class:$data==$parent.selected()?'selected':'',style:$parent.fill?{flex:1}:{},click:$parent.select">
+				<div class="innertabtext" data-bind="text:title"></div>
 				<!-- ko if:$parent.closeable -->
-				<i class="material-icons littlex" data-bind="click:function(){$parent.remove($index(),$data)},clickBubble:false">close</i>
+				<i class="material-icons littlex" data-bind="click:$parent.remove,clickBubble:false">close</i>
 				<!-- /ko -->
 			</div>
 		</div>
+		<!-- /ko -->
+		<!-- ko ifnot: rearrangeable -->
+		<div class="tabs" data-bind="foreach:tabs,attr:{id:id}">
+			<div class="tab" data-bind="class:$data==$parent.selected()?'selected':'',style:$parent.fill?{flex:1}:{},click:function(){$parent.select($index(),$data);}">
+				<div class="innertabtext" data-bind="text:title"></div>
+				<!-- ko if:$parent.closeable -->
+				<i class="material-icons littlex" data-bind="click:$parent.remove,clickBubble:false">close</i>
+				<!-- /ko -->
+			</div>
+		</div>
+		<!-- /ko -->
 	</script>
 	<script type="text/javascript">
+	var tabsdragulagroups = 0;
 	function Tabs(props) {
 		var self = this;
-		props = Object.assign({closeable:false,rearrangeable:true,fill:false,tabs:null,id:"",didSelect:null,selected:null},props);
+		props = Object.assign({closeable:false,rearrangeable:false,fill:false,tabs:null,id:"",didSelect:null,draggroup:null,selected:ko.observable(null)},props);
+		if (props.draggroup == null) {self.draggroup = 'TabsGroup'+tabsdragulagroups++;}
+		else                         {self.draggroup = props.draggroup;}
 		self.template = "tabs-area";
 		self.rearrangeable = props.rearrangeable;
 		self.closeable = props.closeable;
 		self.tabs = props.tabs;
-		self.id = props.id;
+		self.id   = props.id;
 		self.fill = props.fill;
-		self.selected = ko.observable(props.selected);
+		self.selected = props.selected;
 		self.vresize = function() {}
-		self.remove = function(item,blod) {
-			var matabs = self.tabs();
-			if (matabs.length==1) {self.selected(null);}
-			else if (self.selected()==item && item == matabs.length-1 || self.selected()>item) {
-				self.selected(self.selected()-1)
-			}
-			matabs.splice(item,1);
-			self.tabs(matabs);
+		self.remove = function(item) {
+			console.log(item);
+			item.close();
+			self.tabs.remove(item);
 		};
-		self.select = function(bwow,blod) {
-			if (self.tabs()[bwow]!=blod) {return;}
+		self.select = function(bwow) {
 			self.selected(bwow);
+			bwow.click();
 		};
 		self.onLoad = function(a) {
 			if (self.rearrangeable) {
-				dragula([a[1]]).on('drop', function (el,source,dest,sibling) {
-					var fordex = self.tabs().length;
-					if (sibling != null) {fordex = parseInt(sibling.getAttribute('index'));}
-					var eldex = parseInt(el.getAttribute('index'));
-					if (eldex<fordex) {fordex--;}
-					var matabs = self.tabs()
-					matabs.splice(fordex,0,...matabs.splice(eldex,1));
-					self.tabs(matabs);
-					if (self.selected()==eldex) {
-						self.selected(fordex);
-					} else {
-						if (self.selected()>fordex) {self.selected(self.selected()+1)}
-						if (self.selected()>eldex)  {self.selected(self.selected()-1)}
-						else if (self.selected()==fordex) {self.selected(self.selected()+1)}
-					}
-				});
+				window.knockoutDragula.options(self.draggroup);//{ removeOnSpill: true }
 			}
 		};
 	}
@@ -211,130 +212,73 @@
 {% endmacro %}
 
 {% macro importRecursiveArea() %}
-	
-	<script type="text/html" id="recursive-area">
-		<div style="margin-left:20px;margin-bottom:5px;" data-bind="attr:{index:index}">
-			<!-- ko foreach:data -->
-			<div data-bind="attr:{index:$parent.index.concat([$index()])}">
+	<script type="text/html" id="rearrangeable-recursive-area">
+		<div style="margin-left:20px;padding-bottom:10px;" data-bind="dragula:{data:elems,group:draggroup,moves:moves,accepts:accepts}">
+			<div class="recursiveunit">
 				<div class="recursiveelement" style="display: flex">
-					<div style="width:30px;text-align: center;" data-bind="if:$data.data">
+					<div  class="recursiveexpander"  data-bind="if:$data.elems">
 						<i data-bind="class:expanded()?'material-icons rotate-90':'material-icons',click:function(){expanded(!expanded())}">play_arrow</i>
 					</div>
 					<div style="flex:1">
-						<span>wakwakawwkawkaw</span>
+						<span data-bind="text:title,click:click"></span>
 					</div>
 				</div>
-				<!-- ko if:$data.data -->
+				<!-- ko if:$data.elems -->
 					<div data-bind="visible: expanded()">
 					<!-- ko template:{
-						name: 'recursive-area',
-						data:{drags:$parent.drags,data:$data,index:$parent.index.concat([$index()])},
-						afterRender:function(a,b,c,d){$parent.drags.push(a[1]);console.log("debug");}} -->
+						name:'rearrangeable-recursive-area',
+						data:{moves:$parent.moves,accepts:$parent.accepts,draggroup:$parent.draggroup,elems:elems}} -->
 					<!-- /ko -->
 					</div>
 				<!-- /ko -->
 			</div>
-			<!-- /ko -->
+		</div>
+	</script>
+	<script type="text/html" id="recursive-area">
+		<div style="margin-left:20px;margin-bottom:5px;" data-bind="foreach:elems">
+			<div>
+				<div class="recursiveelement" style="display: flex">
+					<div class="recursiveexpander" data-bind="if:$data.elems">
+						<i data-bind="class:expanded()?'material-icons rotate-90':'material-icons',click:function(){expanded(!expanded())}">play_arrow</i>
+					</div>
+					<div style="flex:1">
+						<span data-bind="text:title,click:click"></span>
+					</div>
+				</div>
+				<!-- ko if:$data.elems -->
+					<div data-bind="visible: expanded()">
+					<!-- ko template:{
+						name: 'recursive-area',
+						data:{elems:elems}} -->
+					<!-- /ko -->
+					</div>
+				<!-- /ko -->
+			</div>
 		</div>
 	</script>
 	<script type="text/javascript">
+	var recursivedragulagroups=0;
 	function RecursiveArea(props){
 		var self = this;
-		props = Object.assign({data:null,id:""},props);
-		self.index = [];
-		self.drags = [];
-		self.template = "recursive-area";
-
-		self.expanded = ko.observable(false);
-		self.data = ko.observableArray([
-			{
-				expanded:ko.observable(false),
-				data:ko.observableArray([
-					{
-						expanded:ko.observable(false),
-						data:ko.observableArray([{},{},{}])
-					}
-				]),
-			},
-			{
-				expanded:ko.observable(false),
-				data:ko.observableArray([{}])
-			}
-		]);
-		// self.selected = ko.observable(null);
+		props = Object.assign({elems:null,id:"",rearrangeable:true,draggroup:null},props);
+		if (props.draggroup == null) {self.draggroup = 'RecursiveGroup'+recursivedragulagroups++;}
+		else                         {self.draggroup = props.draggroup;}
+		self.rearrangeable = props.rearrangeable;
+		self.template = self.rearrangeable?"rearrangeable-recursive-area":"recursive-area";
+		self.elems = props.elems
+		self.moves = function (el, source, handle,sibling) {
+			while(handle!=null && !handle.classList.contains('recursiveunit')) {handle = handle.parentElement;}
+			return handle === el;
+		};
+		self.accepts = function (el, dest, source,sibling) {
+			while(dest != null) {dest = dest.parentElement;if (dest==el){return false;}}
+			return true;
+		};
 		self.vresize = function() {}
 		self.onLoad = function(a) {
-			dragula(self.drags.concat([a[1]]),{
-				moves: function (el, source, handle,sibling) {
-					// console.log(el,source,handle,sibling)
-					while(handle.getAttribute('index') == null) {
-						handle = handle.parentElement;
-					}
-					return handle.getAttribute('index')==el.getAttribute('index');
-				},
-				accepts: function (el, dest, source,sibling) {
-					// console.log(el,source,dest,sibling)
-					var onetext = dest.getAttribute('index')
-					var twotext = el.getAttribute('index')
-					var onear = onetext==""?[]:onetext.split(",").map(function(item){return parseInt(item);})
-					var twoar = twotext==""?[]:twotext.split(",").map(function(item){return parseInt(item);})
-					var val = false;
-					twoar.forEach(function(item,index){
-						if (index>=onear.length || onear[index] != item) {val=true;}
-					});
-					return val; // elements are always draggable by default
-				},
-			}).on('drop', function (el,source,dest,sibling) {
-				function pathof(i) {var j=i.getAttribute('index');return j==""?[]:j.split(",").map(function(item){return parseInt(item);})}
-				function insert(p,data,n) {
-					// console.log(data(),p)
-					// console.log("asdfasdf",p,p.length,p[p.length-1],data()[p[p.length-1]]);
-					if (p.length==1) {data(data().slice(0,p[0]-1).concat([n]).concat(data().slice(p[0]-1)));}
-					else {
-						// console.log("ifjs",data()[p[p.length-1]].data);
-						insert(p.slice(1),data()[p[0]].data,n);
-					}
-				};
-				function pop(p,data) {
-					if (p.length==1) {var dats = data();var res = dats.splice(p[0],1);data([...dats]);return res[0];}
-					else {return pop(p.slice(1),data()[p[0]].data);}
-				};
-				function get(p,data) {
-					if (p.length==1) {return data()[p[0]];}
-					else {return get(p.slice(1),data()[p[0]].data);}
-				};
-				var vat;
-				var elpath = pathof(el);
-				var sibpath;
-				if (sibling==null) {
-					sibpath = pathof(dest);
-					vat = sibpath.length;
-					console.log("inferred");
-					sibpath.push(get(sibpath,self.data).data().length-1);
-				} else {
-					sibpath = pathof(sibling);
-					console.log(elpath,sibpath);
-					vat = sibpath.length;
-				};
-				var i=0;
-				while (i<Math.min(elpath.length,vat) && elpath[i]==sibpath[i]) {i++}
-				if (i<Math.min(elpath.length,vat) && elpath[i]<sibpath[i]) {sibpath[i]--;}
-				insert(sibpath,self.data,pop(elpath,self.data));
-				function recprint(i,data) {
-					i++;
-					return data.map(function(data){
-						var ltabs = "";
-						for (var u=0;u<i;u++) {ltabs = ltabs+"==";}
-						ltabs += "0\n";
-						if (data.data != undefined) {
-							ltabs += recprint(i+1,data.data())
-						}
-						return ltabs
-					}).join("")
-				}
-				console.log(recprint(0,self.data()));
-			});
-			self.drags = [];
+			if (self.rearrangeable) {
+				window.knockoutDragula.options(self.draggroup);
+			}
 		}
 	}
 	</script>
@@ -343,7 +287,23 @@
 
 
 
-
+{% macro importHtmlArea() %}
+	<script type="text/html" id="html-area">
+		<div data-bind="html:html,attr:{id:id}">
+		</div>
+	</script>
+	<script type="text/javascript">
+	function HtmlArea(props){
+		var self = this;
+		props = Object.assign({html:null,id:""},props);
+		self.template = "html-area";
+		self.id=props.id;
+		self.html = props.html;
+		self.vresize = function() {}
+		self.onLoad = function() {}
+	}
+	</script>
+{% endmacro %}
 
 
 

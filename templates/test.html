@@ -19,16 +19,16 @@ var justice = new ViewModel();
 function ViewModel() {
 	var self = this;
 	self.node = new Divider({
-		type:"fixed-right",
+		type:"fixed-top",
 		resizeable:true,
-		// first:new Tabs(),
-		first:new Divider({
-			type:"fixed-top",
+		first:new Tabs({tabs:ko.observableArray(["sok","eidj","eosfj","dijfd"])}),
+		second:new Divider({
+			type:"fixed-left",
 			resizeable:true,
-			first:new Tabs({tabs:ko.observableArray(["sok","eidj","eosfj","dijfd"])}),
-			second:new RecursiveArea()
-		}),
-		second:new TextArea()
+			first:new RecursiveArea(),
+			second:new TextArea()
+		})
+		// second:new TextArea()
 	});
 }
 

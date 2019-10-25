@@ -1,25 +1,233 @@
+
+
+
 {% extends "template.html" %}
 {% set active_page = "editor" %}
-{% block body %}
+{% import "components.html" as components %}
 
-<script id="layerNode" type="text/html">
-  <div class="layerbox">
-    <div style="width:30px;text-align: center;" data-bind="if:type=='tree'">
-      <i data-bind="class:expanded()?'material-icons rotate-90':'material-icons',click:function(){expanded(!expanded())}">play_arrow</i>
-    </div>
-    <div style="flex:1">
-      <span data-bind="text:title,click:click"></span>
-    </div>
-  </div>
-  <!-- ko if: type == "tree" && expanded() -->
-    <div style="margin-left:20px;">
-    <!-- ko template:{name: 'layerNode',foreach: children } -->
-    <!-- /ko -->    
-    </div>
-  <!-- /ko -->
+{% block body %}
+{{components.importscripts()}}
+{{components.importDivider()}}
+{{components.importTabs()}}
+{{components.importTextArea()}}
+{{components.importHtmlArea()}}
+{{components.importRecursiveArea()}}
+
+<div data-bind="template:{name:node.template,data:node,afterRender:node.onLoad}" style="height:100%"></div>
+
+<script src="static/script/synchronize.js"></script>
+<!-- add leading, following for batching changes, eliminate whitespace right off the bat. list of ignored changes -->
+<!-- deal with repos that are too large -->
+<script>
+
+var justice;
+
+
+
+function TextEditor(currentfile) {
+  var self  = this;
+  self.name = "Text Editor";
+  self.node = new TextArea();
+  self.sync = null
+  self.suspend = function() {
+    if (justice.ui()==self) {
+      if (self.sync!=null) {self.sync.disableUI();}
+      justice.ui(null);
+    }
+  }
+  self.wake = function() {
+    console.log("waking");
+    self.sync = currentfile.format(RawTextDataFormat,function(sync){
+      self.sync = sync;
+      justice.ui(self);
+      self.sync.attach(self.node.editor);
+    });
+  }
+}
+
+
+// function AnimationEditor() {
+//   var self = this;
+//   self.name = "Animation Editor";
+//   self.node = new TextArea();
+
+// }
+// function MusicEditor() {
+//   var self = this;
+//   self.name = "Music Editor";
+//   self.node = new TextArea();
+
+// }
+
+
+
+
+function RawTextDataFormat(data) {
+  return SyncObservable.fromObservable({},ko.observable(data));
+}
+
+
+
+
+
+function Directory(data){
+  var self = this;
+  self.type = 'tree';
+  self.title = data.title;
+  // console.log(self.title)
+  self.path = data.path;
+  self.elems = ko.observableArray([]);
+  self.expanded = ko.observable(true);
+  self.radd = function(ra) {
+    ra.title = ra.title.substr(ra.title.indexOf('/')+1);
+    if (ra.title.indexOf('/') == -1) {
+      if (ra.type == 'blob') {
+        self.elems.push(new File(ra));
+      } else if (ra.type == 'tree') {
+        self.elems.push(new Directory(ra));
+      }
+    } else {
+      self.elems()[self.elems().length-1].radd(ra);
+    }
+  }
+  self.click = function(){}
+}
+function File(data) {
+  var self = this;
+  self.type = 'blob';
+  self.title = data.title;
+  // console.log(self.title)
+  self.path = data.path;
+  self.sha = data.sha;
+  self.connectedusers = ko.observableArray([]);
+  self.synchronizer = null;
+  self.ui = null;
+  self.lastdataformat = null;
+  self.format = function(format,callback) {//format current data in accordance with given format. called anytime relevant UIs wake.
+    if (self.lastdataformat==format) {callback(self.synchronizer);return;}
+    self.lastdataformat = format;
+    if (self.synchronizer==null) {
+      $.ajax("/files", {
+        type: "POST",
+        data: ko.toJSON({
+          sessionId:justice.sessionId,
+          path:self.path
+        }),
+        contentType: "application/json",
+        success: function(data){
+          self.synchronizer = format(data);
+          self.synchronizer.synchronize(justice.sessionId,self.path);
+          callback(self.synchronizer);
+        }
+      });
+    } else {
+      self.synchronizer.disconnect();
+      self.synchronizer = format(self.synchronizer.evaluate());
+      self.synchronizer.synchronize(justice.sessionId,self.path);
+      callback(self.synchronizer);
+    }
+  }
+  self.close = function() {//tab closed; unload all related data.
+    if (self.ui!=null) {self.ui.suspend();}
+    self.synchronizer = null;
+    self.lastdataformat = null;
+    self.ui = null;
+  }
+  self.click = function(){
+    console.log("fuka you")
+    if (!justice.tabs().includes(self)) {
+      console.log("fuka ddyou")
+      justice.tabs.push(self);
+    }
+    justice.selected(self);
+    if (self.ui == null) {self.ui = new TextEditor(self);}
+    if (justice.ui()!=self.ui) {
+      console.log("fuka ddyasudhfiou")
+      if (justice.ui()!=null) {justice.ui().suspend();}
+      self.ui.wake();
+    }
+  }
+}
+function User(data) {
+  self.name = data;
+  // self.color = COLORS[colori];
+  // colori = (colori+1)%12;
+}
+function AppViewModel(servedata) {
+  var self =  this;
+  self.elems = ko.observableArray([]);
+  self.tabs  = ko.observableArray([]);
+
+  self.activeusers = ko.observableArray(servedata['activemembers'].split(",").map(function(item){return new User(item);}));
+  self.sessionId = servedata.sessionId
+
+  socket.on('player_join', function(data){self.activeusers.push(data.name);});
+  socket.on('player_leave',function(data){self.activeusers.remove(data.name);});
+
+
+  self.ui = ko.observable(null);
+  self.selected = ko.observable(null);
+  self.blank = new HtmlArea({html:""});
+
+  self.node = new Divider({
+    type:"fixed-top",
+    initialmeasure:"5em",
+    resizeable:true,
+    first:ko.observable(new Tabs({tabs:self.tabs,closeable:true,rearrangeable:true,selected:self.selected})),
+    second:ko.observable(new Divider({
+      type:"fixed-left",
+      resizeable:true,
+      first:ko.observable(new RecursiveArea({elems:self.elems})),
+      second:ko.computed(function(){
+        if (self.ui()==null) {
+          return self.blank;
+        }
+        return self.ui().node;
+      })
+    }))
+  });
+  $.ajax("/directories", {
+    type: "POST",
+    contentType: "application/json",
+    data: ko.toJSON({
+      sessionId:self.sessionId
+    }),
+    success: function(data){
+      console.log(data);
+      data.tree.forEach(function(ra){
+        ra.title = ra.path;
+        console.log(ra.title);
+        if (ra.title.indexOf('/') == -1) {
+          if (ra.type == 'blob') {
+            self.elems.push(new File(ra));
+          } else if (ra.type == 'tree') {
+            self.elems.push(new Directory(ra));
+          }
+        } else {
+          self.elems()[self.elems().length-1].radd(ra);
+        }
+      });
+    }
+  });
+}
+
+
+
+handshake(function(servedata){
+  justice = new AppViewModel(servedata);
+  ko.applyBindings(justice);
+});
+
+
+
+
+
+
+
 </script>
 
-
+<!-- 
+<<<<<<< HEAD
 <div id="editormain">
 	<div id="editleft" data-bind="template: {name:'layerNode',foreach:children}">
 	</div>
@@ -39,6 +247,12 @@
 
 <script src="static/script/editorjs.js"></script>
 
+=======
+>>>>>>> f7ebc47cb140a786e3841aa03e45ec83cddab9b6 -->
 {% endblock %}
+{% block footer %}
+{% endblock %}
+
+
 
 
