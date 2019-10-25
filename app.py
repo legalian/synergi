@@ -246,6 +246,7 @@ def on_join(data):
 	sesh.activemembers = sesh.activemembers+","+creds
 	db.session.commit()
 
+	session['sessionId'] = sesh.id
 
 	join_room(str(repo.id)+","+str(sesh.id))
 	emit('accept',{'sessionId':sesh.id,'activemembers':sesh.activemembers},room=request.sid)
@@ -257,7 +258,7 @@ def on_join(data):
 @socketio.on('disconnect')
 def on_disconnect():
 	creds=session['githubuser']
-	for sesh in Session.query:
+	for sesh in Session.query.filter_by(id=int(session['sessionId'])).all():
 		jj = sesh.activemembers.split(",")
 		if creds in jj:
 			jj.remove(creds)
