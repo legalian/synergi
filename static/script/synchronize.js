@@ -229,13 +229,17 @@ function SyncObservable(props) {
   self.evaluate = props.evaluate;
   self.oldmsglength = props.oldmsglength;
   self.synchronize = function(sessionId,path) {
+    var md5buffer = self.evaluate();
     self.endpointUp = function(changedInterval) {
       //send data to the server here.
       console.log("sent to server:",changedInterval);
+      var md5 = "placeholder md5 hash here."//take the hash of the md5buffer variable before we change it the line below
+      md5buffer = md5buffer.slice(0,changedInterval.start)+changedInterval.data+md5buffer.slice(changedInterval.start+changedInterval.length);
       socket.emit('edit', {
         delta:{start:changedInterval.start,amt:changedInterval.length,msg:changedInterval.data},
         path:path,
-        sessionId:sessionId
+        sessionId:sessionId,
+        md5:md5
       });
     }
   };

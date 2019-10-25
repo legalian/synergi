@@ -171,6 +171,7 @@ function AppViewModel(servedata) {
 
   self.node = new Divider({
     type:"fixed-top",
+    initialmeasure:"5em",
     resizeable:true,
     first:ko.observable(new Tabs({tabs:self.tabs,closeable:true,rearrangeable:true,selected:self.selected})),
     second:ko.observable(new Divider({
