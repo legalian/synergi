@@ -9,8 +9,6 @@ import os
 import hashlib
 import sys
 import json
-import platform
-from subprocess import Popen
 
 # import sentry_sdk
 # from sentry_sdk.integrations.flask import FlaskIntegration
@@ -306,8 +304,12 @@ def on_join(data):
 
 	sesh = Session.query.filter_by(project_id=int(repo.id)).first()
 	if sesh == None: return
-	sesh.activemembers = sesh.activemembers+","+creds
-	db.session.commit()
+	yam = sesh.activemembers
+	jj = [] if yam=="" else yam.split(",")
+	if creds not in jj:
+		jj.append(creds)
+		sesh.activemembers = ",".join(jj)
+		db.session.commit()
 
 
 	join_room(str(repo.id)+","+str(sesh.id))

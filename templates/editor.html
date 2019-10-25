@@ -19,7 +19,8 @@
 <!-- add leading, following for batching changes, eliminate whitespace right off the bat. list of ignored changes -->
 
 <script type='text/html' id='right-pane'>
-  <div data-bind="foreach:$root.connectedusers">
+  Connected Users:
+  <div data-bind="foreach:$root.activeusers">
     <div data-bind="style:{color:color},text:name"></div>
   </div>
 </script>
@@ -194,8 +195,12 @@ function AppViewModel(servedata) {
   self.elems = ko.observableArray([]);
   self.tabs  = ko.observableArray([]);
 
+  console.log(servedata['activemembers']);
+
   self.activeusers = ko.observableArray(servedata['activemembers'].split(",").map(function(item){return new User(item);}));
   self.sessionId = servedata.sessionId
+
+  console.log(self.activeusers());
 
   socket.on('player_join', function(data){self.activeusers.push(data.name);});
   socket.on('player_leave',function(data){self.activeusers.remove(data.name);});

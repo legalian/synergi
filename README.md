@@ -17,6 +17,9 @@ TODO
 	(it would be too much of a time sync to check with github for every little keystroke, so for each of those little changes we just check with our database to see if they have joined the session. They can only join the session if they have read permissions, so long as we implement the previous bullet point.)
 
 FUTURE TODO
+-- need a better way to determine when someone really disconnects
+	(currently, visiting and then refreshing the page sends two joins and then one disconnect.)
+	(the first join adds you to the list of accessors, the second join does nothing, and the first diconnect removes them from the list of connected users even though theyre still connected and currently editing)
 -- Doing a pull
 	(button with pop-up settings. Not sure how this would work behind the scenes.)
 -- Create a new branch
