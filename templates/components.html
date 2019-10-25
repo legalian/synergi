@@ -216,11 +216,11 @@
 		<div style="margin-left:20px;padding-bottom:10px;" data-bind="dragula:{data:elems,group:draggroup,moves:moves,accepts:accepts}">
 			<div class="recursiveunit">
 				<div class="recursiveelement" style="display: flex">
-					<div  class="recursiveexpander"  data-bind="if:$data.elems">
+					<div  class="recursiveexpander"  data-bind="if:$data.elems" style="flex-shrink:0;">
 						<i data-bind="class:expanded()?'material-icons rotate-90':'material-icons',click:function(){expanded(!expanded())}">play_arrow</i>
 					</div>
 					<div style="flex:1">
-						<span data-bind="text:title,click:click"></span>
+						<span data-bind="text:title,click:click" style="overflow: hidden;white-space: nowrap;"></span>
 					</div>
 				</div>
 				<!-- ko if:$data.elems -->
@@ -238,11 +238,11 @@
 		<div style="margin-left:20px;margin-bottom:5px;" data-bind="foreach:elems">
 			<div>
 				<div class="recursiveelement" style="display: flex">
-					<div class="recursiveexpander" data-bind="if:$data.elems">
+					<div class="recursiveexpander" data-bind="if:$data.elems" style="flex-shrink:0;">
 						<i data-bind="class:expanded()?'material-icons rotate-90':'material-icons',click:function(){expanded(!expanded())}">play_arrow</i>
 					</div>
 					<div style="flex:1">
-						<span data-bind="text:title,click:click"></span>
+						<span data-bind="text:title,click:click" style="overflow: hidden;white-space: nowrap;"></span>
 					</div>
 				</div>
 				<!-- ko if:$data.elems -->
