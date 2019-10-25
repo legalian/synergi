@@ -18,18 +18,31 @@ function handshake(F) {
   var projectId = $.urlParam('projectId');
   socket = io(window.location.origin.replace(/^http/, 'ws'),{transports: ['polling']});//,{query:'loggeduser=user1'}
   
-  $.ajax("/join", {
-    type: "POST",
-    contentType: "application/json",
-    data: ko.toJSON({
-      projectId:projectId
-    }),
-    success: function(data){
-      socket.on('connect', function() {
+  // $.ajax("/join", {
+  //   type: "POST",
+  //   contentType: "application/json",
+  //   data: ko.toJSON({
+  //     projectId:projectId
+  //   }),
+  //   success: function(data){
+  //     socket.on('connect', function() {
+  //       socket.emit('join',{projectId:projectId});
+  //       socket.on('accept',F)
+  //     });
+  //   }
+  // });
+  socket.on('connect', function() {
+    $.ajax("/join", {
+      type: "POST",
+      contentType: "application/json",
+      data: ko.toJSON({
+        projectId:projectId
+      }),
+      success: function(data){
         socket.emit('join',{projectId:projectId});
         socket.on('accept',F)
-      });
-    }
+      }
+    });
   });
 
 }

@@ -8,6 +8,7 @@ import requests
 import os
 import hashlib
 import sys
+import json
 import platform
 from subprocess import Popen
 
