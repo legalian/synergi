@@ -17,10 +17,46 @@
 
 <script src="static/script/synchronize.js"></script>
 <!-- add leading, following for batching changes, eliminate whitespace right off the bat. list of ignored changes -->
-<!-- deal with repos that are too large -->
+
+<script type='text/html' id='right-pane'>
+  <div data-bind="foreach:$root.connectedusers">
+    <div data-bind="style:{color:color},text:name"></div>
+  </div>
+</script>
+
+
+
 <script>
 
+function shuffle(a) {
+    var j, x, i;
+    for (i = a.length - 1; i > 0; i--) {
+        j = Math.floor(Math.random() * (i + 1));
+        x = a[i];
+        a[i] = a[j];
+        a[j] = x;
+    }
+    return a;
+}
+var COLORS = shuffle([
+    '#e21400', '#91580f', '#f8a700', '#f78b00',
+    '#58dc00', '#287b00', '#a8f07a', '#4ae8c4',
+    '#3b88eb', '#3824aa', '#a700ff', '#d300e7'
+]);
+var colori = 0;
+
+
+
+
 var justice;
+
+
+function RightPane() {
+  var self = this;
+  self.template = "right-pane";
+  self.vresize = function() {}
+  self.onLoad = function() {}
+}
 
 
 
@@ -150,8 +186,8 @@ function File(data) {
 }
 function User(data) {
   self.name = data;
-  // self.color = COLORS[colori];
-  // colori = (colori+1)%12;
+  self.color = COLORS[colori];
+  colori = (colori+1)%12;
 }
 function AppViewModel(servedata) {
   var self =  this;
@@ -169,23 +205,51 @@ function AppViewModel(servedata) {
   self.selected = ko.observable(null);
   self.blank = new HtmlArea({html:""});
 
+  // $('#rightbar').html()
+
+  // self.node = new Divider({
+  //   type:"fixed-top",
+  //   initialmeasure:"5em",
+  //   resizeable:true,
+  //   first:ko.observable(new Tabs({tabs:self.tabs,closeable:true,rearrangeable:true,selected:self.selected})),
+  //   second:ko.observable(new Divider({
+  //     type:"fixed-left",
+  //     resizeable:true,
+  //     first:ko.observable(new RecursiveArea({elems:self.elems})),
+  //     second:ko.computed(function(){
+  //       if (self.ui()==null) {
+  //         return self.blank;
+  //       }
+  //       return self.ui().node;
+  //     })
+  //   }))
+  // });
+
   self.node = new Divider({
-    type:"fixed-top",
-    initialmeasure:"5em",
+    type:"fixed-left",
     resizeable:true,
-    first:ko.observable(new Tabs({tabs:self.tabs,closeable:true,rearrangeable:true,selected:self.selected})),
+    first:ko.observable(new RecursiveArea({elems:self.elems})),
     second:ko.observable(new Divider({
-      type:"fixed-left",
+      type:"fixed-right",
       resizeable:true,
-      first:ko.observable(new RecursiveArea({elems:self.elems})),
-      second:ko.computed(function(){
-        if (self.ui()==null) {
-          return self.blank;
-        }
-        return self.ui().node;
-      })
+      first:ko.observable(new Divider({
+        type:"fixed-top",
+        initialmeasure:"5em",
+        resizeable:true,
+        first:ko.observable(new Tabs({tabs:self.tabs,closeable:true,rearrangeable:true,selected:self.selected})),
+        second:ko.computed(function(){
+          if (self.ui()==null) {
+            return self.blank;
+          }
+          return self.ui().node;
+        })
+      })),
+      second:ko.observable(new RightPane())
     }))
   });
+
+
+
   $.ajax("/directories", {
     type: "POST",
     contentType: "application/json",
