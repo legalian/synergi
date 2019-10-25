@@ -6,6 +6,7 @@ from flask_session import Session
 import base64
 import requests
 import os
+import hashlib
 
 from app_factory import db,app,blueprint,socketio
 # from flask_dance.consumer.storage import BaseStorage
@@ -15,8 +16,7 @@ from models import Project, Session, TemFile
 app.config['ssl_verify_client_cert'] = True
 
 ##################################
-# app = Flask(__name__)
-
+	
 @app.route('/components')
 def components():
 	return render_template('test.html')
@@ -35,19 +35,9 @@ def music():
 
 def gitcreds(github):
 	if not github.authorized: return None
-	# print("sidjfoisdf")
 	resp = github.get("/user").json()["login"]
 	session['githubuser'] = resp
-	# print(session.get('github_oauth'))
-	# session['github'] = github
-	# print("oiwjfeoiwjef")
 	return resp
-
-
-
-@app.route('/template')
-def frickyouParker():
-	return render_template('/template.html')
 
 
 @app.route("/")
@@ -67,12 +57,8 @@ def repos():
 	openrepos = []
 	res = []
 	for i in github.get("/user/repos").json():
-		# print("accessing:"+str(i['owner']['login'])+","+str(i['name']))
-		# print([k.serialize() for k in Project.query.all()])
 
-
-		repo = Project.query.filter_by(owner=str(i['owner']['login']),repo=str(i['name'])).first()
-		if repo != None:
+		for repo in Project.query.filter_by(owner=str(i['owner']['login']),repo=str(i['name'])).all():
 			res.append(repo.serialize())
 
 		openrepos.append({
@@ -82,11 +68,33 @@ def repos():
 		})
 	return {'openrepos':openrepos,'res':res}
 
+@app.route("/deleteObject", methods=['POST'])
+def deleteObject():
+	data = request.json
+
+	for sesh in Session.query.filter_by(project_id = data["projectid"]).all():
+		TemFile.query.filter_by(session_id = sesh.id).delete()
+	Session.query.filter_by(project_id = data["projectid"]).delete()
+	Project.query.filter_by(id = data["projectid"]).delete()
+
+
+
+	db.session.commit()
+
+	for yams in Project.query.filter_by(id = data["projectid"]).all():
+		print(yams.serialize())
+	else:
+		print("Nothing to delete after")
+
+
+
+	return "200"
 
 
 @app.route("/projects",methods=['POST'])
 def projects():
 	yam = request.form
+	print("OAIJDFOIAJDOIASJDOFIJSDFOIJSDLKFJSLKDFJLSKDFJLKSDJFLKSDFJLKSDFJ\n\n\n\n")
 	proj = Project(
 		name       = str(yam['name']),
 		repo       = str(yam['repo']),
@@ -96,17 +104,7 @@ def projects():
 	)
 	db.session.add(proj)
 	db.session.commit()
-	return projectlist();
-
-
-
-# @app.route("/projects/<int:id>",methods=['GET','PUT','DELETE'])
-# def project(id):
-# 	if request.method == 'GET':
-
-
-
-
+	return "200"
 
 
 @app.route("/editor")
@@ -122,22 +120,10 @@ def login():
 	resp = github.get("/user")
 	return redirect("/")
 
-# @app.route("/login")
-# def login():
-#     if not github.authorized:
-#         return redirect(url_for("github.login"))
-#     resp = github.get("/user")
-#     return redirect("/")
-#     # assert resp.ok
-#     # print(resp.json())
-#     # return "You are @{login} on GitHub".format(login=resp.json()["login"])
-
-
-
 
 @app.route("/logout")
 def logout():
-	return "jw9ejfoweufj"
+	return "no you cant"
 
 
 
@@ -163,18 +149,21 @@ def files():
 		if r.status_code != 200:
 			print(r.content)
 			return
-		con = r.json()
+		# con = r.json()
+		con = json.loads(r.content)
+
+		#json.loads(result.content)
+		decoded = str(base64.b64decode(con['content']).decode("utf-8"))
 		book = TemFile(
 			session_id = sesh.id,
 			path = jak['path'],
-			content = con['content'],
+			content = decoded,
 			sha = con['sha']
 		)
-		# print("book added")
+
 		db.session.add(book)
 		db.session.commit()
 	return book.content
-
 
 
 
@@ -267,49 +256,8 @@ def on_disconnect():
 	emit('player_leave',{'name':creds},include_self=False)
 
 
-
-
-
-
-
-
-
-
-
-# @app.route("/projects",methods=['GET','POST'])
-# @app.route("/projects/<int:id>",methods=['GET','PUT','DELETE'])
-
-
-# @app.route("/projects/<int:id>/requests",methods=['GET','POST'])
-# @app.route("/projects/<int:id>/requests/<int:rid>",methods=['DELETE'])
-
-
-
-# @socketio.on('edit')
-# def handle_my_custom_event(json):
-
-
-
-# def getfiles():
-# 	response = requests.get("http://127.0.0.1:5000")
-
-
-
-
 if __name__ == '__main__':
 	ssl_verify_client_cert = True
 	# context = ('local.crt', 'local.key')#certificate and key files
 	socketio.run(app,debug=True,keyfile='key.pem', certfile='cert.pem')
 	#eventlet.monkey_patch(socket=False)
-
-
-
-
-
-
-
-
-
-
-
-
