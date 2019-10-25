@@ -231,9 +231,9 @@ function SyncObservable(props) {
   self.synchronize = function(sessionId,path) {
     self.endpointUp = function(changedInterval) {
       //send data to the server here.
-      console.log(changedInterval);
+      console.log("sent to server:",changedInterval);
       socket.emit('edit', {
-        delta:{start:changedInterval.start,amt:changedInterval.amt,msg:changedInterval.data},
+        delta:{start:changedInterval.start,amt:changedInterval.length,msg:changedInterval.data},
         path:path,
         sessionId:sessionId
       });
@@ -281,9 +281,9 @@ SyncObservable.fromObservable = function(props,obs) {
     syncobs.disableUI = function() {aceEnabled=false;}
     // syncobs.enableUI();
     ace.session.on('change', function(delta) {
-      console.log("change edit(B)",delta)
+      console.log("change edit(B)",delta,tracking,aceEnabled)
       if (!tracking) {return;}
-      if (!props.aceEnabled) {return}
+      if (!aceEnabled) {return}
       console.log("change edit",delta)
       var yaya = ace.getValue()
       tracking = false;
@@ -292,7 +292,20 @@ SyncObservable.fromObservable = function(props,obs) {
       var start = nthIndex(yaya,"\n",delta.start.row)+1+delta.start.column;
       var end   = nthIndex(yaya,"\n",delta.end.row)+1+delta.end.column;
       var msg = delta.lines.join("\n");
-      var ninterval = new ChangeInterval(start,end-start,msg);
+
+      var ninterval;
+      if (delta.action == 'insert') {
+        ninterval = new ChangeInterval(start,0,msg);
+      } else if (delta.action == 'remove') {
+        ninterval = new ChangeInterval(start,end-start,"");
+      }
+
+  // # if edit['mode'] == 'insert':
+  // #   book.content = book.content[:edit['delta']['amt']]+edit['delta']['msg']+book.content[edit['delta']['amt']:]
+  // # elif edit['mode'] == 'remove':
+  // #   book.content = book.content[:edit['delta']['amt']]+book.content[edit['delta']['amt']+len(edit['delta']['msg']):]
+
+
       syncobs.endpointUp(ninterval);
       syncobs.oldmsglength+=ninterval.lendelta();// = newValue.toString().length+(props.str?2:0);
     });

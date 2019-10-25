@@ -28,9 +28,10 @@ function TextEditor(currentfile) {
   var self  = this;
   self.name = "Text Editor";
   self.node = new TextArea();
+  self.sync = null
   self.suspend = function() {
     if (justice.ui()==self) {
-      self.sync.disableUI()
+      if (self.sync!=null) {self.sync.disableUI();}
       justice.ui(null);
     }
   }
@@ -103,7 +104,7 @@ function File(data) {
   self.ui = null;
   self.lastdataformat = null;
   self.format = function(format,callback) {//format current data in accordance with given format. called anytime relevant UIs wake.
-    if (self.lastdataformat==format) {return self.synchronizer;}
+    if (self.lastdataformat==format) {callback(self.synchronizer);return;}
     self.lastdataformat = format;
     if (self.synchronizer==null) {
       $.ajax("/files", {
@@ -115,11 +116,14 @@ function File(data) {
         contentType: "application/json",
         success: function(data){
           self.synchronizer = format(data);
+          self.synchronizer.synchronize(justice.sessionId,self.path);
           callback(self.synchronizer);
         }
       });
     } else {
+      self.synchronizer.disconnect();
       self.synchronizer = format(self.synchronizer.evaluate());
+      self.synchronizer.synchronize(justice.sessionId,self.path);
       callback(self.synchronizer);
     }
   }
