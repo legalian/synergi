@@ -271,7 +271,6 @@ def joinjoin():
 	#here we need to tell the user to fuck themselves with a rusty pipe if they try to edit a repo they dont have write permissions for
 	#dunno which api endpoint to hit but its probably not too bad
 
-
 	sesh = Session.query.filter_by(project_id=int(repo.id)).first()
 	if sesh == None:
 		master = github.get("/repos/"+repo.owner+"/"+repo.repo+"/branches/"+repo.branch)
@@ -286,6 +285,10 @@ def joinjoin():
 		)
 		db.session.add(sesh)
 		db.session.commit()
+
+
+	session['sessionId'] = sesh.id
+
 	return "OK"
 
 
@@ -305,7 +308,6 @@ def on_join(data):
 	sesh.activemembers = sesh.activemembers+","+creds
 	db.session.commit()
 
-	session['sessionId'] = sesh.id
 
 	join_room(str(repo.id)+","+str(sesh.id))
 	emit('accept',{'sessionId':sesh.id,'activemembers':sesh.activemembers},room=request.sid)

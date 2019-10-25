@@ -17,19 +17,21 @@ function nthIndex(str, pat, n){
 function handshake(F) {
   var projectId = $.urlParam('projectId');
   socket = io(window.location.origin.replace(/^http/, 'ws'),{transports: ['polling']});//,{query:'loggeduser=user1'}
-  socket.on('connect', function() {
-    $.ajax("/join", {
-      type: "POST",
-      contentType: "application/json",
-      data: ko.toJSON({
-        projectId:projectId
-      }),
-      success: function(data){
+  
+  $.ajax("/join", {
+    type: "POST",
+    contentType: "application/json",
+    data: ko.toJSON({
+      projectId:projectId
+    }),
+    success: function(data){
+      socket.on('connect', function() {
         socket.emit('join',{projectId:projectId});
         socket.on('accept',F)
-      }
-    });
+      });
+    }
   });
+
 }
 ko.subscribable.fn.subscribeChanged = function (callback) {
   var savedValue = [...this.peek()];
