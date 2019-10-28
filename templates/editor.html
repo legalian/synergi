@@ -23,6 +23,8 @@
   <div data-bind="foreach:$root.activeusers">
     <div data-bind="style:{color:color},text:name"></div>
   </div>
+  Editor:
+  <select data-bind="options:$root.availableeditors,optionsText: 'name',optionsValue: 'func',"></select>
 </script>
 
 
@@ -30,19 +32,19 @@
 <script>
 
 function shuffle(a) {
-    var j, x, i;
-    for (i = a.length - 1; i > 0; i--) {
-        j = Math.floor(Math.random() * (i + 1));
-        x = a[i];
-        a[i] = a[j];
-        a[j] = x;
-    }
-    return a;
+  var j, x, i;
+  for (i = a.length - 1; i > 0; i--) {
+    j = Math.floor(Math.random() * (i + 1));
+    x = a[i];
+    a[i] = a[j];
+    a[j] = x;
+  }
+  return a;
 }
 var COLORS = shuffle([
-    '#e21400', '#91580f', '#f8a700', '#f78b00',
-    '#58dc00', '#287b00', '#a8f07a', '#4ae8c4',
-    '#3b88eb', '#3824aa', '#a700ff', '#d300e7'
+  '#e21400', '#91580f', '#f8a700', '#f78b00',
+  '#58dc00', '#287b00', '#a8f07a', '#4ae8c4',
+  '#3b88eb', '#3824aa', '#a700ff', '#d300e7'
 ]);
 var colori = 0;
 
@@ -58,6 +60,19 @@ function RightPane() {
   self.vresize = function() {}
   self.onLoad = function() {}
 }
+
+
+
+
+// EDITOR
+// selected file ->
+//   select each tab
+
+
+// DUAL EDITOR
+// selected file1 ->
+// selected file2 ->
+
 
 
 
@@ -81,6 +96,36 @@ function TextEditor(currentfile) {
     });
   }
 }
+// function DualTextEditor(currentfile) {
+//   var self  = this;
+//   self.name = "Text Editor";
+//   self.node = new TextArea();
+//   self.sync = null
+//   self.suspend = function() {
+//     if (justice.ui()==self) {
+//       if (self.sync!=null) {self.sync.disableUI();}
+//       justice.ui(null);
+//     }
+//   }
+//   self.wake = function() {
+//     console.log("waking");
+//     var onewoke=false;
+//     var twowoke=false;
+//     function getwoke(){
+
+//     }
+//     self.sync = currentfile.format(RawTextDataFormat,function(sync){
+//       self.sync = sync;
+//       justice.ui(self);
+//       self.sync.attach(self.node.editor);
+//     });
+//     self.sync = currentfile.format(RawTextDataFormat,function(sync){
+//       self.sync = sync;
+//       justice.ui(self);
+//       self.sync.attach(self.node.editor);
+//     });
+//   }
+// }
 
 
 // function AnimationEditor() {
@@ -111,7 +156,6 @@ function Directory(data){
   var self = this;
   self.type = 'tree';
   self.title = data.title;
-  // console.log(self.title)
   self.path = data.path;
   self.elems = ko.observableArray([]);
   self.expanded = ko.observable(true);
@@ -171,15 +215,12 @@ function File(data) {
     self.ui = null;
   }
   self.click = function(){
-    console.log("fuka you")
     if (!justice.tabs().includes(self)) {
-      console.log("fuka ddyou")
       justice.tabs.push(self);
     }
     justice.selected(self);
     if (self.ui == null) {self.ui = new TextEditor(self);}
     if (justice.ui()!=self.ui) {
-      console.log("fuka ddyasudhfiou")
       if (justice.ui()!=null) {justice.ui().suspend();}
       self.ui.wake();
     }
@@ -195,12 +236,10 @@ function AppViewModel(servedata) {
   self.elems = ko.observableArray([]);
   self.tabs  = ko.observableArray([]);
 
-  console.log(servedata['activemembers']);
 
   self.activeusers = ko.observableArray(servedata['activemembers'].split(",").map(function(item){return new User(item);}));
   self.sessionId = servedata.sessionId
 
-  console.log(self.activeusers());
 
   socket.on('player_join', function(data){self.activeusers.push(data.name);});
   socket.on('player_leave',function(data){self.activeusers.remove(data.name);});
@@ -210,25 +249,13 @@ function AppViewModel(servedata) {
   self.selected = ko.observable(null);
   self.blank = new HtmlArea({html:""});
 
-  // $('#rightbar').html()
+  self.availableeditors = ko.observableArray([{name:"Text Editor",func:TextEditor}]);//,{name:"Double Text Editor",func:DualTextEditor}
+  self.reqeditor = ko.observable(self.availableeditors()[0]);
+  self.reqeditor.subscribe(function(neditor){
+    if (self.selected()!=null) {self.selected().form();}
+  });
 
-  // self.node = new Divider({
-  //   type:"fixed-top",
-  //   initialmeasure:"5em",
-  //   resizeable:true,
-  //   first:ko.observable(new Tabs({tabs:self.tabs,closeable:true,rearrangeable:true,selected:self.selected})),
-  //   second:ko.observable(new Divider({
-  //     type:"fixed-left",
-  //     resizeable:true,
-  //     first:ko.observable(new RecursiveArea({elems:self.elems})),
-  //     second:ko.computed(function(){
-  //       if (self.ui()==null) {
-  //         return self.blank;
-  //       }
-  //       return self.ui().node;
-  //     })
-  //   }))
-  // });
+
 
   self.node = new Divider({
     type:"fixed-left",
@@ -262,10 +289,8 @@ function AppViewModel(servedata) {
       sessionId:self.sessionId
     }),
     success: function(data){
-      console.log(data);
       data.tree.forEach(function(ra){
         ra.title = ra.path;
-        console.log(ra.title);
         if (ra.title.indexOf('/') == -1) {
           if (ra.type == 'blob') {
             self.elems.push(new File(ra));
