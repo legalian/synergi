@@ -1,1 +1,373 @@
-log test
+log testNothing to delete after
+OAIJDFOIAJDOIASJDOFIJSDFOIJSDLKFJSLKDFJLSKDFJLKSDJFLKSDFJLKSDFJ
+
+
+
+
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+oasdjfoaisdjfoiajsdf
+Nothing to delete after
+OAIJDFOIAJDOIASJDOFIJSDFOIJSDLKFJSLKDFJLSKDFJLKSDJFLKSDFJLKSDFJ
+
+
+
+
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+
+
+
+not found:  [''] durbin3
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+
+
+
+not found:  [''] durbin3
+oasdjfoaisdjfoiajsdf
+None
+None
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+None
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+<id 35>
+None
+None
+None
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+None
+
+
+
+not found:  [''] durbin3
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+oasdjfoaisdjfoiajsdf
+None
+None
