@@ -1,1 +1,722 @@
-log test
+log testoasdjfoaisdjfoiajsdf
+None
+{'delta': {'start': 8, 'amt': 0, 'msg': '\n'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 9, 'amt': 0, 'msg': '\n'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 10, 'amt': 0, 'msg': '\n'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 11, 'amt': 0, 'msg': 'o'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 12, 'amt': 0, 'msg': 'i'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 13, 'amt': 0, 'msg': 'h'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 14, 'amt': 0, 'msg': '\n'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 15, 'amt': 0, 'msg': 'o'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 16, 'amt': 0, 'msg': 'i'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 17, 'amt': 0, 'msg': 'h'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 18, 'amt': 0, 'msg': '\n'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 19, 'amt': 0, 'msg': 'o'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 20, 'amt': 0, 'msg': 'i'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 21, 'amt': 0, 'msg': 'h'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 22, 'amt': 0, 'msg': '\n'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 23, 'amt': 0, 'msg': 'o'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 24, 'amt': 0, 'msg': 'h'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 25, 'amt': 0, 'msg': '\n'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 26, 'amt': 0, 'msg': 'o'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 27, 'amt': 0, 'msg': 'i'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 28, 'amt': 0, 'msg': 'h'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 29, 'amt': 0, 'msg': 'o'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 30, 'amt': 0, 'msg': 'i'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 31, 'amt': 0, 'msg': 'h'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 32, 'amt': 0, 'msg': '\n'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 33, 'amt': 0, 'msg': 'i'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 34, 'amt': 0, 'msg': 'h'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 35, 'amt': 0, 'msg': '\n'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 36, 'amt': 0, 'msg': 'h'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 37, 'amt': 0, 'msg': '\n'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 38, 'amt': 0, 'msg': 'O'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 39, 'amt': 0, 'msg': 'H'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 40, 'amt': 0, 'msg': '\n'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 41, 'amt': 0, 'msg': 'U'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 42, 'amt': 0, 'msg': 'h'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 43, 'amt': 0, 'msg': 'n'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 44, 'amt': 0, 'msg': '\n'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 45, 'amt': 0, 'msg': '\n'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 46, 'amt': 0, 'msg': '\n'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+None
+None
+None
+
+
+
+not found:  [''] legalian
+{'delta': {'start': 0, 'amt': 0, 'msg': ''}, 'path': 'migrations/versions/6e067c6a10ad_.py', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 0, 'amt': 0, 'msg': '"""empty message\n\nRevision ID: 6e067c6a10ad\nRevises: \nCreate Date: 2019-09-13 13:22:36.522911\n\n"""\nfrom alembic import op\nimport sqlalchemy as sa\n\n\n# revision identifiers, used by Alembic.\nrevision = \'6e067c6a10ad\'\ndown_revision = None\nbranch_labels = None\ndepends_on = None\n\n\ndef upgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    op.create_table(\'books\',\n    sa.Column(\'id\', sa.Integer(), nullable=False),\n    sa.Column(\'name\', sa.String(), nullable=True),\n    sa.Column(\'author\', sa.String(), nullable=True),\n    sa.Column(\'published\', sa.String(), nullable=True),\n    sa.PrimaryKeyConstraint(\'id\')\n    )\n    # ### end Alembic commands ###\n\n\ndef downgrade():\n    # ### commands auto generated by Alembic - please adjust! ###\n    op.drop_table(\'books\')\n    # ### end Alembic commands ###\n'}, 'path': 'migrations/versions/6e067c6a10ad_.py', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+None
+
+
+
+not found:  [''] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+oasdjfoaisdjfoiajsdf
+<id 13>
+{'delta': {'start': 25, 'amt': 0, 'msg': '\n'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 26, 'amt': 0, 'msg': 'g'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 27, 'amt': 0, 'msg': '\n'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 28, 'amt': 0, 'msg': 'g'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 29, 'amt': 0, 'msg': 'g'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 30, 'amt': 0, 'msg': '\n'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 31, 'amt': 0, 'msg': '\n'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 32, 'amt': 0, 'msg': '\n'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 33, 'amt': 0, 'msg': 'g'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 34, 'amt': 0, 'msg': '\n'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 35, 'amt': 0, 'msg': 'f'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 36, 'amt': 0, 'msg': '\n'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 37, 'amt': 0, 'msg': 'f'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 38, 'amt': 0, 'msg': '\n'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 39, 'amt': 0, 'msg': 'f'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 40, 'amt': 0, 'msg': '\n'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 41, 'amt': 0, 'msg': 'f'}, 'path': 'log.txt', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+None
+{'delta': {'start': 38, 'amt': 0, 'msg': '\n'}, 'path': 'migrations/README', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 39, 'amt': 0, 'msg': '\n'}, 'path': 'migrations/README', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 40, 'amt': 0, 'msg': '\n'}, 'path': 'migrations/README', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+None
+{'delta': {'start': 378, 'amt': 0, 'msg': '\n'}, 'path': 'app.py', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 379, 'amt': 0, 'msg': '\n'}, 'path': 'app.py', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 380, 'amt': 0, 'msg': '\n'}, 'path': 'app.py', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 381, 'amt': 0, 'msg': 'f'}, 'path': 'app.py', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 382, 'amt': 0, 'msg': '\n'}, 'path': 'app.py', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 383, 'amt': 0, 'msg': 'f'}, 'path': 'app.py', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 384, 'amt': 0, 'msg': 'd'}, 'path': 'app.py', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 385, 'amt': 0, 'msg': '\n'}, 'path': 'app.py', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 386, 'amt': 0, 'msg': 'f'}, 'path': 'app.py', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 387, 'amt': 0, 'msg': '\n'}, 'path': 'app.py', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 388, 'amt': 0, 'msg': 'f'}, 'path': 'app.py', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 389, 'amt': 0, 'msg': '\n'}, 'path': 'app.py', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 390, 'amt': 0, 'msg': 'f'}, 'path': 'app.py', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 391, 'amt': 0, 'msg': '\n'}, 'path': 'app.py', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 392, 'amt': 0, 'msg': 'f'}, 'path': 'app.py', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 393, 'amt': 0, 'msg': '\n'}, 'path': 'app.py', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+<id 18>
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+oasdjfoaisdjfoiajsdf
+<id 18>
