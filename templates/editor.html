@@ -27,6 +27,13 @@
   <select data-bind="options:$root.availableeditors,optionsText: 'name',optionsValue: 'func',"></select>
 </script>
 
+<script type='text/html' id='add-split-tab'>
+  <div style="position:relative;height:100%;width:100%;">
+    <div data-bind="template:{name:second().template,data:second(),afterRender:second().onLoad}"></div>
+    <div style="position:absolute;top:0;left:0;bottom:0;width:2em;background-color:black;"></div>
+  </div>
+</script>
+
 
 
 <script>
@@ -59,6 +66,11 @@ function RightPane() {
   self.template = "right-pane";
   self.vresize = function() {}
   self.onLoad = function() {}
+}
+function AddSplitTab(props) {
+  var self = this;
+  Tabs.bind(self)(props)
+  self.template = "add-split-tab";
 }
 
 
@@ -266,9 +278,9 @@ function AppViewModel(servedata) {
       resizeable:true,
       first:ko.observable(new Divider({
         type:"fixed-top",
-        initialmeasure:"5em",
+        initialmeasure:"2em",
         resizeable:true,
-        first:ko.observable(new Tabs({tabs:self.tabs,closeable:true,rearrangeable:true,selected:self.selected})),
+        first:ko.observable(new AddSplitTab({tabs:self.tabs,closeable:true,rearrangeable:true,selected:self.selected})),
         second:ko.computed(function(){
           if (self.ui()==null) {
             return self.blank;

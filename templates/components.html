@@ -67,15 +67,15 @@
 			default: throw "unrecognized type";
 		}
 		self.vresize = function() {
-			self.first().vresize();
-			self.second().vresize();
 		}
 		self.onLoad = function(a) {
 			$(a[1]).splitPane();
 			$(a[1]).on('splitpaneresize', function(event) {
 				var target = event.target === document ? window : event.target;
 				if (target === a[1]) {
-					self.vresize();
+					var property = self.align=="horizontal" ? 'height' : 'width';
+					self.first().vresize($(a[1]).find('.split-pane-component:first')[property]() + (self.align=="horizontal"?0:-5));
+					self.second().vresize($(a[1]).find('.split-pane-component:last')[property]());
 				}
 			});
 		};

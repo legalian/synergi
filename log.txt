@@ -720,3 +720,452 @@ found  ['legalian'] legalian
 removed  [] legalian
 oasdjfoaisdjfoiajsdf
 <id 18>
+<id 17>
+{'delta': {'start': 39, 'amt': 0, 'msg': '\n'}, 'path': 'migrations/README', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 40, 'amt': 0, 'msg': '\n'}, 'path': 'migrations/README', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 41, 'amt': 0, 'msg': '\n'}, 'path': 'migrations/README', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 42, 'amt': 0, 'msg': '\n'}, 'path': 'migrations/README', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 43, 'amt': 0, 'msg': '\n'}, 'path': 'migrations/README', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 44, 'amt': 0, 'msg': '\n'}, 'path': 'migrations/README', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 45, 'amt': 0, 'msg': '\n'}, 'path': 'migrations/README', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 46, 'amt': 0, 'msg': '\n'}, 'path': 'migrations/README', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 47, 'amt': 0, 'msg': '\n'}, 'path': 'migrations/README', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 48, 'amt': 0, 'msg': '\n'}, 'path': 'migrations/README', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 49, 'amt': 0, 'msg': '\n'}, 'path': 'migrations/README', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 50, 'amt': 0, 'msg': '\n'}, 'path': 'migrations/README', 'sessionId': 4, 'md5': 'placeholder md5 hash here.'}
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+not found:  [''] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
