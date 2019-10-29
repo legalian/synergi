@@ -40,7 +40,7 @@ FUTURE TODO
 Stretch Goals
 -- change filename from todolist to browse
 -- invite system maybe
--- mute sslv3 error
+
 
 
 

@@ -168,7 +168,8 @@ def files():
 
 	#creds=session['githubuser']
 	#if creds not in sesh.activemembers.split(',') then tell the user to go directly to hell- dont give them any files they arent to be trusted.
-
+	creds = session['githubuser']
+	if creds not in sesh.activemembers.split(','): return
 
 	book = TemFile.query.filter_by(session_id = int(sesh.id),path=str(jak['path'])).first()
 	print(book)
@@ -186,11 +187,14 @@ def files():
 		#you'll need to calculate the md5 hash here as well, for the new TemFile object youre creating
 		con = json.loads(r.content)
 		decoded = str(base64.b64decode(con['content']).decode("utf-8"))
+		has = hashlib.md5(decoded.encode("utf-8")).hexdigest()
+		print("File hash: " , has)
 		book = TemFile(
 			session_id = sesh.id,
 			path = jak['path'],
 			content = decoded,
-			sha = con['sha']
+			sha = con['sha'],
+			md5 = has
 		)
 
 		db.session.add(book)
@@ -210,6 +214,9 @@ def handle_edit(edit):
 	#synchronize.js line 237 is where this data comes from.
 
 	#if creds not in sesh.activemembers.split(',') then automatically reject their change- they arent in the session.
+	if (creds not in sesh.activemembers.split(',')): 
+		emit('rejected',{"delta":edit['delta']},room=request.sid) 
+		return
 
 	#edit['md5'] would be the hash that comes from the client. You compare this hash against the server's hashes.
 	#no matching hash found: reject change
@@ -224,8 +231,7 @@ def handle_edit(edit):
 		#if change overlaps current_delta: reject change and exit
 		#if change comes before current_delta: current_delta.start+=len(change.data)-change.amt
 
-	if False:#this is what you do when you reject a change
-		emit('rejected',{delta:edit['delta']},room=request.sid)
+	
 		#as a side note, here are the basic patterns for notifying clients through socketio:
 		#room=request.sid        <---- notifies only the person that sent the message
 		#broadcast=True                      <---- (when inside a socketio route) notifies everyone connected to the session
@@ -236,9 +242,14 @@ def handle_edit(edit):
 
 
 
-	book.content = book.content[:edit['delta']['start']]+edit['delta']['msg']+book.content[edit['delta']['start']+edit['delta']['amt']:]
+	# book.content = book.content[:edit['delta']['start']]+edit['delta']['msg']+book.content[edit['delta']['start']+edit['delta']['amt']:]
 
-
+	has = edit['md5']
+	if(not book.addHash(has, edit['delta'])): 
+		emit('rejected',{"delta":edit['delta']},room=request.sid) 
+		return
+	print("added hash: " , has)
+	# call addhash()
 	db.session.commit()
 	emit('edit',edit,broadcast=True,include_self=False)
 
@@ -280,7 +291,7 @@ def joinjoin():
 			branch     = repo.branch,
 			sha        = head_tree_sha,
 			project_id = repo.id,
-			activemembers = ""
+			activemembers = "",
 		)
 		db.session.add(sesh)
 		db.session.commit()
@@ -290,6 +301,8 @@ def joinjoin():
 
 	return "OK"
 
+
+#######     {name: "name", id: "3241324"} | {name: "name2", id: "341234"} | ....
 
 
 

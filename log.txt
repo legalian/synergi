@@ -1,0 +1,543 @@
+None
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+None
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+None
+None
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+None
+None
+28226eca66e5cec48ea94a37895a2b0b
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+None
+File hash:  b34f90d415b12280ddc052be528de6f5
+None
+File hash:  5181f8ba9adc650a9bb51b0d17b04fab
+<id 44>
+<id 44>
+<id 45>
+<id 42>
+<id 35>
+None
+File hash:  8072d138675bdea5218ff93833e183ad
+<id 44>
+{'delta': {'start': 33, 'amt': 0, 'msg': '\n'}, 'path': 'log.txt', 'sessionId': 24, 'md5': 'placeholder md5 hash here.'}
+book hash:  f8daf25758fad9cca3c8f2984f8e5de3
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+{'delta': {'start': 34, 'amt': 0, 'msg': '\n'}, 'path': 'log.txt', 'sessionId': 24, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 35, 'amt': 0, 'msg': '\n'}, 'path': 'log.txt', 'sessionId': 24, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 36, 'amt': 0, 'msg': 'a'}, 'path': 'log.txt', 'sessionId': 24, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 37, 'amt': 0, 'msg': 'd'}, 'path': 'log.txt', 'sessionId': 24, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 38, 'amt': 0, 'msg': 's'}, 'path': 'log.txt', 'sessionId': 24, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 39, 'amt': 0, 'msg': 'f'}, 'path': 'log.txt', 'sessionId': 24, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 40, 'amt': 0, 'msg': 'f'}, 'path': 'log.txt', 'sessionId': 24, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 34, 'amt': 125, 'msg': ''}, 'path': 'log.txt', 'sessionId': 24, 'md5': 'placeholder md5 hash here.'}
+{'delta': {'start': 33, 'amt': 1, 'msg': ''}, 'path': 'log.txt', 'sessionId': 24, 'md5': 'placeholder md5 hash here.'}
+<id 44>
+{'delta': {'start': 33, 'amt': 0, 'msg': ' '}, 'path': 'log.txt', 'sessionId': 24, 'md5': 'placeholder md5 hash here.'}
+book hash:  42106c2de9cb007030c79c38ac55e5f6
+{'delta': {'start': 34, 'amt': 0, 'msg': ' '}, 'path': 'log.txt', 'sessionId': 24, 'md5': 'placeholder md5 hash here.'}
+book hash:  9cc9f81671eac1416774269cf7ef7fc3
+{'delta': {'start': 35, 'amt': 0, 'msg': 'a'}, 'path': 'log.txt', 'sessionId': 24, 'md5': 'placeholder md5 hash here.'}
+book hash:  3414ac9e9ce9954961af11e9a1f19dd4
+{'delta': {'start': 36, 'amt': 0, 'msg': 's'}, 'path': 'log.txt', 'sessionId': 24, 'md5': 'placeholder md5 hash here.'}
+book hash:  da29afbafc2f984658b919d926fc19cb
+{'delta': {'start': 37, 'amt': 0, 'msg': 'd'}, 'path': 'log.txt', 'sessionId': 24, 'md5': 'placeholder md5 hash here.'}
+book hash:  2501d04c987365a62fca0e9433b2f24b
+{'delta': {'start': 38, 'amt': 0, 'msg': ';'}, 'path': 'log.txt', 'sessionId': 24, 'md5': 'placeholder md5 hash here.'}
+book hash:  431184141afff576fcc914fc634a174d
+{'delta': {'start': 39, 'amt': 0, 'msg': 'd'}, 'path': 'log.txt', 'sessionId': 24, 'md5': 'placeholder md5 hash here.'}
+book hash:  b5f7a4c522d668bc48d2f40c2f0e2875
+{'delta': {'start': 40, 'amt': 0, 'msg': 'l'}, 'path': 'log.txt', 'sessionId': 24, 'md5': 'placeholder md5 hash here.'}
+book hash:  36557dc40001be45d3ab819d20df1674
+{'delta': {'start': 41, 'amt': 0, 'msg': 'k'}, 'path': 'log.txt', 'sessionId': 24, 'md5': 'placeholder md5 hash here.'}
+book hash:  a618c2ba06b87c79294a08507894a723
+{'delta': {'start': 42, 'amt': 0, 'msg': 'f'}, 'path': 'log.txt', 'sessionId': 24, 'md5': 'placeholder md5 hash here.'}
+book hash:  412538ee3d2b2bf35fce26df418467fe
+{'delta': {'start': 43, 'amt': 0, 'msg': 'j'}, 'path': 'log.txt', 'sessionId': 24, 'md5': 'placeholder md5 hash here.'}
+book hash:  a3132bda9bf6a8096da2aff7c64a21ac
+{'delta': {'start': 44, 'amt': 0, 'msg': 'a'}, 'path': 'log.txt', 'sessionId': 24, 'md5': 'placeholder md5 hash here.'}
+book hash:  1134ebbc256d656c81ead3e6b6f1b304
+{'delta': {'start': 45, 'amt': 0, 'msg': 's'}, 'path': 'log.txt', 'sessionId': 24, 'md5': 'placeholder md5 hash here.'}
+book hash:  ad413888d417f5f4bc9f1738e40d8fe0
+{'delta': {'start': 46, 'amt': 0, 'msg': 'd'}, 'path': 'log.txt', 'sessionId': 24, 'md5': 'placeholder md5 hash here.'}
+book hash:  9e78d5842db128a5fb02ec4c7b9f6512
+{'delta': {'start': 47, 'amt': 0, 'msg': 'k'}, 'path': 'log.txt', 'sessionId': 24, 'md5': 'placeholder md5 hash here.'}
+book hash:  fdfbc3d80b4e8097cd6d2503ea1d1f55
+{'delta': {'start': 48, 'amt': 0, 'msg': ';'}, 'path': 'log.txt', 'sessionId': 24, 'md5': 'placeholder md5 hash here.'}
+book hash:  eb52adcaa45ff74333e7e5980bfcd42a
+{'delta': {'start': 49, 'amt': 0, 'msg': 'l'}, 'path': 'log.txt', 'sessionId': 24, 'md5': 'placeholder md5 hash here.'}
+book hash:  d104ab19070403d5b54497152a60e048
+{'delta': {'start': 50, 'amt': 0, 'msg': 'f'}, 'path': 'log.txt', 'sessionId': 24, 'md5': 'placeholder md5 hash here.'}
+book hash:  d51f435137842bba4314842adbf87695
+{'delta': {'start': 51, 'amt': 0, 'msg': 'j'}, 'path': 'log.txt', 'sessionId': 24, 'md5': 'placeholder md5 hash here.'}
+book hash:  d9590b5d032261a530b56a807996bba8
+{'delta': {'start': 52, 'amt': 0, 'msg': 'a'}, 'path': 'log.txt', 'sessionId': 24, 'md5': 'placeholder md5 hash here.'}
+book hash:  06cd13549b1dfb6a9a9b4124af28b0bd
+{'delta': {'start': 53, 'amt': 0, 'msg': 's'}, 'path': 'log.txt', 'sessionId': 24, 'md5': 'placeholder md5 hash here.'}
+book hash:  52af7e154bef2a1dcfdb657f89bcbbda
+{'delta': {'start': 54, 'amt': 0, 'msg': 'd'}, 'path': 'log.txt', 'sessionId': 24, 'md5': 'placeholder md5 hash here.'}
+book hash:  3743176374ee6dba78d93c2b5df2209b
+{'delta': {'start': 33, 'amt': 22, 'msg': ''}, 'path': 'log.txt', 'sessionId': 24, 'md5': 'placeholder md5 hash here.'}
+book hash:  f8daf25758fad9cca3c8f2984f8e5de3
+{'delta': {'start': 33, 'amt': 0, 'msg': '\\'}, 'path': 'log.txt', 'sessionId': 24, 'md5': 'placeholder md5 hash here.'}
+book hash:  e9fd599bc7c87a3544a4587c58bb9843
+{'delta': {'start': 33, 'amt': 1, 'msg': ''}, 'path': 'log.txt', 'sessionId': 24, 'md5': 'placeholder md5 hash here.'}
+book hash:  f8daf25758fad9cca3c8f2984f8e5de3
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+OAIJDFOIAJDOIASJDOFIJSDFOIJSDLKFJSLKDFJLSKDFJLKSDJFLKSDFJLKSDFJ
+
+
+
+
+None
+File hash:  5181f8ba9adc650a9bb51b0d17b04fab
+<id 1>
+{'delta': {'start': 47, 'amt': 0, 'msg': 'f'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': '744a0f5b0dbd278b3e98b6e7da4b6512'}
+{'delta': {'start': 48, 'amt': 0, 'msg': 's'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': 'f9ef654b4659559f4ab78f6bab6b2e93'}
+{'delta': {'start': 49, 'amt': 0, 'msg': 'a'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': '3f132e12c34892dbb7ea1703a60e260a'}
+{'delta': {'start': 50, 'amt': 0, 'msg': 'd'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': '309fad2b4026f9be67d11b26bc42c2cc'}
+{'delta': {'start': 51, 'amt': 0, 'msg': 'f'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': '3e39afa43711651d1c13e56f80c2b55e'}
+{'delta': {'start': 52, 'amt': 0, 'msg': '\n'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': '6f8fb513c76cd740e2807ef53d08798a'}
+{'delta': {'start': 53, 'amt': 0, 'msg': '\n'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': '27e1a40217d67ae84cc134d6dd56e89f'}
+{'delta': {'start': 54, 'amt': 0, 'msg': '\n'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': '6c8053ae52c9101f517823fe3d005118'}
+{'delta': {'start': 55, 'amt': 0, 'msg': 'w'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': 'f8f4f9bbf35058a8e3cab98ab61e2063'}
+{'delta': {'start': 56, 'amt': 0, 'msg': 'w'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': '0b76a1dc45f421cd2c1a09e4a10da6e9'}
+{'delta': {'start': 57, 'amt': 0, 'msg': 'a'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': 'faeec4a84ea626221ef6ac0ca118d872'}
+{'delta': {'start': 58, 'amt': 0, 'msg': 'd'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': '778372ae35ada8e4be328621682e6f95'}
+{'delta': {'start': 59, 'amt': 0, 'msg': 's'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': '7c6a3b712e8a6b6a292aba304b67f029'}
+{'delta': {'start': 60, 'amt': 0, 'msg': 'f'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': 'cbc4ffcf23ef2c9cf2159336438586a7'}
+{'delta': {'start': 61, 'amt': 0, 'msg': '\n'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': '9c920dc71dfb191577e2de0efecbb3ca'}
+oasdjfoaisdjfoiajsdf
+oasdjfoaisdjfoiajsdf
+oasdjfoaisdjfoiajsdf
+<id 1>
+{'delta': {'start': 47, 'amt': 0, 'msg': '\n'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': '744a0f5b0dbd278b3e98b6e7da4b6512'}
+{'delta': {'start': 48, 'amt': 0, 'msg': 'j'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': '64338fcddbcc6bd5ef6cf003e437977e'}
+{'delta': {'start': 49, 'amt': 0, 'msg': 'j'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': '3a344bd91b856262a80ac1ac4427bb5e'}
+{'delta': {'start': 50, 'amt': 0, 'msg': 'j'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': 'ce1b079fe50666eb401e78861b810e17'}
+{'delta': {'start': 51, 'amt': 0, 'msg': 'j'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': '8c4bf6eb154100029d313b8a9a2ab0a3'}
+{'delta': {'start': 52, 'amt': 0, 'msg': '\n'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': '409cf1a19ad5302f3246bf807686db9b'}
+{'delta': {'start': 53, 'amt': 0, 'msg': '\n'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': '926d5addcbe8196dabc032455e4404ae'}
+{'delta': {'start': 54, 'amt': 0, 'msg': 'z'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': '7ed406a4b1d3229854baabd1dcc21cc9'}
+{'delta': {'start': 55, 'amt': 0, 'msg': 'd'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': '2f82dbfa0c05ddc54daa9ca94779a2cb'}
+{'delta': {'start': 56, 'amt': 0, 'msg': 'f'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': '3f621b1a0e3e31c3b794f742fd4bf0b7'}
+{'delta': {'start': 57, 'amt': 0, 'msg': 'a'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': 'ac5ce87983045983bbb84907c5b8fa66'}
+{'delta': {'start': 58, 'amt': 0, 'msg': 'd'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': '1f15f126a48360ebd2e88dfcf16a724d'}
+{'delta': {'start': 59, 'amt': 0, 'msg': 's'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': '3044c038f69044db6127b64d3d5981bc'}
+{'delta': {'start': 60, 'amt': 0, 'msg': 'f'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': '216dfe3c1ef5a50df7e1e15a8bd4460f'}
+<id 1>
+<id 1>
+{'delta': {'start': 47, 'amt': 0, 'msg': '\n'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': '744a0f5b0dbd278b3e98b6e7da4b6512'}
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+<id 1>
+{'delta': {'start': 434, 'amt': 0, 'msg': '\n'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': '744a0f5b0dbd278b3e98b6e7da4b6512'}
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+<id 1>
+{'delta': {'start': 46, 'amt': 0, 'msg': '\n'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': '744a0f5b0dbd278b3e98b6e7da4b6512'}
+<id 1>
+{'delta': {'start': 46, 'amt': 0, 'msg': '\n'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': '744a0f5b0dbd278b3e98b6e7da4b6512'}
+{'delta': {'start': 47, 'amt': 0, 'msg': '\n'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': 'ef3aa7dd238359efa2950cd0aba7c14d'}
+{'delta': {'start': 48, 'amt': 0, 'msg': 'a'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': 'a374acfc0b8261a05b41bd47b564935a'}
+{'delta': {'start': 49, 'amt': 0, 'msg': 's'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': '497a2e7b6ed093978278d2dc584d7572'}
+{'delta': {'start': 50, 'amt': 0, 'msg': 'd'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': '92391ad0f7ff7b65871bfb6b9bbc401d'}
+{'delta': {'start': 51, 'amt': 0, 'msg': 'f'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': '21b860d4021c585c5c16e8a40f4ee638'}
+{'delta': {'start': 52, 'amt': 0, 'msg': '\n'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': 'ddfca82c33a4a337bc6dbd6d7010c7fb'}
+{'delta': {'start': 53, 'amt': 0, 'msg': 'a'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': '2710d1c8755c835f900825a62fffabca'}
+{'delta': {'start': 54, 'amt': 0, 'msg': 'd'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': '22c8ca3bccf5b2c8626da9a564648510'}
+{'delta': {'start': 55, 'amt': 0, 'msg': 's'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': '624e7538413991931ea9404517ecf706'}
+{'delta': {'start': 56, 'amt': 0, 'msg': 'f'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': '25ebf46bd38f182b3d9eae9d6728664c'}
+{'delta': {'start': 57, 'amt': 0, 'msg': '\n'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': '5a944919dfc839c7118b76ccfb12ed17'}
+{'delta': {'start': 58, 'amt': 0, 'msg': 'd'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': 'f7c4772ee11d07a68cacf4f0b6bb793b'}
+{'delta': {'start': 59, 'amt': 0, 'msg': 's'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': 'f80d6d59e42f1b5229b4c181624d819b'}
+{'delta': {'start': 60, 'amt': 0, 'msg': 'f'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': 'fbcbeded11f1349237570ebd5891acbc'}
+{'delta': {'start': 61, 'amt': 0, 'msg': 'f'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': 'c1cd0acec076550079c05d0eb657d2dd'}
+{'delta': {'start': 62, 'amt': 0, 'msg': '\n'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': 'd8394a2188412b0f9088a6cc4ce522dc'}
+{'delta': {'start': 63, 'amt': 0, 'msg': 'f'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': 'cb58c5b328357ed5eecb0e5e4a809d43'}
+{'delta': {'start': 64, 'amt': 0, 'msg': 'f'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': 'ad8f759533cb70b30a1a4554fb18eb52'}
+{'delta': {'start': 65, 'amt': 0, 'msg': '\n'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': '41591ec26b1681d7571b93245de41c6a'}
+{'delta': {'start': 66, 'amt': 0, 'msg': '\n'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': '039bf5198352c83ba085de266f6b74f9'}
+{'delta': {'start': 67, 'amt': 0, 'msg': 'f'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': '3f489a8a1f00c5f3567526ac30a47c46'}
+{'delta': {'start': 68, 'amt': 0, 'msg': 'f'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': '5fe1f0fe74a520f09dfcc74eff2f0ae3'}
+{'delta': {'start': 69, 'amt': 0, 'msg': '\n'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': '3d65094c9bb6db417a44bae83ef21e34'}
+{'delta': {'start': 70, 'amt': 0, 'msg': 'b'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': '26d6032ad7b189ebfe9368001be689de'}
+{'delta': {'start': 71, 'amt': 0, 'msg': 'u'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': 'af49bca6d6778fcddf1b81c3cd88dc9f'}
+{'delta': {'start': 72, 'amt': 0, 'msg': 't'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': '1dfdb06d1e41aaaeb3cd750fff7815ba'}
+{'delta': {'start': 73, 'amt': 0, 'msg': 't'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': '35ed71daef1cf67580e83a497da0c14b'}
+<id 1>
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+<id 1>
+{'delta': {'start': 47, 'amt': 0, 'msg': '\n'}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': '744a0f5b0dbd278b3e98b6e7da4b6512'}
+before hash check:  744a0f5b0dbd278b3e98b6e7da4b6512
+most recent hash:  5181f8ba9adc650a9bb51b0d17b04fab
+{'delta': {'start': 47, 'amt': 1, 'msg': ''}, 'path': 'static/css/styles.css', 'sessionId': 1, 'md5': '64338fcddbcc6bd5ef6cf003e437977e'}
+before hash check:  64338fcddbcc6bd5ef6cf003e437977e
+most recent hash:  5181f8ba9adc650a9bb51b0d17b04fab
+None
+File hash:  0d64fccd082782288b1dce1b4743bc9c
+lil SUCCESS:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 37, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'b6c2ad4f6c8b8c98a266b059cbb197e6'}
+before hash check:  b6c2ad4f6c8b8c98a266b059cbb197e6
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 37, 'amt': 0, 'msg': '.'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '722f46c35e20aadc8ed89b0c32402234'}
+before hash check:  722f46c35e20aadc8ed89b0c32402234
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 37, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'eaf50cf565339696456ca1175fb43b28'}
+before hash check:  eaf50cf565339696456ca1175fb43b28
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 37, 'amt': 0, 'msg': '.'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '722f46c35e20aadc8ed89b0c32402234'}
+before hash check:  722f46c35e20aadc8ed89b0c32402234
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 37, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'eaf50cf565339696456ca1175fb43b28'}
+before hash check:  eaf50cf565339696456ca1175fb43b28
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 37, 'amt': 0, 'msg': '.'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '722f46c35e20aadc8ed89b0c32402234'}
+before hash check:  722f46c35e20aadc8ed89b0c32402234
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 37, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'eaf50cf565339696456ca1175fb43b28'}
+before hash check:  eaf50cf565339696456ca1175fb43b28
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 37, 'amt': 0, 'msg': '.'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '722f46c35e20aadc8ed89b0c32402234'}
+before hash check:  722f46c35e20aadc8ed89b0c32402234
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 36, 'amt': 2, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'eaf50cf565339696456ca1175fb43b28'}
+before hash check:  eaf50cf565339696456ca1175fb43b28
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 36, 'amt': 0, 'msg': 'n.'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'bead12b20fb65200f5d197a89ef47be5'}
+before hash check:  bead12b20fb65200f5d197a89ef47be5
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 36, 'amt': 2, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '5b9bd60c434de048be1dc66e23f90ef8'}
+before hash check:  5b9bd60c434de048be1dc66e23f90ef8
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 36, 'amt': 0, 'msg': 'n.'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'bead12b20fb65200f5d197a89ef47be5'}
+before hash check:  bead12b20fb65200f5d197a89ef47be5
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 36, 'amt': 2, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '5b9bd60c434de048be1dc66e23f90ef8'}
+before hash check:  5b9bd60c434de048be1dc66e23f90ef8
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 36, 'amt': 0, 'msg': 'n.'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'bead12b20fb65200f5d197a89ef47be5'}
+before hash check:  bead12b20fb65200f5d197a89ef47be5
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 36, 'amt': 2, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '5b9bd60c434de048be1dc66e23f90ef8'}
+before hash check:  5b9bd60c434de048be1dc66e23f90ef8
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 36, 'amt': 0, 'msg': 'n.'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'bead12b20fb65200f5d197a89ef47be5'}
+before hash check:  bead12b20fb65200f5d197a89ef47be5
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 36, 'amt': 2, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '5b9bd60c434de048be1dc66e23f90ef8'}
+before hash check:  5b9bd60c434de048be1dc66e23f90ef8
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+<id 2>
+{'delta': {'start': 37, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'b6c2ad4f6c8b8c98a266b059cbb197e6'}
+before hash check:  b6c2ad4f6c8b8c98a266b059cbb197e6
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 37, 'amt': 0, 'msg': '.'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '722f46c35e20aadc8ed89b0c32402234'}
+before hash check:  722f46c35e20aadc8ed89b0c32402234
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+{'delta': {'start': 37, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'eaf50cf565339696456ca1175fb43b28'}
+{'delta': {'start': 37, 'amt': 0, 'msg': '.'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '722f46c35e20aadc8ed89b0c32402234'}
+{'delta': {'start': 37, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'eaf50cf565339696456ca1175fb43b28'}
+{'delta': {'start': 37, 'amt': 0, 'msg': '.'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '722f46c35e20aadc8ed89b0c32402234'}
+{'delta': {'start': 37, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'eaf50cf565339696456ca1175fb43b28'}
+{'delta': {'start': 37, 'amt': 0, 'msg': '.'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '722f46c35e20aadc8ed89b0c32402234'}
+{'delta': {'start': 37, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'eaf50cf565339696456ca1175fb43b28'}
+{'delta': {'start': 37, 'amt': 0, 'msg': '.'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '722f46c35e20aadc8ed89b0c32402234'}
+{'delta': {'start': 37, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'eaf50cf565339696456ca1175fb43b28'}
+{'delta': {'start': 37, 'amt': 0, 'msg': '.'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '722f46c35e20aadc8ed89b0c32402234'}
+{'delta': {'start': 37, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'eaf50cf565339696456ca1175fb43b28'}
+{'delta': {'start': 37, 'amt': 0, 'msg': '.'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '722f46c35e20aadc8ed89b0c32402234'}
+{'delta': {'start': 37, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'eaf50cf565339696456ca1175fb43b28'}
+{'delta': {'start': 37, 'amt': 0, 'msg': '.'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '722f46c35e20aadc8ed89b0c32402234'}
+{'delta': {'start': 37, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'eaf50cf565339696456ca1175fb43b28'}
+{'delta': {'start': 37, 'amt': 0, 'msg': '.'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '722f46c35e20aadc8ed89b0c32402234'}
+{'delta': {'start': 37, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'eaf50cf565339696456ca1175fb43b28'}
+{'delta': {'start': 37, 'amt': 0, 'msg': '.'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '722f46c35e20aadc8ed89b0c32402234'}
+{'delta': {'start': 38, 'amt': 0, 'msg': '.'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'eaf50cf565339696456ca1175fb43b28'}
+{'delta': {'start': 38, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'a2251e00d36ad68a1780f7476e0e58a0'}
+{'delta': {'start': 38, 'amt': 0, 'msg': '.'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'eaf50cf565339696456ca1175fb43b28'}
+{'delta': {'start': 38, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'a2251e00d36ad68a1780f7476e0e58a0'}
+{'delta': {'start': 37, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'eaf50cf565339696456ca1175fb43b28'}
+{'delta': {'start': 37, 'amt': 0, 'msg': '.'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '722f46c35e20aadc8ed89b0c32402234'}
+<id 2>
+{'delta': {'start': 38, 'amt': 0, 'msg': '.'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'b6c2ad4f6c8b8c98a266b059cbb197e6'}
+before hash check:  b6c2ad4f6c8b8c98a266b059cbb197e6
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 39, 'amt': 0, 'msg': '.'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '0063e161ef0da616856aa790ce7af9e7'}
+before hash check:  0063e161ef0da616856aa790ce7af9e7
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 39, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '34735501cc9c700395dcafd084fafc6b'}
+before hash check:  34735501cc9c700395dcafd084fafc6b
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 38, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '0063e161ef0da616856aa790ce7af9e7'}
+before hash check:  0063e161ef0da616856aa790ce7af9e7
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 37, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'b6c2ad4f6c8b8c98a266b059cbb197e6'}
+before hash check:  b6c2ad4f6c8b8c98a266b059cbb197e6
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 37, 'amt': 0, 'msg': '.'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '722f46c35e20aadc8ed89b0c32402234'}
+before hash check:  722f46c35e20aadc8ed89b0c32402234
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 37, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'eaf50cf565339696456ca1175fb43b28'}
+before hash check:  eaf50cf565339696456ca1175fb43b28
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 37, 'amt': 0, 'msg': '.'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '722f46c35e20aadc8ed89b0c32402234'}
+before hash check:  722f46c35e20aadc8ed89b0c32402234
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 37, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'eaf50cf565339696456ca1175fb43b28'}
+before hash check:  eaf50cf565339696456ca1175fb43b28
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 37, 'amt': 0, 'msg': '.'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '722f46c35e20aadc8ed89b0c32402234'}
+before hash check:  722f46c35e20aadc8ed89b0c32402234
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 37, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'eaf50cf565339696456ca1175fb43b28'}
+before hash check:  eaf50cf565339696456ca1175fb43b28
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 37, 'amt': 0, 'msg': '.'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '722f46c35e20aadc8ed89b0c32402234'}
+before hash check:  722f46c35e20aadc8ed89b0c32402234
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 37, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'eaf50cf565339696456ca1175fb43b28'}
+before hash check:  eaf50cf565339696456ca1175fb43b28
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 37, 'amt': 0, 'msg': '.'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '722f46c35e20aadc8ed89b0c32402234'}
+before hash check:  722f46c35e20aadc8ed89b0c32402234
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 37, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'eaf50cf565339696456ca1175fb43b28'}
+before hash check:  eaf50cf565339696456ca1175fb43b28
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 37, 'amt': 0, 'msg': '.'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '722f46c35e20aadc8ed89b0c32402234'}
+before hash check:  722f46c35e20aadc8ed89b0c32402234
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 37, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'eaf50cf565339696456ca1175fb43b28'}
+before hash check:  eaf50cf565339696456ca1175fb43b28
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 37, 'amt': 0, 'msg': '.'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '722f46c35e20aadc8ed89b0c32402234'}
+before hash check:  722f46c35e20aadc8ed89b0c32402234
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 37, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'eaf50cf565339696456ca1175fb43b28'}
+before hash check:  eaf50cf565339696456ca1175fb43b28
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 36, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '722f46c35e20aadc8ed89b0c32402234'}
+before hash check:  722f46c35e20aadc8ed89b0c32402234
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 36, 'amt': 0, 'msg': 'n'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'bead12b20fb65200f5d197a89ef47be5'}
+before hash check:  bead12b20fb65200f5d197a89ef47be5
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 37, 'amt': 0, 'msg': 'n'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '90237eb45c9562bb0b61ba64a74bbd99'}
+before hash check:  90237eb45c9562bb0b61ba64a74bbd99
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 38, 'amt': 0, 'msg': 'n'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'c7ae72ddc6cca4a743a223bd1d8641b0'}
+before hash check:  c7ae72ddc6cca4a743a223bd1d8641b0
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 39, 'amt': 0, 'msg': 'n'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '3b3a6ff45d9716e023e5609812ce2416'}
+before hash check:  3b3a6ff45d9716e023e5609812ce2416
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 40, 'amt': 0, 'msg': 'n'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '75a8cf013b2dac5cefc1434cbd4b12e3'}
+before hash check:  75a8cf013b2dac5cefc1434cbd4b12e3
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 41, 'amt': 0, 'msg': 'n'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '5791209b397e15dadcda5d84e5ae75e0'}
+before hash check:  5791209b397e15dadcda5d84e5ae75e0
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 41, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '2f3d37eb15277eb49764a740e17912c7'}
+before hash check:  2f3d37eb15277eb49764a740e17912c7
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 40, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '5791209b397e15dadcda5d84e5ae75e0'}
+before hash check:  5791209b397e15dadcda5d84e5ae75e0
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 39, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '75a8cf013b2dac5cefc1434cbd4b12e3'}
+before hash check:  75a8cf013b2dac5cefc1434cbd4b12e3
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 38, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '3b3a6ff45d9716e023e5609812ce2416'}
+before hash check:  3b3a6ff45d9716e023e5609812ce2416
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 37, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'c7ae72ddc6cca4a743a223bd1d8641b0'}
+before hash check:  c7ae72ddc6cca4a743a223bd1d8641b0
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 36, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '90237eb45c9562bb0b61ba64a74bbd99'}
+before hash check:  90237eb45c9562bb0b61ba64a74bbd99
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 35, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'bead12b20fb65200f5d197a89ef47be5'}
+before hash check:  bead12b20fb65200f5d197a89ef47be5
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 35, 'amt': 0, 'msg': 'o'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '2801d1c820d35aad089a11d6ac0feaea'}
+before hash check:  2801d1c820d35aad089a11d6ac0feaea
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 36, 'amt': 0, 'msg': 'n'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '6c4fc68306a5d24a9bbfd30a9122bc40'}
+before hash check:  6c4fc68306a5d24a9bbfd30a9122bc40
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 37, 'amt': 0, 'msg': 'n'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '9c0bd91bd207a09571f3181110d15d62'}
+before hash check:  9c0bd91bd207a09571f3181110d15d62
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 38, 'amt': 0, 'msg': 'n'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '63a9e40f5d55bf31ebfecde92ed46346'}
+before hash check:  63a9e40f5d55bf31ebfecde92ed46346
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 39, 'amt': 0, 'msg': 'n'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'cbd5209a9804f828b6c248e61d9baa9f'}
+before hash check:  cbd5209a9804f828b6c248e61d9baa9f
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 40, 'amt': 0, 'msg': 'n'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '2a1bd96a46c5a680bfe5ce3f9ae21f94'}
+before hash check:  2a1bd96a46c5a680bfe5ce3f9ae21f94
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 40, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '48ccc5a596a2df41a450b8c2c149a1fb'}
+before hash check:  48ccc5a596a2df41a450b8c2c149a1fb
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 39, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '2a1bd96a46c5a680bfe5ce3f9ae21f94'}
+before hash check:  2a1bd96a46c5a680bfe5ce3f9ae21f94
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 38, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'cbd5209a9804f828b6c248e61d9baa9f'}
+before hash check:  cbd5209a9804f828b6c248e61d9baa9f
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 37, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '63a9e40f5d55bf31ebfecde92ed46346'}
+before hash check:  63a9e40f5d55bf31ebfecde92ed46346
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 37, 'amt': 0, 'msg': 'o'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '9c0bd91bd207a09571f3181110d15d62'}
+before hash check:  9c0bd91bd207a09571f3181110d15d62
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 38, 'amt': 0, 'msg': 'o'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '687b2778c371908663b161b787db8be8'}
+before hash check:  687b2778c371908663b161b787db8be8
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 39, 'amt': 0, 'msg': 'o'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '8722d4a1329452cfec0607c6539b469e'}
+before hash check:  8722d4a1329452cfec0607c6539b469e
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 40, 'amt': 0, 'msg': 'o'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '8eaec80a06a1e14bcf0f250928d2e4ab'}
+before hash check:  8eaec80a06a1e14bcf0f250928d2e4ab
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 40, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '20b085824bbab6b5e00aaf5b5f8ee626'}
+before hash check:  20b085824bbab6b5e00aaf5b5f8ee626
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 39, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '8eaec80a06a1e14bcf0f250928d2e4ab'}
+before hash check:  8eaec80a06a1e14bcf0f250928d2e4ab
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 38, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '8722d4a1329452cfec0607c6539b469e'}
+before hash check:  8722d4a1329452cfec0607c6539b469e
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 38, 'amt': 0, 'msg': 'n'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '687b2778c371908663b161b787db8be8'}
+before hash check:  687b2778c371908663b161b787db8be8
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 39, 'amt': 0, 'msg': 'i'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'd2c8deb378a02a0f0131003d786c260f'}
+before hash check:  d2c8deb378a02a0f0131003d786c260f
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 39, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '7c44353133813d4b88b3d7258081c83f'}
+before hash check:  7c44353133813d4b88b3d7258081c83f
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 38, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'd2c8deb378a02a0f0131003d786c260f'}
+before hash check:  d2c8deb378a02a0f0131003d786c260f
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+{'delta': {'start': 37, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '687b2778c371908663b161b787db8be8'}
+before hash check:  687b2778c371908663b161b787db8be8
+most recent hash:  0d64fccd082782288b1dce1b4743bc9c
+
+
+
+found  ['durbin3'] durbin3
+
+
+
+removed  [] durbin3
+{'delta': {'start': 37, 'amt': 0, 'msg': 'j'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '9c0bd91bd207a09571f3181110d15d62'}
+{'delta': {'start': 38, 'amt': 0, 'msg': 'j'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'd04bdb18b265a2b8df6f32715c19d4a1'}
+{'delta': {'start': 38, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'dbd16db558ba97adda932ea700b5e3d8'}
+{'delta': {'start': 37, 'amt': 1, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'd04bdb18b265a2b8df6f32715c19d4a1'}
+{'delta': {'start': 37, 'amt': 0, 'msg': '.'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '9c0bd91bd207a09571f3181110d15d62'}
+{'delta': {'start': 38, 'amt': 0, 'msg': 'j'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '9efa09f4ac3b41dc592aa0b13c59c39a'}
