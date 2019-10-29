@@ -157,7 +157,7 @@ function TextEditor(currentfile) {
 
 
 function RawTextDataFormat(data) {
-  return SyncObservable.fromObservable({},ko.observable(data));
+  return SyncObservable.fromObservable({str:false},ko.observable(data));
 }
 
 
@@ -280,7 +280,7 @@ function AppViewModel(servedata) {
         type:"fixed-top",
         initialmeasure:"2em",
         resizeable:true,
-        first:ko.observable(new AddSplitTab({tabs:self.tabs,closeable:true,rearrangeable:true,selected:self.selected})),
+        first:ko.observable(new Tabs({tabs:self.tabs,closeable:true,rearrangeable:true,selected:self.selected})),
         second:ko.computed(function(){
           if (self.ui()==null) {
             return self.blank;

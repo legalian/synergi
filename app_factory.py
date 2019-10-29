@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_dance.contrib.github import make_github_blueprint
 from flask_session import Session
 import os
-
+from flask_migrate import Migrate, MigrateCommand
 
 
 app = Flask(__name__)
@@ -21,5 +21,5 @@ blueprint = make_github_blueprint(
 )
 app.register_blueprint(blueprint, url_prefix="/login")
 
-
+migrate = Migrate(app, db)
 

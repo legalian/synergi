@@ -11,4 +11,4 @@ env/
 /static/bower_components/
 /static/bower_components
 activate.sh
-
+log.txt

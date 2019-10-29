@@ -44,7 +44,6 @@ function handshake(F) {
       }
     });
   });
-
 }
 ko.subscribable.fn.subscribeChanged = function (callback) {
   var savedValue = [...this.peek()];
@@ -247,14 +246,15 @@ function SyncObservable(props) {
     var md5buffer = self.evaluate();
     self.endpointUp = function(changedInterval) {
       //send data to the server here.
-      console.log("sent to server:",changedInterval);
-      var md5 = "placeholder md5 hash here."//take the hash of the md5buffer variable before we change it the line below
+      // console.log("sent to server:",changedInterval);
+      var md6 = md5(md5buffer);//take the hash of the md5buffer variable before we change it the line below
+      console.log("md5:::: ", md6,md5buffer);
       md5buffer = md5buffer.slice(0,changedInterval.start)+changedInterval.data+md5buffer.slice(changedInterval.start+changedInterval.length);
       socket.emit('edit', {
         delta:{start:changedInterval.start,amt:changedInterval.length,msg:changedInterval.data},
         path:path,
         sessionId:sessionId,
-        md5:md5
+        md5:md6
       });
     }
   };
@@ -264,7 +264,7 @@ function SyncObservable(props) {
   };
 };
 SyncObservable.fromObservable = function(props,obs) {
-  var props = Object.assign({str:true},props)
+  var props = Object.assign({unwrap:false,str:true},props)
   var ace = null;
   var tracking = true;
   var syncobs;
@@ -281,7 +281,8 @@ SyncObservable.fromObservable = function(props,obs) {
         obs(rye);
       } else {
         syncobs.oldmsglength = rye.length;
-        obs(JSON.parse(rye));
+        if (props.unwrap) {obs(JSON.parse(rye));}
+        else {obs(rye);}
       }
       tracking = true;
     },
@@ -300,10 +301,8 @@ SyncObservable.fromObservable = function(props,obs) {
     syncobs.disableUI = function() {aceEnabled=false;}
     // syncobs.enableUI();
     ace.session.on('change', function(delta) {
-      console.log("change edit(B)",delta,tracking,aceEnabled)
       if (!tracking) {return;}
       if (!aceEnabled) {return}
-      console.log("change edit",delta)
       var yaya = ace.getValue()
       tracking = false;
       obs(yaya);
@@ -311,6 +310,8 @@ SyncObservable.fromObservable = function(props,obs) {
       var start = nthIndex(yaya,"\n",delta.start.row)+1+delta.start.column;
       var end   = nthIndex(yaya,"\n",delta.end.row)+1+delta.end.column;
       var msg = delta.lines.join("\n");
+
+      if (props.str) {start++;end++;}
 
       var ninterval;
       if (delta.action == 'insert') {
