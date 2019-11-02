@@ -33,9 +33,11 @@
 	<script type="text/javascript">
 	function Divider(props) {
 		var self = this;
-		props = Object.assign({initialmeasure:"10em",resizeable:true,type:"fixed-top",first:null,second:null,id:""},props)
+		props = Object.assign({initialmeasure:"10em",resizeable:true,slidesout:false,parent:null,type:"fixed-top",first:null,second:null,id:""},props)
 		self.resizeable = props.resizeable;
 		self.initialmeasure = props.initialmeasure;
+		self.slidesout = props.slidesout;
+		self.parent = props.parent;
 		self.id = props.id;
 		self.type = props.type;//fixed-bottom, fixed-right, fixed-left, fixed-top, horizontal-percent, vertical-percent
 		self.align = ["fixed-bottom","fixed-top","horizontal-percent"].includes(self.type)?"horizontal":"vertical";
@@ -69,14 +71,29 @@
 		}
 		self.vresize = function() {
 		}
+		self.reparent = function(newparent) {
+			self.parent = newparent;
+		}
 		self.onLoad = function(a) {
 			$(a[1]).splitPane();
 			$(a[1]).on('splitpaneresize', function(event) {
 				var target = event.target === document ? window : event.target;
 				if (target === a[1]) {
-					var property = self.align=="horizontal" ? 'height' : 'width';
-					self.first().vresize($(a[1]).find('.split-pane-component:first')[property]() + (self.align=="horizontal"?0:-5));
-					self.second().vresize($(a[1]).find('.split-pane-component:last')[property]());
+					var property = self.align == "horizontal" ? 'height' : 'width';
+					if (self.slidesout) {
+						if ($(a[1]).find('.split-pane-component:first')[property]() + (self.align=="horizontal"?0:-5)<5) {
+							console.log("deleted");
+							self.second().reparent(self.parent);
+							console.log("deleted");
+							self.parent(self.second());
+						}
+						if ($(a[1]).find('.split-pane-component:last')[property]() < 5) {
+							self.first().reparent(self.parent);
+							self.parent(self.first());
+						}
+					}
+					self.first().vresize();
+					self.second().vresize();
 				}
 			});
 		};
@@ -154,7 +171,7 @@
 	var tabsdragulagroups = 0;
 	function Tabs(props) {
 		var self = this;
-		props = Object.assign({closeable:false,rearrangeable:false,fill:false,tabs:null,id:"",didSelect:null,draggroup:null,selected:ko.observable(null)},props);
+		props = Object.assign({closeable:false,rearrangeable:false,fill:false,tabs:null,id:"",didSelect:null,draggroup:null,selected:ko.observable(null),onClick:function(){},onRemove:function(){}},props);
 		if (props.draggroup == null) {self.draggroup = 'TabsGroup'+tabsdragulagroups++;}
 		else                         {self.draggroup = props.draggroup;}
 		self.template = "tabs-area";
@@ -166,13 +183,12 @@
 		self.selected = props.selected;
 		self.vresize = function() {}
 		self.remove = function(item) {
-			console.log(item);
-			item.close();
 			self.tabs.remove(item);
+			props.onRemove(item);
 		};
-		self.select = function(bwow) {
-			self.selected(bwow);
-			bwow.click();
+		self.select = function(item) {
+			self.selected(item);
+			props.onClick(item);
 		};
 		self.onLoad = function(a) {
 			if (self.rearrangeable) {
@@ -221,14 +237,14 @@
 						<i data-bind="class:expanded()?'material-icons rotate-90':'material-icons',click:function(){expanded(!expanded())}">play_arrow</i>
 					</div>
 					<div style="flex:1">
-						<span data-bind="text:title,click:click" style="overflow: hidden;white-space: nowrap;"></span>
+						<span data-bind="text:title,click:$parent.onClick" style="overflow: hidden;white-space: nowrap;"></span>
 					</div>
 				</div>
 				<!-- ko if:$data.elems -->
 					<div data-bind="visible: expanded()">
 					<!-- ko template:{
 						name:'rearrangeable-recursive-area',
-						data:{moves:$parent.moves,accepts:$parent.accepts,draggroup:$parent.draggroup,elems:elems}} -->
+						data:{onClick:$parent.onClick,moves:$parent.moves,accepts:$parent.accepts,draggroup:$parent.draggroup,elems:elems}} -->
 					<!-- /ko -->
 					</div>
 				<!-- /ko -->
@@ -243,14 +259,14 @@
 						<i data-bind="class:expanded()?'material-icons rotate-90':'material-icons',click:function(){expanded(!expanded())}">play_arrow</i>
 					</div>
 					<div style="flex:1">
-						<span data-bind="text:title,click:click" style="overflow: hidden;white-space: nowrap;"></span>
+						<span data-bind="text:title,click:$parent.onClick" style="overflow: hidden;white-space: nowrap;"></span>
 					</div>
 				</div>
 				<!-- ko if:$data.elems -->
 					<div data-bind="visible: expanded()">
 					<!-- ko template:{
 						name: 'recursive-area',
-						data:{elems:elems}} -->
+						data:{onClick:$parent.onClick,elems:elems}} -->
 					<!-- /ko -->
 					</div>
 				<!-- /ko -->
@@ -261,12 +277,13 @@
 	var recursivedragulagroups=0;
 	function RecursiveArea(props){
 		var self = this;
-		props = Object.assign({elems:null,id:"",rearrangeable:true,draggroup:null},props);
+		props = Object.assign({elems:null,id:"",rearrangeable:true,draggroup:null,onClick:function(){}},props);
 		if (props.draggroup == null) {self.draggroup = 'RecursiveGroup'+recursivedragulagroups++;}
 		else                         {self.draggroup = props.draggroup;}
 		self.rearrangeable = props.rearrangeable;
 		self.template = self.rearrangeable?"rearrangeable-recursive-area":"recursive-area";
 		self.elems = props.elems
+		self.onClick = props.onClick;
 		self.moves = function (el, source, handle,sibling) {
 			while(handle!=null && !handle.classList.contains('recursiveunit')) {handle = handle.parentElement;}
 			return handle === el;

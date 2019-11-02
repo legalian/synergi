@@ -63,20 +63,7 @@ var colori = 0;
 var justice;
 
 
-function RightPane() {
-  var self = this;
-  self.template = "right-pane";
-  self.vresize = function() {}
-  self.onLoad = function() {}
-}
-function AddSplitTab(props) {
-  var self = this;
-  Tabs.bind(self)(props)
-  self.template = "add-split-tab";
-  self.downgrade = function(){
-    self.template = "tabs-area";
-  }
-}
+
 
 
 
@@ -98,20 +85,50 @@ function TextEditor(currentfile) {
   self.name = "Text Editor";
   self.node = new TextArea();
   self.sync = null
-  self.suspend = function() {
-    if (justice.ui()==self) {
+  self.suspend = function(paneui) {
+    if (paneui()==self) {
       if (self.sync!=null) {self.sync.disableUI();}
-      justice.ui(null);
+      paneui(null);
     }
   }
-  self.wake = function() {
+  self.wake = function(paneui) {
     console.log("waking");
     self.sync = currentfile.format(RawTextDataFormat,function(sync){
       self.sync = sync;
-      justice.ui(self);
+      paneui(self);
       self.sync.attach(self.node.editor);
     });
   }
+}
+
+function GenericUI() {
+  // self.connectedFiles = [];
+  // self.desiredFormats = [];
+  // self.specificwake = function(syncs) {};
+
+  self.suspend = function(paneui) {
+    if (paneui()==self) {
+      self.connectedFiles.forEach(function(item){
+        item.uiBecameInactive(ui);
+      });
+      paneui(null);
+    }
+  }
+  self.wake = function(paneui) {
+    var eachfileconnected = [];
+    self.connectedFiles.forEach(function(item,index){
+      eachfileconnected.push(null);
+      item.format(self.desiredFormats[index],function(sync){
+        eachfileconnected[index]=sync;
+        if (eachfileconnected.every(a=>a!=null)) {
+          self.specificwake(eachfileconnected);
+          paneui(self);
+        }
+      });
+    });
+  }
+
+  // self.connectedSyncs = 
 }
 // function DualTextEditor(currentfile) {
 //   var self  = this;
@@ -165,6 +182,47 @@ function RawTextDataFormat(data) {
   return SyncObservable.fromObservable({str:false},ko.observable(data));
 }
 
+//last pane interacted with...
+//always add tab to rightmost/ select on rightmost...
+
+
+function RightPane() {
+  var self = this;
+  self.template = "right-pane";
+  self.vresize = function() {}
+  self.onLoad = function() {}
+}
+function AddSplitTab(props) {
+  var self = this;
+  Tabs.bind(self)(props)
+  self.template = "add-split-tab";
+  self.downgrade = function(){
+    self.template = "tabs-area";
+  }
+}
+function Pane() {
+  var self = this;
+  self.tabs = ko.observableArray([]);
+  self.selected = ko.observable();
+  self.ui = ko.observable(null);
+  self.onClick = function(item) {
+    item.active(self.ui);
+  }
+  self.onRemove = function(item) {
+    item.removeListener(self);
+  }
+  Divider.bind(self)({
+    type:"fixed-top",
+    initialmeasure:"2em",
+    resizeable:true,
+    first:ko.observable(new AddSplitTab({draggroup:"GEditorTabs",tabs:self.tabs,closeable:true,rearrangeable:true,selected:self.selected,onClick:self.onClick,onRemove:self.onRemove})),
+    second:ko.computed(function(){
+      if (self.ui()==null) {return justice.blank;}
+      return self.ui().node;
+    })
+  });
+  self.closeEverything
+}
 
 
 
@@ -188,20 +246,57 @@ function Directory(data){
       self.elems()[self.elems().length-1].radd(ra);
     }
   }
-  self.click = function(){}
+  self.open = function(){}
 }
 function File(data) {
   var self = this;
   self.type = 'blob';
   self.title = data.title;
-  // console.log(self.title)
   self.path = data.path;
   self.sha = data.sha;
   self.connectedusers = ko.observableArray([]);
-  self.synchronizer = null;
-  self.ui = null;
-  self.lastdataformat = null;
-  self.format = function(format,callback) {//format current data in accordance with given format. called anytime relevant UIs wake.
+
+
+  self.centraldata    = null
+  self.listeners      = []//[([ui],synchronizer)]<--- synchronizer.dataformat
+  self.connectedpanes = []//[(pane,ui)]
+
+
+  //any change in synchronizer should update other synchronizers and shared bank and server
+
+  self.transferPanes = function(pane1,pane2) {
+    self.removePane(pane2);
+    //any uis connected to pane1 are now connected to pane2.
+    //any uis already connected to pane2 should be closed.
+  }
+  self.personalUiChanged = function(pane,newui) {
+    self.connectedpanes.forEach(function(item) {
+      if (item.pane == pane) {
+        //
+
+      }
+    });
+  }
+  self.removePane = function(pane) {
+    var foundind = -1;
+    self.connectedpanes.forEach(function(item,index) {
+      if (item.pane == pane) {
+        item.ui.suspend(pane.ui);
+        foundind = index;
+      }
+    });
+    if (foundind != -1) {self.connectedpanes.splice(foundind,1);}
+    //find the pane and kill it and then kill the associated ui and the associated synchronizer
+  }
+  self.uiBecameInactive = function(ui) {
+    //might need to call sync.disableUI
+    //then you might just throw away your synchronizer.
+  }
+
+
+  self.format = function(format,callback) {
+    //format current data in accordance with given format. called anytime relevant UIs wake.
+    //call callback with 
     if (self.lastdataformat==format) {callback(self.synchronizer);return;}
     self.lastdataformat = format;
     if (self.synchronizer==null) {
@@ -231,16 +326,23 @@ function File(data) {
     self.lastdataformat = null;
     self.ui = null;
   }
-  self.click = function(){
-    if (!justice.tabs().includes(self)) {
-      justice.tabs.push(self);
-    }
-    justice.selected(self);
+  self.active = function(ui) {
     if (self.ui == null) {self.ui = new TextEditor(self);}
-    if (justice.ui()!=self.ui) {
-      if (justice.ui()!=null) {justice.ui().suspend();}
-      self.ui.wake();
+    if (ui()!=self.ui) {
+      if (ui()!=null) {ui().suspend();}
+      self.ui.wake(ui);
     }
+  }
+  self.open = function(){
+    var pane = justice.getFrontPane();
+
+    if (!pane.first().tabs().includes(self)) {
+      pane.first().tabs.push(self);
+    }
+    pane.first().selected(self);
+    self.active(pane.ui);
+
+    
   }
 }
 function User(data) {
@@ -251,7 +353,7 @@ function User(data) {
 function AppViewModel(servedata) {
   var self =  this;
   self.elems = ko.observableArray([]);
-  self.tabs  = ko.observableArray([]);
+  // self.tabs  = ko.observableArray([]);
 
 
   self.activeusers = ko.observableArray(servedata['activemembers'].split(",").map(function(item){return new User(item);}));
@@ -273,11 +375,10 @@ function AppViewModel(servedata) {
   });
 
 
-
   self.node = new Divider({
     type:"fixed-left",
     resizeable:true,
-    first:ko.observable(new RecursiveArea({elems:self.elems})),
+    first:ko.observable(new RecursiveArea({elems:self.elems,onClick:function(item){item.open();}})),
     second:ko.observable(new Divider({
       type:"fixed-right",
       resizeable:true,
@@ -285,7 +386,7 @@ function AppViewModel(servedata) {
         type:"fixed-top",
         initialmeasure:"2em",
         resizeable:true,
-        first:ko.observable(new AddSplitTab({tabs:self.tabs,closeable:true,rearrangeable:true,selected:self.selected})),
+        first:ko.observable(new AddSplitTab({draggroup:"GEditorTabs",tabs:ko.observableArray([]),closeable:true,rearrangeable:true,selected:ko.observable()})),
         second:ko.computed(function(){
           if (self.ui()==null) {
             return self.blank;
@@ -296,38 +397,56 @@ function AppViewModel(servedata) {
       second:ko.observable(new RightPane())
     }))
   });
+  self.getFrontPane = function() {
+    if (self.node.second().first().first().template == "resizeable-area") {
+      return self.node.second().first().second();
+    } else {
+      return self.node.second().first();
+    }
+  }
+  self.paneCount = function() {
+    return self.countPanes(self.node.second().first());
+  }
+  self.countPanes = function(eds) {
+    if (eds.first().template == "resizeable-area") {
+      return 1 + self.countPanes(eds.first())
+    } else {
+      return 1
+    }
+  }
   self.extradd = function() {
-    console.log("adding tab")
+    console.log("adding tab; there are now(before the add):",self.paneCount(),"tabs")
     var allprevs = self.node.second().first();
-    if (allprevs.first().template=='add-split-tab') {allprevs.first().downgrade();}
-    else {allprevs.second().first().downgrade();}
     var newfirst = new Divider({
       type:"fixed-top",
       initialmeasure:"2em",
       resizeable:true,
-      first:ko.observable(new AddSplitTab({tabs:self.tabs,closeable:true,rearrangeable:true,selected:self.selected})),
+      first:ko.observable(new AddSplitTab({draggroup:"GEditorTabs",tabs:ko.observableArray([]),closeable:true,rearrangeable:true,selected:ko.observable()})),
       second:ko.computed(function(){
         if (self.ui()==null) {return self.blank;}
         return self.ui().node;
       })
     })
-    self.node.second().first(new Divider({
+    var newcombination = new Divider({
       type:"fixed-right",
       resizeable:true,
       first:ko.observable(allprevs),
-      second:ko.observable(newfirst)
-    }));
-
-
-
-
-
-
-
-
+      second:ko.observable(newfirst),
+      slidesout:true,
+      parent:function(cheat){
+        var mast;
+        if (cheat.first().template=='resizeable-area') {mast = cheat.second().first();}
+        else {mast = cheat.first();}
+        mast.template = "add-split-tab";
+        mast.downgrade = function(){mast.template = "tabs-area";}
+        self.node.second().first(cheat);
+      }
+    });
+    if (allprevs.first().template=='add-split-tab') {allprevs.first().downgrade();}
+    else {allprevs.second().first().downgrade();}
+    allprevs.reparent(newcombination.first);
+    self.node.second().first(newcombination)
   }
-
-
   $.ajax("/directories", {
     type: "POST",
     contentType: "application/json",

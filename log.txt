@@ -1553,3 +1553,345 @@ found  ['legalian'] legalian
 
 removed  [] legalian
 <id 2>
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+<id 2>
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+<id 2>
+None
+File hash:  08468b8c8a2f73a5602748491301bfda
+lil SUCCESS:  08468b8c8a2f73a5602748491301bfda
+<id 2>
+None
+File hash:  f2bbc73d717b40be3149a21de9cf7809
+lil SUCCESS:  f2bbc73d717b40be3149a21de9cf7809
+<id 1>
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+not found:  [''] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+{'delta': {'start': 0, 'amt': 50, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '61cb6b7eb60fd31f1109074168eb6d94'}
+added hash:  61cb6b7eb60fd31f1109074168eb6d94
+{'delta': {'start': 0, 'amt': 0, 'msg': 'Generic single-databaasldkfjlaskdfse configuration'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'd41d8cd98f00b204e9800998ecf8427e'}
+added hash:  d41d8cd98f00b204e9800998ecf8427e
+{'delta': {'start': 0, 'amt': 0, 'msg': ''}, 'path': 'manage.py', 'sessionId': 1, 'md5': 'f2bbc73d717b40be3149a21de9cf7809'}
+added hash:  f2bbc73d717b40be3149a21de9cf7809
+{'delta': {'start': 0, 'amt': 0, 'msg': "from flask_script import Manager\nfrom flask_migrate import Migrate, MigrateCommand\n\nfrom app import app, db\n\n# migrate = Migrate(app, db)\n\nmanager = Manager(app)\n\nmanager.add_command('db', MigrateCommand)\n\n\nif __name__ == '__main__':\n    manager.run()\n\n\n"}, 'path': 'manage.py', 'sessionId': 1, 'md5': 'f2bbc73d717b40be3149a21de9cf7809'}
+added hash:  f2bbc73d717b40be3149a21de9cf7809
+{'delta': {'start': 0, 'amt': 50, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '61cb6b7eb60fd31f1109074168eb6d94'}
+
+
+
+found  ['legalian'] legalian
+
+
+
+removed  [] legalian
+{'delta': {'start': 0, 'amt': 0, 'msg': ''}, 'path': 'manage.py', 'sessionId': 1, 'md5': '1ab2882961d13c9c449f6974a486c061'}
+{'delta': {'start': 0, 'amt': 0, 'msg': "from flask_script import Manager\nfrom flask_migrate import Migrate, MigrateCommand\n\nfrom app import app, db\n\n# migrate = Migrate(app, db)\n\nmanager = Manager(app)\n\nmanager.add_command('db', MigrateCommand)\n\n\nif __name__ == '__main__':\n    manager.run()\n\n\n"}, 'path': 'manage.py', 'sessionId': 1, 'md5': '1ab2882961d13c9c449f6974a486c061'}
+{'delta': {'start': 0, 'amt': 50, 'msg': ''}, 'path': 'migrations/README', 'sessionId': 1, 'md5': '61cb6b7eb60fd31f1109074168eb6d94'}
+{'delta': {'start': 0, 'amt': 0, 'msg': 'Generic single-databaasldkfjlaskdfse configuration'}, 'path': 'migrations/README', 'sessionId': 1, 'md5': 'd41d8cd98f00b204e9800998ecf8427e'}
+added hash:  d41d8cd98f00b204e9800998ecf8427e
+oasdjfoaisdjfoiajsdf
+oasdjfoaisdjfoiajsdf
