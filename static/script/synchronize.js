@@ -44,7 +44,6 @@ function handshake(F) {
       }
     });
   });
-
 }
 ko.subscribable.fn.subscribeChanged = function (callback) {
   var savedValue = [...this.peek()];
@@ -265,7 +264,7 @@ function SyncObservable(props) {
   };
 };
 SyncObservable.fromObservable = function(props,obs) {
-  var props = Object.assign({str:true},props)
+  var props = Object.assign({unwrap:false,str:true},props)
   var ace = null;
   var tracking = true;
   var syncobs;
@@ -282,7 +281,8 @@ SyncObservable.fromObservable = function(props,obs) {
         obs(rye);
       } else {
         syncobs.oldmsglength = rye.length;
-        obs(JSON.parse(rye));
+        if (props.unwrap) {obs(JSON.parse(rye));}
+        else {obs(rye);}
       }
       tracking = true;
     },
@@ -310,6 +310,8 @@ SyncObservable.fromObservable = function(props,obs) {
       var start = nthIndex(yaya,"\n",delta.start.row)+1+delta.start.column;
       var end   = nthIndex(yaya,"\n",delta.end.row)+1+delta.end.column;
       var msg = delta.lines.join("\n");
+
+      if (props.str) {start++;end++;}
 
       var ninterval;
       if (delta.action == 'insert') {

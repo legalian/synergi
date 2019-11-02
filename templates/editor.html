@@ -27,6 +27,15 @@
   <select data-bind="options:$root.availableeditors,optionsText: 'name',optionsValue: 'func',"></select>
 </script>
 
+<script type='text/html' id='add-split-tab'>
+  <div style="position:relative;height:100%;width:100%;">
+    <div data-bind="template:{name:'tabs-area',data:$data,afterRender:onLoad}"></div>
+    <div style="position:absolute;top:0;right:0;bottom:0;width:2em;background-color:black;">
+      <i class="material-icons littleplus" data-bind="click:$root.extradd,clickBubble:false">add</i>
+    </div>
+  </div>
+</script>
+
 
 
 <script>
@@ -59,6 +68,14 @@ function RightPane() {
   self.template = "right-pane";
   self.vresize = function() {}
   self.onLoad = function() {}
+}
+function AddSplitTab(props) {
+  var self = this;
+  Tabs.bind(self)(props)
+  self.template = "add-split-tab";
+  self.downgrade = function(){
+    self.template = "tabs-area";
+  }
 }
 
 
@@ -145,7 +162,7 @@ function TextEditor(currentfile) {
 
 
 function RawTextDataFormat(data) {
-  return SyncObservable.fromObservable({},ko.observable(data));
+  return SyncObservable.fromObservable({str:false},ko.observable(data));
 }
 
 
@@ -266,9 +283,9 @@ function AppViewModel(servedata) {
       resizeable:true,
       first:ko.observable(new Divider({
         type:"fixed-top",
-        initialmeasure:"5em",
+        initialmeasure:"2em",
         resizeable:true,
-        first:ko.observable(new Tabs({tabs:self.tabs,closeable:true,rearrangeable:true,selected:self.selected})),
+        first:ko.observable(new AddSplitTab({tabs:self.tabs,closeable:true,rearrangeable:true,selected:self.selected})),
         second:ko.computed(function(){
           if (self.ui()==null) {
             return self.blank;
@@ -279,7 +296,36 @@ function AppViewModel(servedata) {
       second:ko.observable(new RightPane())
     }))
   });
+  self.extradd = function() {
+    console.log("adding tab")
+    var allprevs = self.node.second().first();
+    if (allprevs.first().template=='add-split-tab') {allprevs.first().downgrade();}
+    else {allprevs.second().first().downgrade();}
+    var newfirst = new Divider({
+      type:"fixed-top",
+      initialmeasure:"2em",
+      resizeable:true,
+      first:ko.observable(new AddSplitTab({tabs:self.tabs,closeable:true,rearrangeable:true,selected:self.selected})),
+      second:ko.computed(function(){
+        if (self.ui()==null) {return self.blank;}
+        return self.ui().node;
+      })
+    })
+    self.node.second().first(new Divider({
+      type:"fixed-right",
+      resizeable:true,
+      first:ko.observable(allprevs),
+      second:ko.observable(newfirst)
+    }));
 
+
+
+
+
+
+
+
+  }
 
 
   $.ajax("/directories", {

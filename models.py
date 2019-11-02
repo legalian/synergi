@@ -1,6 +1,7 @@
 
 import datetime
 from app_factory import db
+import hashlib
 def print(*args):
     sample = open('log.txt', 'a') 
     sample.write(' '.join([repr(k) if type(k) is not str else k for k in args])+'\n')
@@ -80,7 +81,6 @@ class TemFile(db.Model):
     content    = db.Column(db.String())
     sha        = db.Column(db.String())
 
-
     # all of the four most recent changes and their properties
     delta1_start=db.Column(db.Integer)
     delta1_amt = db.Column(db.Integer)
@@ -116,40 +116,23 @@ class TemFile(db.Model):
 
         ## find the matching md5 in the database
         # if not found, return false
-        print("before hash check: ", md5)
-        print("most recent hash: ", self.hash1)
         prev = False
         if md5==self.hash5:
-            
-            if not process(self.delta4_start, self.delta4_amt, self.delta4_data):
-                return False
-
+            if not process(self.delta4_start, self.delta4_amt, self.delta4_data): return False
             prev = True
         if md5==self.hash4 or prev:
-           if not process(self.delta3_start, self.delta3_amt, self.delta3_data):
-            return False
-
+            if not process(self.delta3_start, self.delta3_amt, self.delta3_data): return False
             prev = True
-
         if md5==self.hash3 or prev:
-            if not process(self.delta2_start, self.delta2_amt, self.delta2_data):
-                return False
-            
-
+            if not process(self.delta2_start, self.delta2_amt, self.delta2_data): return False
             prev = True
-
         if md5==self.hash2 or prev:
-            if not process(self.delta1_start, self.delta1_amt, self.delta1_data):
-                return False
-
+            if not process(self.delta1_start, self.delta1_amt, self.delta1_data): return False
             prev = True
-        if not (prev or md5==self.hash1):
-            return False
-
+        if not (prev or md5==self.hash1): return False
         ## if found update and shift
         self.content = self.content[:delta['start']]+delta['msg']+self.content[delta['start']+delta['amt']:]
         hash = hashlib.md5(self.content.encode("utf-8")).hexdigest()
-        print("BIG SUCCESS: ",hash)
         
         # shift hashes down one
         self.hash5 = self.hash4
@@ -171,7 +154,6 @@ class TemFile(db.Model):
         self.delta1_start  = delta['start']
         self.delta1_amt    = delta['amt']
         self.delta1_data   = delta['msg']
-
         return True
 
     def __init__(self,session_id,path,content,sha, md5):

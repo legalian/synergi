@@ -169,7 +169,7 @@ def files():
 	#creds=session['githubuser']
 	#if creds not in sesh.activemembers.split(',') then tell the user to go directly to hell- dont give them any files they arent to be trusted.
 	creds = session['githubuser']
-	if creds not in sesh.activemembers.split(','): return
+	# if creds not in sesh.activemembers.split(','): return "ur not allowed lol",402
 
 	book = TemFile.query.filter_by(session_id = int(sesh.id),path=str(jak['path'])).first()
 	print(book)
@@ -258,9 +258,9 @@ def directories():
 def joinjoin():
 	data = request.json
 	repo = Project.query.filter_by(id=int(data['projectId'])).first()
-	if repo == None: return
+	if repo == None: return "nah bruh",402
 	creds=session['githubuser']
-	if creds == None: return
+	if creds == None: return "nah son- you got no credentials",402
 
 	#github api calls are done with github.get(path) or github.post(path). you can see the pattern below.
 	#here we need to tell the user to fuck themselves with a rusty pipe if they try to edit a repo they dont have write permissions for
