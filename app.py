@@ -178,13 +178,12 @@ def files():
 		#maybe we can set our own filesize limits or we have two separate aborts, one for when its so large that it breaks the api, and one when its not quite that large but we still won't keep it in our database.
 			#either way we just return 413
 		if False:
-			return "Content too large",413#pretty sure this sends back a 413 error code, which I can interpret on front end.
+			return "Content too large",413 #pretty sure this sends back a 413 error code, which I can interpret on front end.
 		r = github.get("/repos/"+sesh.owner+"/"+sesh.repo+"/contents/"+jak['path']+"?ref="+sesh.branch)
 		if r.status_code != 200:
 			print(r.content)
 			return
 
-		#you'll need to calculate the md5 hash here as well, for the new TemFile object youre creating
 		con = json.loads(r.content)
 		decoded = str(base64.b64decode(con['content']).decode("utf-8"))
 		has = hashlib.md5(decoded.encode("utf-8")).hexdigest()
@@ -217,20 +216,6 @@ def handle_edit(edit):
 	if (creds not in sesh.activemembers.split(',')): 
 		emit('rejected',{"delta":edit['delta']},room=request.sid) 
 		return
-
-	#edit['md5'] would be the hash that comes from the client. You compare this hash against the server's hashes.
-	#no matching hash found: reject change
-	#after you apply the change, the server calculates the md5 of the new data (for security reasons you cant rely on the client to calculate both hashes)
-	#new hash becomes current version, old hash gets added to the list along with the delta and stored in the database.
-		#to add columns to the database, which you will need to do for this step, first modify models.py and then run:
-			#python manage.py db migrate
-			#python manage.py db upgrade
-		#TemFile is the table youd want to add the versioning stuff to.
-
-	#for change in changes_between_matching_hash_and_current_hash:
-		#if change overlaps current_delta: reject change and exit
-		#if change comes before current_delta: current_delta.start+=len(change.data)-change.amt
-
 	
 		#as a side note, here are the basic patterns for notifying clients through socketio:
 		#room=request.sid        <---- notifies only the person that sent the message
