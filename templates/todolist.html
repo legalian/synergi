@@ -123,7 +123,7 @@
 	collapsable project container
 
  -->
-<div id="extra" class="container" data-bind="foreach:results">
+<div id="extra" class="container" data-bind="foreach:synergi_repos">
 	<div class = "project wrap-collabsible">
 		<input data-bind="attr:{id:$index()}" class="toggle" type="checkbox">
 		<label data-bind="attr:{for:$index()},text:name" class="lbl-toggle">[Name]</label>
@@ -178,32 +178,38 @@ function deleteObject(dat) {
 
 function AppViewModel() {
 	var self =	this;
-	self.repos    = ko.observableArray([]);
+	self.github_repos = ko.observableArray([]);
 	self.activerepo = ko.observable(null);
 	self.repochoices = ko.computed(function(){
-		return self.repos().map(function(item){return item.name})
+		return self.github_repos().map(function(item){return item.name})
 	})
 	self.branches = ko.computed(function(){
 		var ind = self.repochoices().indexOf(self.activerepo())
 		if (ind == -1) {return []}
-		return self.repos()[ind].branches
+		return self.github_repos()[ind].branches
 	})
 	self.owner = ko.computed(function(){
 		var ind = self.repochoices().indexOf(self.activerepo())
 		if (ind == -1) {return null}
-		return self.repos()[ind].owner
+		return self.github_repos()[ind].owner
 	});
 
 
-	self.results  = ko.observableArray([]);
+	self.synergi_repos  = ko.observableArray([]);
 	
 
-	
-	$.ajax("/repos", {
+	// taking the place of ::: self.results(data['res']);
+	$.ajax("/synergi_repos", {
 		type: "GET",
 		success: function(data){
-			self.results(data['res']);
-			self.repos(data['openrepos'])
+			self.synergi_repos(data['payload'])
+		}
+	});
+	
+	$.ajax("/github_repos", {
+		type: "GET",
+		success: function(data){
+			self.github_repos(data['payload'])
 		}
 	});
 

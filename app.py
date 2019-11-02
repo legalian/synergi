@@ -3,6 +3,8 @@ from flask_socketio import SocketIO, send, emit, join_room, leave_room
 from flask_sqlalchemy import SQLAlchemy
 from flask_dance.contrib.github import make_github_blueprint, github
 from flask_session import Session
+from app_factory import db,app,blueprint,socketio
+from models import Project, Session, TemFile
 import base64
 import requests
 import os
@@ -10,33 +12,31 @@ import json
 import hashlib
 import sys
 import json
-
-# import sentry_sdk
-# from sentry_sdk.integrations.flask import FlaskIntegration
-
-# from werkzeug.exceptions import HTTPException
-
-# log = logging.getLogger('eventlet')
-# log.setLevel(logging.ERROR)
+import pprint
 
 
+#as a side note, here are the basic patterns for notifying clients through socketio:
+#room=request.sid        <---- notifies only the person that sent the message
+#broadcast=True                      <---- (when inside a socketio route) notifies everyone connected to the session
+#broadcast=True,include_self=False   <---- (when inside a socketio route) notifies everyone connected to the session except for the person initiating the event
+#room=str(repo.id)+","+str(sesh.id)                      <----(when inside a flask route) notifies everyone connected to the session
+#room=str(repo.id)+","+str(sesh.id),include_self=False   <----(when inside a flask route) notifies everyone connected to the session except for the person initiating the event
+#clients recieve these events with shit like: socket.on('rejected',function(data){console.log(data);})
 
-from app_factory import db,app,blueprint,socketio
-# from flask_dance.consumer.storage import BaseStorage
 
-from models import Project, Session, TemFile
 
 app.config['ssl_verify_client_cert'] = True
 app.logger.disabled = True
-
-
-
 
 def print(*args):
 	sample = open('log.txt', 'a') 
 	sample.write(' '.join([repr(k) if type(k) is not str else k for k in args])+'\n')
 	sample.close()
 
+def formattedprint(*args):
+	sample = open('log.txt', 'a') 
+	sample.write(' '.join([pprint.pformat(k,compact=True) if type(k) is not str else k for k in args])+'\n')
+	sample.close()
 
 ##################################
 	
@@ -76,21 +76,37 @@ def projectlist():
 
 
 
-@app.route("/repos")
-def repos():
+@app.route("/github_repos")
+def github_repos():
 	openrepos = []
-	res = []
+
+	# github.get("/user/repos")
+	# https://developer.github.com/v3/repos/#list-your-repositories
 	for i in github.get("/user/repos").json():
+		# TODO: only add if they are a collaborator 
+		# https://developer.github.com/v3/repos/collaborators/#list-collaborators
 
-		for repo in Project.query.filter_by(owner=str(i['owner']['login']),repo=str(i['name'])).all():
-			res.append(repo.serialize())
-
+		# print(github.get("/repos/"+str(i['owner']['login'])+"/"+str(i['name'])+"/branches").json())
 		openrepos.append({
 			'owner':str(i['owner']['login']),
 			'name':str(i['name']),
 			'branches':[p['name'] for p in github.get("/repos/"+str(i['owner']['login'])+"/"+str(i['name'])+"/branches").json()]
 		})
-	return {'openrepos':openrepos,'res':res}
+	return {"payload": openrepos}
+
+@app.route("/synergi_repos")
+def synergi_repos():
+	results = []
+	#load client repos from database
+	user = "{"+session['githubuser']+"}"
+	# Project.query.filter_by(owner=str(i['owner']['login']),repo=str(i['name'])).all()
+	for repo in Project.query.filter(Project.write_access_users.contains(user)).all():
+		results.append(repo.serialize())
+
+	return {"payload":results}
+
+
+
 
 
 
@@ -103,31 +119,29 @@ def deleteObject():
 		TemFile.query.filter_by(session_id = sesh.id).delete()
 	Session.query.filter_by(project_id = data["projectid"]).delete()
 	Project.query.filter_by(id = data["projectid"]).delete()
-
-
-
+	
 	db.session.commit()
-
-	for yams in Project.query.filter_by(id = data["projectid"]).all():
-		print(yams.serialize())
-	else:
-		print("Nothing to delete after")
-
-
-
 	return "200"
 
 
 @app.route("/projects",methods=['POST'])
 def projects():
-	yam = request.form
-	print("OAIJDFOIAJDOIASJDOFIJSDFOIJSDLKFJSLKDFJLSKDFJLKSDJFLKSDFJLKSDFJ\n\n\n\n")
+	json_from_client = request.form
+	# formattedprint("/repos/" + str(json_from_client['owner']) + "/" + str(json_from_client['repo']) + "/contributors")
+	users = github.get("/repos/" + str(json_from_client['owner']) + "/" + str(json_from_client['repo']) + "/contributors").json()
+	# formattedprint(users)
+
+	write_user_list = []
+	for user in users:
+		write_user_list.append(user['login'])
+
 	proj = Project(
-		name       = str(yam['name']),
-		repo       = str(yam['repo']),
-		branch     = str(yam['branch']),
-		owner      = str(yam['owner']),
-		description = str(yam['description'])
+		name       = str(json_from_client['name']),
+		repo       = str(json_from_client['repo']),
+		branch     = str(json_from_client['branch']),
+		owner      = str(json_from_client['owner']),
+		description = str(json_from_client['description']),
+		write_access_users = write_user_list
 	)
 	db.session.add(proj)
 	db.session.commit()
@@ -152,18 +166,15 @@ def logout():
 	return "no you cant"
 
 
-
-
 @socketio.on('connect')
 def sdahoufa():
 	pass
-	
 
 
 @app.route("/files",methods=['POST'])
 def files():
-	jak = request.json
-	sesh = Session.query.filter_by(id=int(jak['sessionId'])).first()
+	json_from_client = request.json
+	sesh = Session.query.filter_by(id=int(json_from_client['sessionId'])).first()
 	if sesh == None: return
 
 	#creds=session['githubuser']
@@ -171,30 +182,32 @@ def files():
 	creds = session['githubuser']
 	# if creds not in sesh.activemembers.split(','): return "ur not allowed lol",402
 
-	book = TemFile.query.filter_by(session_id = int(sesh.id),path=str(jak['path'])).first()
+	book = TemFile.query.filter_by(session_id = int(sesh.id),path=str(json_from_client['path'])).first()
 	print(book)
 	if book == None:
-		#I'd need to look more into the github api, but i think github does something special when the files are too large to be sent over their api or smth
-		#maybe we can set our own filesize limits or we have two separate aborts, one for when its so large that it breaks the api, and one when its not quite that large but we still won't keep it in our database.
-			#either way we just return 413
-		if False:
-			return "Content too large",413#pretty sure this sends back a 413 error code, which I can interpret on front end.
-		r = github.get("/repos/"+sesh.owner+"/"+sesh.repo+"/contents/"+jak['path']+"?ref="+sesh.branch)
-		if r.status_code != 200:
-			print(r.content)
+		
+		# pulls the information of the file from github 
+		# https://developer.github.com/v3/repos/contents/
+		github_request = github.get("/repos/"+sesh.owner+"/"+sesh.repo+"/contents/"+json_from_client['path']+"?ref="+sesh.branch)
+		if github_request.status_code != 200:
+			print(github_request.content)
 			return
 
-		#you'll need to calculate the md5 hash here as well, for the new TemFile object youre creating
-		con = json.loads(r.content)
-		decoded = str(base64.b64decode(con['content']).decode("utf-8"))
-		has = hashlib.md5(decoded.encode("utf-8")).hexdigest()
-		print("File hash: " , has)
+		json_from_github = json.loads(github_request.content)
+
+		# checks to see if the files are above 256KB, and if they are, return error code 413
+		if json_from_github['size'] > 262144 :
+			return "Content too large",413
+		
+		decoded = str(base64.b64decode(json_from_github['content']).decode("utf-8"))
+
+		# making the database entry in TemFile of the current file
 		book = TemFile(
 			session_id = sesh.id,
-			path = jak['path'],
+			path = json_from_client['path'],
 			content = decoded,
-			sha = con['sha'],
-			md5 = has
+			sha = json_from_github['sha'],
+			md5 = hashlib.md5(decoded.encode("utf-8")).hexdigest()
 		)
 
 		db.session.add(book)
@@ -217,39 +230,12 @@ def handle_edit(edit):
 	if (creds not in sesh.activemembers.split(',')): 
 		emit('rejected',{"delta":edit['delta']},room=request.sid) 
 		return
-
-	#edit['md5'] would be the hash that comes from the client. You compare this hash against the server's hashes.
-	#no matching hash found: reject change
-	#after you apply the change, the server calculates the md5 of the new data (for security reasons you cant rely on the client to calculate both hashes)
-	#new hash becomes current version, old hash gets added to the list along with the delta and stored in the database.
-		#to add columns to the database, which you will need to do for this step, first modify models.py and then run:
-			#python manage.py db migrate
-			#python manage.py db upgrade
-		#TemFile is the table youd want to add the versioning stuff to.
-
-	#for change in changes_between_matching_hash_and_current_hash:
-		#if change overlaps current_delta: reject change and exit
-		#if change comes before current_delta: current_delta.start+=len(change.data)-change.amt
-
 	
-		#as a side note, here are the basic patterns for notifying clients through socketio:
-		#room=request.sid        <---- notifies only the person that sent the message
-		#broadcast=True                      <---- (when inside a socketio route) notifies everyone connected to the session
-		#broadcast=True,include_self=False   <---- (when inside a socketio route) notifies everyone connected to the session except for the person initiating the event
-		#room=str(repo.id)+","+str(sesh.id)                      <----(when inside a flask route) notifies everyone connected to the session
-		#room=str(repo.id)+","+str(sesh.id),include_self=False   <----(when inside a flask route) notifies everyone connected to the session except for the person initiating the event
-		#clients recieve these events with shit like: socket.on('rejected',function(data){console.log(data);})
-
-
-
-	# book.content = book.content[:edit['delta']['start']]+edit['delta']['msg']+book.content[edit['delta']['start']+edit['delta']['amt']:]
-
-	has = edit['md5']
-	if(not book.addHash(has, edit['delta'])): 
+	hash = edit['md5']
+	if(not book.addHash(hash, edit['delta'])): 
 		emit('rejected',{"delta":edit['delta']},room=request.sid) 
 		return
-	print("added hash: " , has)
-	# call addhash()
+	print("added hash: " , hash)
 	db.session.commit()
 	emit('edit',edit,broadcast=True,include_self=False)
 
@@ -258,17 +244,19 @@ def handle_edit(edit):
 
 @app.route("/directories",methods=['POST'])
 def directories():
-	# print(dict(request.json))
 	sesh = Session.query.filter_by(id=int(request.json['sessionId'])).first()
 	if sesh == None: return
-	r = github.get("/repos/"+sesh.owner+"/"+sesh.repo+"/git/trees/"+sesh.sha+"?recursive=1,ref="+sesh.branch)
-	if r.status_code != 200:
-		print(r.content)
+	github_request = github.get("/repos/"+sesh.owner+"/"+sesh.repo+"/git/trees/"+sesh.sha+"?recursive=1,ref="+sesh.branch)
+	if github_request.status_code != 200:
+		print(github_request.content)
 		return
-	return r.json()
+	return github_request.json()
 
 
-
+# do a double check the user has write permissions; query github to check 
+# https://developer.github.com/v3/repos/#list-user-repositories
+# or 
+# given repo output collaborators 
 @app.route("/join", methods=['POST'])
 def joinjoin():
 	data = request.json
@@ -302,83 +290,47 @@ def joinjoin():
 	return "OK"
 
 
-#######     {name: "name", id: "3241324"} | {name: "name2", id: "341234"} | ....
-
-
-
 @socketio.on('join')
 def on_join(data):
 	repo = Project.query.filter_by(id=int(data['projectId'])).first()
 	if repo == None: return
-	creds=session['githubuser']
+	creds = session['githubuser']
 	if creds == None: return
 
 	#not sure how youd go about verifying that a user has write permissions here... i may have written myself into a corner...
 
 	sesh = Session.query.filter_by(project_id=int(repo.id)).first()
 	if sesh == None: return
-	yam = sesh.activemembers
-	jj = [] if yam=="" else yam.split(",")
-	if creds not in jj:
-		jj.append(creds)
-		sesh.activemembers = ",".join(jj)
+	members = sesh.activemembers
+	members_array = [] if members == "" else members.split(",")
+	if creds not in members_array:
+		members_array.append(creds)
+		sesh.activemembers = ",".join(members_array)
 		db.session.commit()
-
-
 
 	join_room(str(repo.id)+","+str(sesh.id))
 	emit('accept',{'sessionId':sesh.id,'activemembers':sesh.activemembers},room=request.sid)
 	emit('player_join',{'name':creds},room=str(repo.id)+","+str(sesh.id),include_self=False)
 
 
-
-
 @socketio.on('disconnect')
 def on_disconnect():
-	creds=session['githubuser']
+	creds = session['githubuser']
 	for sesh in Session.query.filter_by(id=int(session['sessionId'])).all():
-		jj = sesh.activemembers.split(",")
-		if creds in jj:
-			print("\n\n\nfound ", jj, creds )
-			jj.remove(creds)
-			print("\n\n\nremoved ", jj, creds)
+		members_array = sesh.activemembers.split(",")
+		if creds in members_array:
+			print("\n\n\nfound ", members_array, creds )
+			members_array.remove(creds)
+			print("\n\n\nremoved ", members_array, creds)
 		else:
-			print("\n\n\nnot found: ", jj, creds )
-		sesh.activemembers = ",".join(jj)
+			print("\n\n\nnot found: ", members_array, creds )
+		sesh.activemembers = ",".join(members_array)
 	db.session.commit()
 	emit('player_leave',{'name':creds},include_self=False)
 
 
-# my_logger = logging.getLogger('my-logger')
-# my_logger.setLevel(logging.ERROR)
-
-# messages = 'This is Console1', 'This is Console2'
-
-# # define a command that starts new terminal
-# if platform.system() == "Windows":
-#     new_window_command = "cmd.exe /c start".split()
-# else:  #XXX this can be made more portable
-#     new_window_command = "x-terminal-emulator -e".split()
-
-# # open new consoles, display messages
-# echo = [sys.executable, "-c",
-#         "import sys; print(sys.argv[1]); input('Press Enter..')"]
-# processes = [Popen(new_window_command + echo + [msg])  for msg in messages]
-
-
-
-
-
 if __name__ == '__main__':
-	# ssl_verify_client_cert = True
-	# context = ('local.crt', 'local.key')#certificate and key files. 
-	# subprocess.call(["tail -f log.txt"]) 
-
-	# subprocess.Popen('ls',stdout=subprocess.PIPE)
-
-
-	socketio.run(app,debug=True,keyfile='key.pem', certfile='cert.pem')#ssl-enable3
-	#eventlet.monkey_patch(socket=False)
+	socketio.run(app,debug=True,keyfile='key.pem', certfile='cert.pem')
 
 
 
