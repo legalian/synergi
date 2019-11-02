@@ -12,6 +12,7 @@ import json
 import hashlib
 import sys
 import json
+import pprint
 
 
 #as a side note, here are the basic patterns for notifying clients through socketio:
@@ -32,6 +33,10 @@ def print(*args):
 	sample.write(' '.join([repr(k) if type(k) is not str else k for k in args])+'\n')
 	sample.close()
 
+def formattedprint(*args):
+	sample = open('log.txt', 'a') 
+	sample.write(' '.join([pprint.pformat(k,compact=True) if type(k) is not str else k for k in args])+'\n')
+	sample.close()
 
 ##################################
 	
@@ -71,21 +76,37 @@ def projectlist():
 
 
 
-@app.route("/repos")
-def repos():
+@app.route("/github_repos")
+def github_repos():
 	openrepos = []
-	res = []
+
+	# github.get("/user/repos")
+	# https://developer.github.com/v3/repos/#list-your-repositories
 	for i in github.get("/user/repos").json():
+		# TODO: only add if they are a collaborator 
+		# https://developer.github.com/v3/repos/collaborators/#list-collaborators
 
-		for repo in Project.query.filter_by(owner=str(i['owner']['login']),repo=str(i['name'])).all():
-			res.append(repo.serialize())
-
+		# print(github.get("/repos/"+str(i['owner']['login'])+"/"+str(i['name'])+"/branches").json())
 		openrepos.append({
 			'owner':str(i['owner']['login']),
 			'name':str(i['name']),
 			'branches':[p['name'] for p in github.get("/repos/"+str(i['owner']['login'])+"/"+str(i['name'])+"/branches").json()]
 		})
-	return {'openrepos':openrepos,'res':res}
+	return {"payload": openrepos}
+
+@app.route("/synergi_repos")
+def synergi_repos():
+	results = []
+	#load client repos from database
+	user = "{"+session['githubuser']+"}"
+	# Project.query.filter_by(owner=str(i['owner']['login']),repo=str(i['name'])).all()
+	for repo in Project.query.filter(Project.write_access_users.contains(user)).all():
+		results.append(repo.serialize())
+
+	return {"payload":results}
+
+
+
 
 
 
@@ -106,12 +127,21 @@ def deleteObject():
 @app.route("/projects",methods=['POST'])
 def projects():
 	json_from_client = request.form
+	# formattedprint("/repos/" + str(json_from_client['owner']) + "/" + str(json_from_client['repo']) + "/contributors")
+	users = github.get("/repos/" + str(json_from_client['owner']) + "/" + str(json_from_client['repo']) + "/contributors").json()
+	# formattedprint(users)
+
+	write_user_list = []
+	for user in users:
+		write_user_list.append(user['login'])
+
 	proj = Project(
 		name       = str(json_from_client['name']),
 		repo       = str(json_from_client['repo']),
 		branch     = str(json_from_client['branch']),
 		owner      = str(json_from_client['owner']),
-		description = str(json_from_client['description'])
+		description = str(json_from_client['description']),
+		write_access_users = write_user_list
 	)
 	db.session.add(proj)
 	db.session.commit()
@@ -223,7 +253,10 @@ def directories():
 	return github_request.json()
 
 
-
+# do a double check the user has write permissions; query github to check 
+# https://developer.github.com/v3/repos/#list-user-repositories
+# or 
+# given repo output collaborators 
 @app.route("/join", methods=['POST'])
 def joinjoin():
 	data = request.json

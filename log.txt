@@ -1,0 +1,137 @@
+oasdjfoaisdjfoiajsdf
+{'message': 'Not Found', 'documentation_url': 'https://developer.github.com/v3'}
+oasdjfoaisdjfoiajsdf
+[{'name': 'master', 'commit': {'sha': '85eafa128bc28aa93eb42c2be1f3767d995eff3e', 'url': 'https://api.github.com/repos/durbin3/hello-world/commits/85eafa128bc28aa93eb42c2be1f3767d995eff3e'}, 'protected': False}]
+[{'name': 'master', 'commit': {'sha': '101ccf3c58af12e3159b5498b9d55895e02176f2', 'url': 'https://api.github.com/repos/durbin3/music-maker/commits/101ccf3c58af12e3159b5498b9d55895e02176f2'}, 'protected': False}]
+[{'name': 'master', 'commit': {'sha': '4260f8d38f35f4fa3e40426fa8fb20ebb2e1cb96', 'url': 'https://api.github.com/repos/legalian/hackathon-practice/commits/4260f8d38f35f4fa3e40426fa8fb20ebb2e1cb96'}, 'protected': False}]
+[{'name': 'master', 'commit': {'sha': '41fc8893cf52c8102e2f9a8664bf77cde32bfecc', 'url': 'https://api.github.com/repos/legalian/synergi/commits/41fc8893cf52c8102e2f9a8664bf77cde32bfecc'}, 'protected': False}]
+{'message': 'Must have push access to view repository collaborators.', 'documentation_url': 'https://developer.github.com/v3/repos/collaborators/#list-collaborators'}
+/repos/legalian/synergi/collaborators
+{'message': 'Must have push access to view repository collaborators.', 'documentation_url': 'https://developer.github.com/v3/repos/collaborators/#list-collaborators'}
+oasdjfoaisdjfoiajsdf
+/repos/legalian/synergi/collaborators
+{'message': 'Must have push access to view repository collaborators.', 'documentation_url': 'https://developer.github.com/v3/repos/collaborators/#list-collaborators'}
+oasdjfoaisdjfoiajsdf
+/repos/legalian/synergi/contributors
+[{'login': 'legalian', 'id': 9938954, 'node_id': 'MDQ6VXNlcjk5Mzg5NTQ=', 'avatar_url': 'https://avatars0.githubusercontent.com/u/9938954?v=4', 'gravatar_id': '', 'url': 'https://api.github.com/users/legalian', 'html_url': 'https://github.com/legalian', 'followers_url': 'https://api.github.com/users/legalian/followers', 'following_url': 'https://api.github.com/users/legalian/following{/other_user}', 'gists_url': 'https://api.github.com/users/legalian/gists{/gist_id}', 'starred_url': 'https://api.github.com/users/legalian/starred{/owner}{/repo}', 'subscriptions_url': 'https://api.github.com/users/legalian/subscriptions', 'organizations_url': 'https://api.github.com/users/legalian/orgs', 'repos_url': 'https://api.github.com/users/legalian/repos', 'events_url': 'https://api.github.com/users/legalian/events{/privacy}', 'received_events_url': 'https://api.github.com/users/legalian/received_events', 'type': 'User', 'site_admin': False, 'contributions': 125}, {'login': 'durbin3', 'id': 54672526, 'node_id': 'MDQ6VXNlcjU0NjcyNTI2', 'avatar_url': 'https://avatars1.githubusercontent.com/u/54672526?v=4', 'gravatar_id': '', 'url': 'https://api.github.com/users/durbin3', 'html_url': 'https://github.com/durbin3', 'followers_url': 'https://api.github.com/users/durbin3/followers', 'following_url': 'https://api.github.com/users/durbin3/following{/other_user}', 'gists_url': 'https://api.github.com/users/durbin3/gists{/gist_id}', 'starred_url': 'https://api.github.com/users/durbin3/starred{/owner}{/repo}', 'subscriptions_url': 'https://api.github.com/users/durbin3/subscriptions', 'organizations_url': 'https://api.github.com/users/durbin3/orgs', 'repos_url': 'https://api.github.com/users/durbin3/repos', 'events_url': 'https://api.github.com/users/durbin3/events{/privacy}', 'received_events_url': 'https://api.github.com/users/durbin3/received_events', 'type': 'User', 'site_admin': False, 'contributions': 47}, {'login': 'vamsikoll', 'id': 54682391, 'node_id': 'MDQ6VXNlcjU0NjgyMzkx', 'avatar_url': 'https://avatars1.githubusercontent.com/u/54682391?v=4', 'gravatar_id': '', 'url': 'https://api.github.com/users/vamsikoll', 'html_url': 'https://github.com/vamsikoll', 'followers_url': 'https://api.github.com/users/vamsikoll/followers', 'following_url': 'https://api.github.com/users/vamsikoll/following{/other_user}', 'gists_url': 'https://api.github.com/users/vamsikoll/gists{/gist_id}', 'starred_url': 'https://api.github.com/users/vamsikoll/starred{/owner}{/repo}', 'subscriptions_url': 'https://api.github.com/users/vamsikoll/subscriptions', 'organizations_url': 'https://api.github.com/users/vamsikoll/orgs', 'repos_url': 'https://api.github.com/users/vamsikoll/repos', 'events_url': 'https://api.github.com/users/vamsikoll/events{/privacy}', 'received_events_url': 'https://api.github.com/users/vamsikoll/received_events', 'type': 'User', 'site_admin': False, 'contributions': 20}, {'login': 'sapostu', 'id': 54751008, 'node_id': 'MDQ6VXNlcjU0NzUxMDA4', 'avatar_url': 'https://avatars3.githubusercontent.com/u/54751008?v=4', 'gravatar_id': '', 'url': 'https://api.github.com/users/sapostu', 'html_url': 'https://github.com/sapostu', 'followers_url': 'https://api.github.com/users/sapostu/followers', 'following_url': 'https://api.github.com/users/sapostu/following{/other_user}', 'gists_url': 'https://api.github.com/users/sapostu/gists{/gist_id}', 'starred_url': 'https://api.github.com/users/sapostu/starred{/owner}{/repo}', 'subscriptions_url': 'https://api.github.com/users/sapostu/subscriptions', 'organizations_url': 'https://api.github.com/users/sapostu/orgs', 'repos_url': 'https://api.github.com/users/sapostu/repos', 'events_url': 'https://api.github.com/users/sapostu/events{/privacy}', 'received_events_url': 'https://api.github.com/users/sapostu/received_events', 'type': 'User', 'site_admin': False, 'contributions': 2}]
+oasdjfoaisdjfoiajsdf
+/repos/legalian/synergi/contributors
+[{'avatar_url': 'https://avatars0.githubusercontent.com/u/9938954?v=4',
+  'contributions': 125,
+  'events_url': 'https://api.github.com/users/legalian/events{/privacy}',
+  'followers_url': 'https://api.github.com/users/legalian/followers',
+  'following_url': 'https://api.github.com/users/legalian/following{/other_user}',
+  'gists_url': 'https://api.github.com/users/legalian/gists{/gist_id}',
+  'gravatar_id': '',
+  'html_url': 'https://github.com/legalian',
+  'id': 9938954,
+  'login': 'legalian',
+  'node_id': 'MDQ6VXNlcjk5Mzg5NTQ=',
+  'organizations_url': 'https://api.github.com/users/legalian/orgs',
+  'received_events_url': 'https://api.github.com/users/legalian/received_events',
+  'repos_url': 'https://api.github.com/users/legalian/repos',
+  'site_admin': False,
+  'starred_url': 'https://api.github.com/users/legalian/starred{/owner}{/repo}',
+  'subscriptions_url': 'https://api.github.com/users/legalian/subscriptions',
+  'type': 'User',
+  'url': 'https://api.github.com/users/legalian'},
+ {'avatar_url': 'https://avatars1.githubusercontent.com/u/54672526?v=4',
+  'contributions': 47,
+  'events_url': 'https://api.github.com/users/durbin3/events{/privacy}',
+  'followers_url': 'https://api.github.com/users/durbin3/followers',
+  'following_url': 'https://api.github.com/users/durbin3/following{/other_user}',
+  'gists_url': 'https://api.github.com/users/durbin3/gists{/gist_id}',
+  'gravatar_id': '',
+  'html_url': 'https://github.com/durbin3',
+  'id': 54672526,
+  'login': 'durbin3',
+  'node_id': 'MDQ6VXNlcjU0NjcyNTI2',
+  'organizations_url': 'https://api.github.com/users/durbin3/orgs',
+  'received_events_url': 'https://api.github.com/users/durbin3/received_events',
+  'repos_url': 'https://api.github.com/users/durbin3/repos',
+  'site_admin': False,
+  'starred_url': 'https://api.github.com/users/durbin3/starred{/owner}{/repo}',
+  'subscriptions_url': 'https://api.github.com/users/durbin3/subscriptions',
+  'type': 'User',
+  'url': 'https://api.github.com/users/durbin3'},
+ {'avatar_url': 'https://avatars1.githubusercontent.com/u/54682391?v=4',
+  'contributions': 20,
+  'events_url': 'https://api.github.com/users/vamsikoll/events{/privacy}',
+  'followers_url': 'https://api.github.com/users/vamsikoll/followers',
+  'following_url': 'https://api.github.com/users/vamsikoll/following{/other_user}',
+  'gists_url': 'https://api.github.com/users/vamsikoll/gists{/gist_id}',
+  'gravatar_id': '',
+  'html_url': 'https://github.com/vamsikoll',
+  'id': 54682391,
+  'login': 'vamsikoll',
+  'node_id': 'MDQ6VXNlcjU0NjgyMzkx',
+  'organizations_url': 'https://api.github.com/users/vamsikoll/orgs',
+  'received_events_url': 'https://api.github.com/users/vamsikoll/received_events',
+  'repos_url': 'https://api.github.com/users/vamsikoll/repos',
+  'site_admin': False,
+  'starred_url': 'https://api.github.com/users/vamsikoll/starred{/owner}{/repo}',
+  'subscriptions_url': 'https://api.github.com/users/vamsikoll/subscriptions',
+  'type': 'User',
+  'url': 'https://api.github.com/users/vamsikoll'},
+ {'avatar_url': 'https://avatars3.githubusercontent.com/u/54751008?v=4',
+  'contributions': 2,
+  'events_url': 'https://api.github.com/users/sapostu/events{/privacy}',
+  'followers_url': 'https://api.github.com/users/sapostu/followers',
+  'following_url': 'https://api.github.com/users/sapostu/following{/other_user}',
+  'gists_url': 'https://api.github.com/users/sapostu/gists{/gist_id}',
+  'gravatar_id': '',
+  'html_url': 'https://github.com/sapostu',
+  'id': 54751008,
+  'login': 'sapostu',
+  'node_id': 'MDQ6VXNlcjU0NzUxMDA4',
+  'organizations_url': 'https://api.github.com/users/sapostu/orgs',
+  'received_events_url': 'https://api.github.com/users/sapostu/received_events',
+  'repos_url': 'https://api.github.com/users/sapostu/repos',
+  'site_admin': False,
+  'starred_url': 'https://api.github.com/users/sapostu/starred{/owner}{/repo}',
+  'subscriptions_url': 'https://api.github.com/users/sapostu/subscriptions',
+  'type': 'User',
+  'url': 'https://api.github.com/users/sapostu'}]
+oasdjfoaisdjfoiajsdf
+/repos/durbin3/hello-world/contributors
+[{'avatar_url': 'https://avatars1.githubusercontent.com/u/54672526?v=4',
+  'contributions': 1,
+  'events_url': 'https://api.github.com/users/durbin3/events{/privacy}',
+  'followers_url': 'https://api.github.com/users/durbin3/followers',
+  'following_url': 'https://api.github.com/users/durbin3/following{/other_user}',
+  'gists_url': 'https://api.github.com/users/durbin3/gists{/gist_id}',
+  'gravatar_id': '',
+  'html_url': 'https://github.com/durbin3',
+  'id': 54672526,
+  'login': 'durbin3',
+  'node_id': 'MDQ6VXNlcjU0NjcyNTI2',
+  'organizations_url': 'https://api.github.com/users/durbin3/orgs',
+  'received_events_url': 'https://api.github.com/users/durbin3/received_events',
+  'repos_url': 'https://api.github.com/users/durbin3/repos',
+  'site_admin': False,
+  'starred_url': 'https://api.github.com/users/durbin3/starred{/owner}{/repo}',
+  'subscriptions_url': 'https://api.github.com/users/durbin3/subscriptions',
+  'type': 'User',
+  'url': 'https://api.github.com/users/durbin3'}]
+/repos/durbin3/hello-world/contributors
+[{'avatar_url': 'https://avatars1.githubusercontent.com/u/54672526?v=4',
+  'contributions': 1,
+  'events_url': 'https://api.github.com/users/durbin3/events{/privacy}',
+  'followers_url': 'https://api.github.com/users/durbin3/followers',
+  'following_url': 'https://api.github.com/users/durbin3/following{/other_user}',
+  'gists_url': 'https://api.github.com/users/durbin3/gists{/gist_id}',
+  'gravatar_id': '',
+  'html_url': 'https://github.com/durbin3',
+  'id': 54672526,
+  'login': 'durbin3',
+  'node_id': 'MDQ6VXNlcjU0NjcyNTI2',
+  'organizations_url': 'https://api.github.com/users/durbin3/orgs',
+  'received_events_url': 'https://api.github.com/users/durbin3/received_events',
+  'repos_url': 'https://api.github.com/users/durbin3/repos',
+  'site_admin': False,
+  'starred_url': 'https://api.github.com/users/durbin3/starred{/owner}{/repo}',
+  'subscriptions_url': 'https://api.github.com/users/durbin3/subscriptions',
+  'type': 'User',
+  'url': 'https://api.github.com/users/durbin3'}]
+oasdjfoaisdjfoiajsdf
+oasdjfoaisdjfoiajsdf

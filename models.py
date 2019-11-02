@@ -2,6 +2,7 @@
 import datetime
 from app_factory import db
 import hashlib
+from sqlalchemy.dialects import postgresql as pg
 def print(*args):
     sample = open('log.txt', 'a') 
     sample.write(' '.join([repr(k) if type(k) is not str else k for k in args])+'\n')
@@ -17,13 +18,15 @@ class Project(db.Model):
     owner = db.Column(db.String())
     repo = db.Column(db.String())
     branch = db.Column(db.String())
+    write_access_users = db.Column(pg.ARRAY(db.String))
 
-    def __init__(self, name,description,owner,repo,branch):
+    def __init__(self, name, description, owner, repo, branch, write_access_users):
         self.name = name
         self.description = description
         self.owner = owner
         self.repo = repo
         self.branch = branch
+        self.write_access_users = write_access_users
 
     def __repr__(self):
         return '<id {}>'.format(self.id)
@@ -36,7 +39,8 @@ class Project(db.Model):
             'created_date': self.created_date,
             'owner':self.owner,
             'repo':self.repo,
-            'branch':self.branch
+            'branch':self.branch,
+            'write_access_users': self.write_access_users
         }
 
 
