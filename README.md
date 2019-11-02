@@ -1,15 +1,6 @@
 #synergi
 TODO
 -- beautify dropdown menus in browse
--- md5 hash
-	(update the database to also store the last few md5 hashes and deltas)
-	(write a function server-side to "translate" one delta across another)
-		(if their ranges overlap, return error, if the range of the one youre translating over preceeds the other's range, add data.length-amt.)
-	(new changes require md5 hashes- if the md5 hash is not found, return error code)
--- stop the user from opening files that are too large
-	(files that are too large should not be able to be added to our database.)
-	(return an error code from /files post route instead of adding the file to the database)
-	(github api might also have limits in place for how large of a file we can request- if github returns an error code for this case, we'd just need to pass the message along.)
 -- when a user attempts to edit a project, we should check with github to make sure they have write permissions.
 	(like yeah technically they aren't shown projects they dont have write permissions for but we never check for if they copy the url from someone who does, if there's a session already open)
 	(return error code in /join and socket.join if theyre not allowed.)
