@@ -238,30 +238,34 @@ function SyncObservable(props) {
   self.endpointDown = props.endpointDown;//the endpoint that gets hit when the server changes some data.
   self.evaluate = props.evaluate;
   self.oldmsglength = props.oldmsglength;
-  self.synchronize = function(sessionId,path) {
-    var md5buffer = self.evaluate();
-    self.endpointUp = function(changedInterval) {
-      //send data to the server here.
-      // console.log("sent to server:",changedInterval);
-      var md6 = md5(md5buffer);//take the hash of the md5buffer variable before we change it the line below
-      console.log("md5:::: ", md6,md5buffer);
-      md5buffer = md5buffer.slice(0,changedInterval.start)+changedInterval.data+md5buffer.slice(changedInterval.start+changedInterval.length);
-      socket.emit('edit', {
-        delta:{start:changedInterval.start,amt:changedInterval.length,msg:changedInterval.data},
-        path:path,
-        sessionId:sessionId,
-        md5:md6
-      });
-    }
-  };
   self.disconnect = function() {
     self.endpointUp = null;
     self.endpointDown = null;
   };
 };
+
+
+
+
+
+
+
+
+
+// ko.bindingHandlers.aceEdit = {
+//   init: function(element, valueAccessor) {
+
+//   }
+// };
+
+
+
+
+
+
+
 SyncObservable.fromObservable = function(props,obs) {
   var props = Object.assign({unwrap:false,str:true},props)
-  var ace = null;
   var tracking = true;
   var syncobs;
   var syncobs = new SyncObservable({
@@ -288,53 +292,15 @@ SyncObservable.fromObservable = function(props,obs) {
     },
     oldmsglength:obs().toString().length+(props.str?2:0)
   });
-  syncobs.attach = function(aces) {
-    if (aces == ace) {aceEnabled=true;ace.session.setValue(obs());return;}
-    ace=aces;
-    syncobs.disableUI();
-    var aceEnabled = true;
-    ace.session.setValue(obs());
-    syncobs.disableUI = function() {aceEnabled=false;}
-    // syncobs.enableUI();
-    ace.session.on('change', function(delta) {
-      if (!tracking) {return;}
-      if (!aceEnabled) {return}
-      var yaya = ace.getValue()
-      tracking = false;
-      obs(yaya);
-      tracking = true;
-      var start = nthIndex(yaya,"\n",delta.start.row)+1+delta.start.column;
-      var end   = nthIndex(yaya,"\n",delta.end.row)+1+delta.end.column;
-      var msg = delta.lines.join("\n");
-
-      if (props.str) {start++;end++;}
-
-      var ninterval;
-      if (delta.action == 'insert') {
-        ninterval = new ChangeInterval(start,0,msg);
-      } else if (delta.action == 'remove') {
-        ninterval = new ChangeInterval(start,end-start,"");
-      }
-
-  // # if edit['mode'] == 'insert':
-  // #   book.content = book.content[:edit['delta']['amt']]+edit['delta']['msg']+book.content[edit['delta']['amt']:]
-  // # elif edit['mode'] == 'remove':
-  // #   book.content = book.content[:edit['delta']['amt']]+book.content[edit['delta']['amt']+len(edit['delta']['msg']):]
-
-
-      syncobs.endpointUp(ninterval);
-      syncobs.oldmsglength+=ninterval.lendelta();// = newValue.toString().length+(props.str?2:0);
-    });
+  syncobs.props = props;
+  syncobs.getdata = function() {return obs;}
+  syncobs.overridemessage = function(ninterval){
+    console.log(ninterval);
+    syncobs.endpointUp(ninterval);
+    syncobs.endpointDown(ninterval);
   }
-  syncobs.disableUI = function() {}
   obs.subscribe(function(newValue){
     if (!tracking) {return;}
-    if (ace!=null) {
-      tracking = false;
-      ace.session.setValue(newValue);
-      tracking = true;
-      return;
-    }
     var ntext;
     if (props.str) {ntext = '"'+newValue.toString()+'"';}
     else {ntext = newValue.toString();}
@@ -362,8 +328,7 @@ SyncObservable.fromjson = function(props,syncs) {
     },
     oldmsglength:lengthof(props,syncs)
   });
-  syncobs.enableUI  = function() {for (const [key, value] of Object.entries(syncs)) {value.enableUI();}}
-  syncobs.disableUI = function() {for (const [key, value] of Object.entries(syncs)) {value.disableUI();}}
+  syncobs.getdata = function() {return syncs;}
   var oldlen = props.head.length-props.delim.length;
   var prevs = [];
   for (const [key, value] of Object.entries(syncs)) {
@@ -404,6 +369,7 @@ SyncObservable.fromcsv = function(props,objects,parser,serialize) {
       }
     });
   };
+  syncobs.getdata = function() {return syncs;}
   syncobs = new SyncObservable({
     endpointDown:function(changedInterval) {
       tracking = false;
@@ -426,8 +392,6 @@ SyncObservable.fromcsv = function(props,objects,parser,serialize) {
     },
     oldmsglength:lengthof(props,syncs)
   });
-  syncobs.enableUI  = function() {syncs.forEach(function(value){value.enableUI();});}
-  syncobs.disableUI = function() {syncs.forEach(function(value){value.disableUI();});}
   objects.subscribeChanged(function(newValue,oldValue){//to server
     if (!tracking) {return;}
     var i = 0;

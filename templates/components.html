@@ -10,6 +10,7 @@
 <script src="static/bower_components/ace/build/src/ace.js"></script>
 <script src="static/bower_components/knockout-dragula/dist/knockout-dragula.min.js"></script>
 <script src="static/script/md5.js"></script>
+<script src="static/script/synchronize.js"></script>
 {% endmacro %}
 
 {% macro importDivider() %}
@@ -82,12 +83,11 @@
 					var property = self.align == "horizontal" ? 'height' : 'width';
 					if (self.slidesout) {
 						if ($(a[1]).find('.split-pane-component:first')[property]() + (self.align=="horizontal"?0:-5)<5) {
-							console.log("deleted");
+							console.log("deletedF");
 							self.second().reparent(self.parent);
-							console.log("deleted");
 							self.parent(self.second());
-						}
-						if ($(a[1]).find('.split-pane-component:last')[property]() < 5) {
+						} else if ($(a[1]).find('.split-pane-component:last')[property]() < 5) {
+							console.log("deletedS");
 							self.first().reparent(self.parent);
 							self.parent(self.first());
 						}
@@ -171,7 +171,7 @@
 	var tabsdragulagroups = 0;
 	function Tabs(props) {
 		var self = this;
-		props = Object.assign({closeable:false,rearrangeable:false,fill:false,tabs:null,id:"",didSelect:null,draggroup:null,selected:ko.observable(null),onClick:function(){},onRemove:function(){}},props);
+		props = Object.assign({closeable:false,rearrangeable:false,fill:false,tabs:null,id:"",didSelect:null,draggroup:null,selected:ko.observable(null),onClick:null,onRemove:null},props);
 		if (props.draggroup == null) {self.draggroup = 'TabsGroup'+tabsdragulagroups++;}
 		else                         {self.draggroup = props.draggroup;}
 		self.template = "tabs-area";
@@ -183,12 +183,18 @@
 		self.selected = props.selected;
 		self.vresize = function() {}
 		self.remove = function(item) {
-			self.tabs.remove(item);
-			props.onRemove(item);
+			if (props.onRemove!=null) {
+				props.onRemove(item);
+			} else {
+				self.tabs.remove(item);
+			}
 		};
 		self.select = function(item) {
-			self.selected(item);
-			props.onClick(item);
+			if (props.onClick!=null) {
+				props.onClick(item);
+			} else {
+				self.selected(item);
+			}
 		};
 		self.onLoad = function(a) {
 			if (self.rearrangeable) {
@@ -208,21 +214,65 @@
 		}
 	</style>
 	<script type="text/html" id="text-area">
-		<div class="editor" data-bind="text:text"></div>
+		<div class="editor"></div>
 	</script>
 	<script type="text/javascript">
 	function TextArea(props){
 		var self = this;
-		props = Object.assign({text:null},props);
+		props = Object.assign({sync:null},props);
 		// editor.session.setMode("ace/mode/javascript");
 		self.template="text-area";
-		self.text = props.text
+		self.sync = props.sync;
 		self.editor = null;
 		self.vresize = function() {
 			if (self.editor != null) {self.editor.resize();}
 		}
 		self.onLoad = function(a) {
 			self.editor = ace.edit(a[1]);
+
+		    console.log("wjwufjowejf")
+		    var listening = true;
+		    var acsub = self.editor.session.on('change', function(delta) {
+		      if (!listening) {return;}
+		      console.log("change happen:",listening);
+		      var yaya = self.sync.getdata()()
+		      console.log(delta)
+		      var start = nthIndex(yaya,"\n",delta.start.row)+1+delta.start.column;
+		      var end   = nthIndex(yaya,"\n",delta.end.row)+1+delta.end.column;
+		      var msg = delta.lines.join("\n");
+		      if (self.sync.props.str) {start++;end++;}
+		      listening = false;
+		      console.log(start,end);
+		      if (delta.action == 'insert') {
+		        self.sync.overridemessage(new ChangeInterval(start,0,msg));
+		      } else if (delta.action == 'remove') {
+		      	if (msg.length!=Math.abs(end-start)) {
+		      		console.log("DESYNC:",msg,msg.length,end-start);
+		      	}
+		        self.sync.overridemessage(new ChangeInterval(start,end-start,""));
+		      } else {
+		      	console.log("swdfghjnkmjnhbgvfctdrxcfgvbhnjmkjnbhdrxfcghjnk");
+		      }
+		      listening = true;
+		    });
+		    var obsub = self.sync.getdata().subscribe(function(newValue){
+		      console.log("change come down:",listening);
+		      if (!listening) {return;}
+		      console.log("change applied");
+		      listening = false;
+		      self.editor.session.setValue(newValue);
+		      listening = true;
+		    });
+		      listening = false;
+		    self.editor.session.setValue(self.sync.getdata()());
+		      listening = true;
+		    ko.utils.domNodeDisposal.addDisposeCallback(a[1], function() {
+		      obsub.dispose();
+		      self.editor.session.removeListener('change',acsub);
+              self.editor.destroy();
+		      console.log("dispose")
+	          console.log("editor cleaned up.")
+		    });
 		}
 	}
 	</script>

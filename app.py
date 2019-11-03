@@ -227,13 +227,13 @@ def handle_edit(edit):
 	#synchronize.js line 237 is where this data comes from.
 
 	#if creds not in sesh.activemembers.split(',') then automatically reject their change- they arent in the session.
-	if (creds not in sesh.activemembers.split(',')): 
-		emit('rejected',{"delta":edit['delta']},room=request.sid) 
-		return
+	# if (creds not in sesh.activemembers.split(',')): 
+	# 	emit('rejected',{"delta":edit['delta'],"reason":"invalid credentials"},room=request.sid) 
+	# 	return
 	
 	hash = edit['md5']
 	if(not book.addHash(hash, edit['delta'])): 
-		emit('rejected',{"delta":edit['delta']},room=request.sid) 
+		emit('rejected',{"delta":edit['delta'],"mostRecentHash":book.hash1,"yourHash":hash},room=request.sid) 
 		return
 	print("added hash: " , hash)
 	db.session.commit()

@@ -88,19 +88,19 @@ class TemFile(db.Model):
     # all of the four most recent changes and their properties
     delta1_start=db.Column(db.Integer)
     delta1_amt = db.Column(db.Integer)
-    delta1_data= db.Column(db.String())
+    delta1_data= db.Column(db.Integer)
 
     delta2_start=db.Column(db.Integer)
     delta2_amt = db.Column(db.Integer)
-    delta2_data= db.Column(db.String())
+    delta2_data= db.Column(db.Integer)
 
     delta3_start=db.Column(db.Integer)
     delta3_amt = db.Column(db.Integer)
-    delta3_data= db.Column(db.String())
+    delta3_data= db.Column(db.Integer)
 
     delta4_start=db.Column(db.Integer)
     delta4_amt = db.Column(db.Integer)
-    delta4_data= db.Column(db.String())
+    delta4_data= db.Column(db.Integer)
 
 
     # 5 most recent md5 file hashes
@@ -114,7 +114,7 @@ class TemFile(db.Model):
         def process(delt_start,delt_amt,delt_data):
             if(delt_start + delt_amt <= delta['start'] or delta['start'] + delta['amt'] <= delt_start): 
                 if(delt_start < delta['start']):
-                    delta['start'] += (len(delt_data) - delt_amt)
+                    delta['start'] += delt_data
                 return True
 
 
@@ -137,13 +137,17 @@ class TemFile(db.Model):
         ## if found update and shift
         self.content = self.content[:delta['start']]+delta['msg']+self.content[delta['start']+delta['amt']:]
         hash = hashlib.md5(self.content.encode("utf-8")).hexdigest()
-        
+
         # shift hashes down one
         self.hash5 = self.hash4
         self.hash4 = self.hash3
         self.hash3 = self.hash2
         self.hash2 = self.hash1
         self.hash1 = hash
+        if self.hash1 == self.hash2: self.hash2 = ""
+        if self.hash1 == self.hash3: self.hash3 = ""
+        if self.hash1 == self.hash4: self.hash4 = ""
+        if self.hash1 == self.hash5: self.hash5 = ""
 
         # shift deltas down one
         self.delta4_start  = self.delta3_start  
@@ -157,7 +161,7 @@ class TemFile(db.Model):
         self.delta2_data   = self.delta1_data   
         self.delta1_start  = delta['start']
         self.delta1_amt    = delta['amt']
-        self.delta1_data   = delta['msg']
+        self.delta1_data   = len(delta['msg']) - delta['amt']
         return True
 
     def __init__(self,session_id,path,content,sha, md5):
@@ -165,7 +169,6 @@ class TemFile(db.Model):
         self.path = path
         self.content = content
         self.sha = sha
-        print("lil SUCCESS: ",md5)
         self.hash1 = md5
         self.hash2 = ""
         self.hash3 = ""
