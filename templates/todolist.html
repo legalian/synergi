@@ -158,23 +158,23 @@
 
 var justice = new AppViewModel();
 function deleteObject(dat) {
-		console.log("trying to delete")
-		console.log(".")
-		console.log(".")
-		console.log(".")
-		console.log(".")
-		$.ajax("/deleteObject", {
-					type: "POST",
-					data: ko.toJSON({
-						projectid:dat.id
-					}),
-					contentType: "application/json",
-					success: function(data){
-						console.log("Deleted")
-						justice.results.remove(dat);
-					}
-				});
-	}
+	console.log("trying to delete")
+	console.log(".")
+	console.log(".")
+	console.log(".")
+	console.log(".")
+	$.ajax("/deleteObject", {
+		type: "POST",
+		data: ko.toJSON({
+			projectid:dat.id
+		}),
+		contentType: "application/json",
+		success: function(data){
+			console.log("Deleted")
+			justice.results.remove(dat);
+		}
+	});
+}
 
 function AppViewModel() {
 	var self =	this;

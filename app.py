@@ -229,7 +229,7 @@ def handle_edit(edit):
 	#if creds not in sesh.activemembers.split(',') then automatically reject their change- they arent in the session.
 	if (creds not in sesh.activemembers.split(',')): 
 		emit('rejected',{"delta":edit['delta']},room=request.sid) 
-		return
+		return "User not in session", 403
 	
 	hash = edit['md5']
 	if(not book.addHash(hash, edit['delta'])): 
@@ -261,13 +261,21 @@ def directories():
 def joinjoin():
 	data = request.json
 	repo = Project.query.filter_by(id=int(data['projectId'])).first()
-	if repo == None: return "nah bruh",402
+	if repo == None: return "nah bruh",403
 	creds=session['githubuser']
-	if creds == None: return "nah son- you got no credentials",402
+	if creds == None: return "nah son- you got no credentials",403
 
 	#github api calls are done with github.get(path) or github.post(path). you can see the pattern below.
 	#here we need to tell the user to fuck themselves with a rusty pipe if they try to edit a repo they dont have write permissions for
 	#dunno which api endpoint to hit but its probably not too bad
+
+	write_user_list = github.get("/repos/"+repo.owner+"/"+repo.repo + "/contributors").json()
+	for user in write_user_list:
+		if user['login'] == session['githubuser']:
+			break
+	else:
+		return "User does not have write access", 403
+
 
 	sesh = Session.query.filter_by(project_id=int(repo.id)).first()
 	if sesh == None:
@@ -297,7 +305,11 @@ def on_join(data):
 	creds = session['githubuser']
 	if creds == None: return
 
-	#not sure how youd go about verifying that a user has write permissions here... i may have written myself into a corner...
+	for user in repo.write_access_users:
+		if user == session['githubuser']:
+			break
+	else:
+		return "User does not have write access", 403
 
 	sesh = Session.query.filter_by(project_id=int(repo.id)).first()
 	if sesh == None: return

@@ -1,13 +1,11 @@
 #synergi
 TODO
 -- beautify dropdown menus in browse
--- when a user attempts to edit a project, we should check with github to make sure they have write permissions.
-	(like yeah technically they aren't shown projects they dont have write permissions for but we never check for if they copy the url from someone who does, if there's a session already open)
-	(return error code in /join and socket.join if theyre not allowed.)
 -- when a user requests a file or tries to make a change to a file, make sure they have joined the session they claim to be editing
 	(it would be too much of a time sync to check with github for every little keystroke, so for each of those little changes we just check with our database to see if they have joined the session. They can only join the session if they have read permissions, so long as we implement the previous bullet point.)
 
 FUTURE TODO
+-- update other database list to be an Array
 -- fix css syntax error on todolist.html
 -- rewrite project post request to be an ajax post instead of html form (todolist.html line 103)
 -- need a better way to determine when someone really disconnects
