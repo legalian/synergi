@@ -3,10 +3,12 @@ TODO
 -- beautify dropdown menus in browse
 -- when a user requests a file or tries to make a change to a file, make sure they have joined the session they claim to be editing
 	(it would be too much of a time sync to check with github for every little keystroke, so for each of those little changes we just check with our database to see if they have joined the session. They can only join the session if they have read permissions, so long as we implement the previous bullet point.)
-
-FUTURE TODO
 -- update other database list to be an Array
 -- fix css syntax error on todolist.html
+-- repos that are too large (too many files, not specific files that are too big) should be prevented from being /join'ed- return some kind of error response from there
+-- add a versioning system on client side that mimics the server side- that way when the server rejects a change out of step with the client, they can come to a compromise or reload when the server and client can't find common ground.
+-- make the client show some kind of message or attempt a reconnect when it gets a network error (if you close your laptop and come back you have to refresh to make things work again... this would be a source of confusion for users.)
+-- improve client side code so everything works even if the server takes obnoxiously long to respond
 -- rewrite project post request to be an ajax post instead of html form (todolist.html line 103)
 -- need a better way to determine when someone really disconnects
 	(currently, visiting and then refreshing the page sends two joins and then one disconnect.)

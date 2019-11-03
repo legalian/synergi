@@ -240,10 +240,14 @@ function File(data) {
   self.defaultEditor = TextEditor;
   self.defaultOtherFiles = [];
 
+  self.lasthashes = [];
+  self.lastchanges = [];
+
   self.md5buffer      = null
   self.listeners      = []//[([ui],synchronizer)]<--- synchronizer.dataformat
   self.connectedpanes = []//[(pane,ui)]
 
+  self.editlistener = null
 
   //from pane:
   self.transferPanes = function(pane1,pane2) {//transfer pane->ui
@@ -301,6 +305,7 @@ function File(data) {
           self.listeners.splice(i,1);
           if (self.listeners.length==0) {
             self.md5buffer = null;
+            socket.off('edit',self.editlistener);
           }
         }
       }
@@ -325,6 +330,7 @@ function File(data) {
       synchronizer.dataformat = format;
       synchronizer.endpointUp = function(changedInterval) {
         //send data to the other psuedoclients here.
+
         self.listeners.forEach(function(item){
           if (item.sync!=synchronizer) {
             item.sync.endpointDown(changedInterval);
@@ -352,6 +358,15 @@ function File(data) {
         contentType: "application/json",
         success: function(data){
           self.md5buffer = data;
+
+          self.editlistener = socket.on('edit',function(data){
+            console.log("edit happen",data);
+            var changedInterval = new ChangeInterval(data.delta.start,data.delta.amt,data.delta.msg);
+            self.listeners.forEach(function(item){
+              item.sync.endpointDown(data.delta);
+            })
+          });
+
           makeSync();
         }
       });
