@@ -229,36 +229,24 @@
 		}
 		self.onLoad = function(a) {
 			self.editor = ace.edit(a[1]);
-
-		    console.log("wjwufjowejf")
 		    var listening = true;
 		    var acsub = self.editor.session.on('change', function(delta) {
 		      if (!listening) {return;}
-		      console.log("change happen:",listening);
 		      var yaya = self.sync.getdata()()
-		      console.log(delta)
 		      var start = nthIndex(yaya,"\n",delta.start.row)+1+delta.start.column;
 		      var end   = nthIndex(yaya,"\n",delta.end.row)+1+delta.end.column;
 		      var msg = delta.lines.join("\n");
 		      if (self.sync.props.str) {start++;end++;}
 		      listening = false;
-		      console.log(start,end);
 		      if (delta.action == 'insert') {
 		        self.sync.overridemessage(new ChangeInterval(start,0,msg));
 		      } else if (delta.action == 'remove') {
-		      	if (msg.length!=Math.abs(end-start)) {
-		      		console.log("DESYNC:",msg,msg.length,end-start);
-		      	}
 		        self.sync.overridemessage(new ChangeInterval(start,end-start,""));
-		      } else {
-		      	console.log("swdfghjnkmjnhbgvfctdrxcfgvbhnjmkjnbhdrxfcghjnk");
 		      }
 		      listening = true;
 		    });
 		    var obsub = self.sync.getdata().subscribe(function(newValue){
-		      console.log("change come down:",listening);
 		      if (!listening) {return;}
-		      console.log("change applied");
 		      listening = false;
 		      self.editor.session.setValue(newValue);
 		      listening = true;
@@ -270,8 +258,6 @@
 		      obsub.dispose();
 		      self.editor.session.removeListener('change',acsub);
               self.editor.destroy();
-		      console.log("dispose")
-	          console.log("editor cleaned up.")
 		    });
 		}
 	}

@@ -46,7 +46,6 @@ ko.subscribable.fn.subscribeChanged = function (callback) {
   return this.subscribe(function (latestValue) {
     var oldValue = savedValue;
     savedValue = [...latestValue];
-    console.log(latestValue);
     callback(latestValue, oldValue);
   });
 };
@@ -221,8 +220,6 @@ function ChangeInterval(start,length,data) {
   }
   self.endwith = function(length,postfix) {
     if (self.start+self.length>length-postfix.length) {
-      console.log(self)
-      console.log(length,postfix)
       var overlap = self.start+self.length-(length-postfix.length)
       if (!self.data.endsWith(postfix.slice(0,overlap))) {
         throw "Formatting broken; expected "+postfix;
@@ -295,7 +292,6 @@ SyncObservable.fromObservable = function(props,obs) {
   syncobs.props = props;
   syncobs.getdata = function() {return obs;}
   syncobs.overridemessage = function(ninterval){
-    console.log(ninterval);
     syncobs.endpointUp(ninterval);
     syncobs.endpointDown(ninterval);
   }

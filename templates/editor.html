@@ -93,11 +93,8 @@ function GenericUI(files,prototype) {
   var eachfileconnected = [];
   files.forEach(function(item,index){
     eachfileconnected.push(null);
-    console.log("nobefore")
     item.format(prototype.formats[index],self,function(sync){
-      console.log("muahaha")
       eachfileconnected[index]=sync;
-      console.log(eachfileconnected);
       if (eachfileconnected.every(a=>a!=null)) {
         self.editor(new (prototype)(eachfileconnected));
         // self.node = self.editor.node;
@@ -124,21 +121,8 @@ function GenericUI(files,prototype) {
 
 function TextEditor(files) {
   var self  = this;
-  // self.name = "Text Editor";
-  console.log("soidjfosidjf");
   self.mosync = files[0];
   self.node = new TextArea({sync:self.mosync});
-  // self.formats = TextEditor.formats;
-  // GenericUI.bind(self,pane,files)({
-    // suspend:function() {
-    //   self.mosync.detach(self.node.editor);
-    // },
-    // wake:function(syncs) {
-    //   console.log("wake endpoint hit");
-    //   self.mosync = syncs[0];
-    //   self.mosync.attach(self.node.editor);
-    // }
-  // });
 }
 TextEditor.formats = [RawTextDataFormat];
 
@@ -343,20 +327,15 @@ function File(data) {
         //send data to the other psuedoclients here.
         self.listeners.forEach(function(item){
           if (item.sync!=synchronizer) {
-            console.log(changedInterval)
             item.sync.endpointDown(changedInterval);
           }
         })
         //send data to the server here.
-        console.log(self.md5buffer)
-
-        var md6 = md5(self.md5buffer)
-
         socket.emit('edit', {
           delta:{start:changedInterval.start,amt:changedInterval.length,msg:changedInterval.data},
           path:self.path,
           sessionId:justice.sessionId,
-          md5:md6
+          md5:md5(self.md5buffer)
         });
         self.md5buffer = self.md5buffer.slice(0,changedInterval.start)+changedInterval.data+self.md5buffer.slice(changedInterval.start+changedInterval.length);
       }
@@ -373,7 +352,6 @@ function File(data) {
         contentType: "application/json",
         success: function(data){
           self.md5buffer = data;
-          console.log("init",data)
           makeSync();
         }
       });
@@ -462,7 +440,6 @@ function AppViewModel(servedata) {
     }
   }
   self.extradd = function() {
-    console.log("adding tab; there are now(before the add):",self.paneCount(),"tabs")
     var allprevs = self.node.second().first();
     var newfirst = new Pane();
     var newcombination = new Divider({
