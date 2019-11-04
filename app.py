@@ -251,6 +251,10 @@ def directories():
 	if github_request.status_code != 200:
 		print(github_request.content)
 		return
+
+	# https://developer.github.com/v3/git/trees/#get-a-tree
+	if len(github_request.json()['tree']) > 1000 or github_request.json()['truncated']:
+		return "too many files", 413
 	return github_request.json()
 
 
