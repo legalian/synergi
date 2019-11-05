@@ -1,0 +1,84 @@
+
+
+{% macro importNewProject() %}
+
+	<!-- <style type="text/css">
+		.split-pane-divider {background-color:gray;}
+		.static-pane-horizontal {position: relative;height:100%;}
+		.static-pane-vertical {position: relative;height:100%;}
+		.static-pane-horizontal .static-pane-component {left:0;right:0;}
+		.static-pane-vertical .static-pane-component {bottom:0;top:0;}
+		.static-pane-component {position: absolute;}
+	</style> -->
+	<script type="text/html" id="create-new-project">
+		<div data-bind="carousel: { content: { name: 'carouselItemTemplate', data: creationoptions } }"></div>
+	</script>
+
+	
+	<script type="text/html" id="carouselItemTemplate">
+		<h4 data-bind="text: primary"></h4>
+		<p data-bind="text: secondary"></p>
+	</script>
+
+
+	<div data-bind="modal: {
+		visible: modalVisible,
+		header: { data: { label: 'Create new project' } },
+		body: { name: 'create-new-project', data: $data },
+		footer: { data: { action: switchTemplates, closeLabel:'Cancel', primaryLabel:'Create project'}}
+	}"></div>
+	<script type="text/javascript">
+		function NewProjectModel() {
+			var self =	this;
+			self.github_repos = ko.observableArray([]);
+			self.activerepo = ko.observable(null);
+			self.repochoices = ko.computed(function(){
+				return self.github_repos().map(function(item){return item.name})
+			})
+			self.branches = ko.computed(function(){
+				var ind = self.repochoices().indexOf(self.activerepo())
+				if (ind == -1) {return []}
+				return self.github_repos()[ind].branches
+			})
+			self.owner = ko.computed(function(){
+				var ind = self.repochoices().indexOf(self.activerepo())
+				if (ind == -1) {return null}
+				return self.github_repos()[ind].owner
+			});
+			$.ajax("/github_repos", {
+				type: "GET",
+				success: function(data){
+					self.github_repos(data['payload'])
+				}
+			});
+			self.creationoptions = ko.observableArray([
+				{
+		            src: '/static/images/splash.png',
+		            alt: 'Github image',
+		            primary: 'Import repo from github',
+		            secondary: 'Import your existing project for editing in synergi.'
+		        }, {
+		            src: '/static/images/score.png',
+		            alt: 'Music image',
+		            primary: 'Create music project',
+		            secondary: 'Create a new project for musical editing.'
+		        }
+		    ]);
+
+
+			self.click = function() {
+				console.log("clicked");
+			};
+		}
+	</script>
+{% endmacro %}
+
+
+
+
+
+
+
+
+
+

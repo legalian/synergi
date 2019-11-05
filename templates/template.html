@@ -19,29 +19,13 @@
 
 	<script src="static/bower_components/knockout/dist/knockout.js"></script>
 	<script src="static/bower_components/jquery/dist/jquery.min.js"></script>
+	<script src="static/bower_components/knockstrap/build/knockstrap.min.js"></script>
 
 	<script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.6/ace.js" integrity="sha256-CVkji/u32aj2TeC+D13f7scFSIfphw2pmu4LaKWMSY8=" crossorigin="anonymous"></script>
 
 	<script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
 	
-
-	<script type="text/javascript">
-		$(window).on('load', function () {
-	    $(".trigger_popup_fricc").click(function(){
-	       $('.hover_bkgr_fricc').show();
-	    	});
-	    $('.hover_bkgr_fricc').click(function(){
-	        if ($('#elem').is(":hover") == false){
-	        	$('.hover_bkgr_fricc').hide();
-	        }
-	    	});
-	    $('.popupCloseButton').click(function(){
-	    	$('.hover_bkgr_fricc').hide();
-	    	});
-		});
-
-	</script>
 	<title>Synergi Code Editor</title>
 </head>
 <body>
