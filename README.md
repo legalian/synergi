@@ -6,6 +6,7 @@
 <!-- https://developer.github.com/v3/git/refs/#update-a-reference -->
 
 <h1>TODO</h1>
+-- make it so that when a pane is created or deleted it doesnt fuck up the sizes of all the other panes.
 -- on the edit page make the file structure pane sized so you can see all of the file names, and it starts scrolled too far to the right
 -- fix cursor bug when hovering over links. (files in edit page, delete project button, etc.)
 -- git the most recent commit when loading session

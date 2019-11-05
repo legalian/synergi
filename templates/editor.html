@@ -30,7 +30,7 @@
 <script type='text/html' id='add-split-tab'>
   <div style="position:relative;height:100%;width:100%;">
     <div data-bind="template:{name:'tabs-area',data:$data,afterRender:onLoad}"></div>
-    <div style="position:absolute;top:0;right:0;bottom:0;width:2em;background-color:black;">
+    <div style="position:absolute;top:0;right:5px;bottom:0;width:2em;background-color:black;">
       <i class="material-icons littleplus" data-bind="click:$root.extradd,clickBubble:false">add</i>
     </div>
   </div>
@@ -196,6 +196,7 @@ function Pane() {
     self.tabs.remove(item);
   }
   self.afterDrop = function(item,_,SI,ti,TI) {
+    if (SI == TI) {return;}
     var ui = item.getUI(SI.ownerpane);
     if (SI.ownerpane.ui()==ui) {
       SI.ownerpane.ui().suspend();
@@ -216,7 +217,7 @@ function Pane() {
   Divider.bind(self)({
     type:"fixed-top",
     initialmeasure:"2em",
-    resizeable:true,
+    resizeable:false,
     first:ko.observable(new AddSplitTab({draggroup:"GEditorTabs",tabs:self.tabs,closeable:true,rearrangeable:true,selected:self.selected,afterDrop:self.afterDrop,onClick:self.select,onRemove:self.onRemove})),
     second:ko.computed(function(){
       if (self.ui()==null) {return self.blank;}
@@ -231,7 +232,7 @@ function Directory(data){
   self.title = data.title;
   self.path = data.path;
   self.elems = ko.observableArray([]);
-  self.expanded = ko.observable(true);
+  self.expanded = ko.observable(false);
   self.radd = function(ra) {
     ra.title = ra.title.substr(ra.title.indexOf('/')+1);
     if (ra.title.indexOf('/') == -1) {
@@ -494,6 +495,7 @@ function AppViewModel(servedata) {
     allprevs.reparent(newcombination.first);
     self.node.second().first(newcombination)
   }
+  self.newprojectmodel = new NewProjectModel();
   self.commit = function() {
     $.ajax("/commit", {
       type: "POST",
@@ -545,29 +547,6 @@ handshake(function(servedata){
 
 </script>
 
-<!-- 
-<<<<<<< HEAD
-<div id="editormain">
-	<div id="editleft" data-bind="template: {name:'layerNode',foreach:children}">
-	</div>
-	<div id="editorcenter">
-		<div data-bind="foreach: tabs" id="tabbar">
-			<div data-bind="click:click,text:title,class:$root.activefile()==$data?'activetab':'tab'"></div>
-		</div>
-		<div id="editor"></div>
-	</div>
-	<div id="editright" data-bind="foreach:activeusers">
-		<div class="userbox" data-bind="style: { color: color}">
-			<div data-bind="text:name"></div>
-		</div>
-	</div>
-</div>
-
-
-<script src="static/script/editorjs.js"></script>
-
-=======
->>>>>>> f7ebc47cb140a786e3841aa03e45ec83cddab9b6 -->
 {% endblock %}
 {% block footer %}
 {% endblock %}
