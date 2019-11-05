@@ -1,14 +1,13 @@
-{% set active_page = "components" %}
+
 
 {% macro importscripts() %}
 <link rel="stylesheet" href="static/bower_components/split-pane/split-pane.css">
 <link rel="stylesheet" href="static/bower_components/split-pane/pretty-split-pane.css">
-<script src="static/bower_components/angular/angular.js"></script>
 <script src="static/bower_components/split-pane/split-pane.js"></script>
 <link rel="stylesheet" href="static/bower_components/dragula.js/dist/dragula.min.css">
 <script src="static/bower_components/dragula.js/dist/dragula.min.js"></script>
-<script src="static/bower_components/ace/build/src/ace.js"></script>
 <script src="static/bower_components/knockout-dragula/dist/knockout-dragula.min.js"></script>
+<script src="static/bower_components/ace/build/src/ace.js"></script>
 <script src="static/script/md5.js"></script>
 <script src="static/script/synchronize.js"></script>
 {% endmacro %}
@@ -147,7 +146,7 @@
 	</style>
 	<script type="text/html" id="tabs-area">
 		<!-- ko if: rearrangeable -->
-		<div class="tabs" data-bind="dragula:{data:tabs,group:draggroup},attr:{id:id}">
+		<div class="tabs" data-bind="dragula:{data:tabs,group:draggroup,afterDrop:afterDrop},attr:{id:id}">
 			<div class="tab" data-bind="class:$data==$parent.selected()?'selected':'',style:$parent.fill?{flex:1}:{},click:$parent.select">
 				<div class="innertabtext" data-bind="text:title"></div>
 				<!-- ko if:$parent.closeable -->
@@ -171,7 +170,7 @@
 	var tabsdragulagroups = 0;
 	function Tabs(props) {
 		var self = this;
-		props = Object.assign({closeable:false,rearrangeable:false,fill:false,tabs:null,id:"",didSelect:null,draggroup:null,selected:ko.observable(null),onClick:null,onRemove:null},props);
+		props = Object.assign({closeable:false,rearrangeable:false,fill:false,tabs:null,id:"",didSelect:null,draggroup:null,selected:ko.observable(null),afterDrop:function(){},onClick:null,onRemove:null},props);
 		if (props.draggroup == null) {self.draggroup = 'TabsGroup'+tabsdragulagroups++;}
 		else                         {self.draggroup = props.draggroup;}
 		self.template = "tabs-area";
@@ -180,6 +179,7 @@
 		self.tabs = props.tabs;
 		self.id   = props.id;
 		self.fill = props.fill;
+		self.afterDrop = props.afterDrop;
 		self.selected = props.selected;
 		self.vresize = function() {}
 		self.remove = function(item) {
@@ -266,7 +266,7 @@
 
 {% macro importRecursiveArea() %}
 	<script type="text/html" id="rearrangeable-recursive-area">
-		<div style="margin-left:20px;padding-bottom:10px;" data-bind="dragula:{data:elems,group:draggroup,moves:moves,accepts:accepts}">
+		<div style="margin-left:20px;padding-bottom:10px;" data-bind="dragula:{data:elems,group:draggroup,moves:moves,accepts:accepts, afterDrop:afterDrop}">
 			<div class="recursiveunit">
 				<div class="recursiveelement" style="display: flex">
 					<div  class="recursiveexpander"  data-bind="if:$data.elems" style="flex-shrink:0;">
@@ -280,7 +280,7 @@
 					<div data-bind="visible: expanded()">
 					<!-- ko template:{
 						name:'rearrangeable-recursive-area',
-						data:{onClick:$parent.onClick,moves:$parent.moves,accepts:$parent.accepts,draggroup:$parent.draggroup,elems:elems}} -->
+						data:{onClick:$parent.onClick,moves:$parent.moves,accepts:$parent.accepts,afterDrop:$parent.afterDrop,draggroup:$parent.draggroup,elems:elems}} -->
 					<!-- /ko -->
 					</div>
 				<!-- /ko -->
@@ -313,12 +313,13 @@
 	var recursivedragulagroups=0;
 	function RecursiveArea(props){
 		var self = this;
-		props = Object.assign({elems:null,id:"",rearrangeable:true,draggroup:null,onClick:function(){}},props);
+		props = Object.assign({elems:null,id:"",rearrangeable:true,draggroup:null,onClick:function(){},afterDrop:function(){}},props);
 		if (props.draggroup == null) {self.draggroup = 'RecursiveGroup'+recursivedragulagroups++;}
 		else                         {self.draggroup = props.draggroup;}
 		self.rearrangeable = props.rearrangeable;
 		self.template = self.rearrangeable?"rearrangeable-recursive-area":"recursive-area";
 		self.elems = props.elems
+		self.afterDrop = props.afterDrop
 		self.onClick = props.onClick;
 		self.moves = function (el, source, handle,sibling) {
 			while(handle!=null && !handle.classList.contains('recursiveunit')) {handle = handle.parentElement;}

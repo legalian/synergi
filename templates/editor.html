@@ -24,6 +24,7 @@
   </div>
   Editor:
   <select data-bind="options:$root.availableeditors,optionsText: 'name',optionsValue: 'func',"></select>
+  <button type="button" data-bind="click:$root.commit">Commit</button>
 </script>
 
 <script type='text/html' id='add-split-tab'>
@@ -169,6 +170,7 @@ function AddSplitTab(props) {
 function Pane() {
   var self = this;
   self.tabs = ko.observableArray([]);
+  self.tabs.ownerpane = self;
   self.selected = ko.observable();
   self.ui = ko.observable(null);
 
@@ -193,6 +195,21 @@ function Pane() {
     item.removePane(self);
     self.tabs.remove(item);
   }
+  self.afterDrop = function(item,_,SI,ti,TI) {
+    var ui = item.getUI(SI.ownerpane);
+    if (SI.ownerpane.ui()==ui) {
+      SI.ownerpane.ui().suspend();
+      SI.ownerpane.ui(null);
+    }
+    item.transferPanes(SI.ownerpane,TI.ownerpane);
+    if (TI.ownerpane.ui()!=null) {TI.ownerpane.ui().suspend();}
+    TI.ownerpane.selected(item);
+    TI.ownerpane.ui(ui);
+    TI.ownerpane.ui().wake();
+    for (var i=TI().length;i>=0;i--) {
+      if (i!=ti) {TI.splice(i,1);}
+    }
+  }
   self.closeEverything = function() {
     self.tabs.forEach(function(item){self.onRemove(item);})
   }
@@ -200,7 +217,7 @@ function Pane() {
     type:"fixed-top",
     initialmeasure:"2em",
     resizeable:true,
-    first:ko.observable(new AddSplitTab({draggroup:"GEditorTabs",tabs:self.tabs,closeable:true,rearrangeable:true,selected:self.selected,onClick:self.select,onRemove:self.onRemove})),
+    first:ko.observable(new AddSplitTab({draggroup:"GEditorTabs",tabs:self.tabs,closeable:true,rearrangeable:true,selected:self.selected,afterDrop:self.afterDrop,onClick:self.select,onRemove:self.onRemove})),
     second:ko.computed(function(){
       if (self.ui()==null) {return self.blank;}
       return self.ui().node();
@@ -476,6 +493,19 @@ function AppViewModel(servedata) {
     else {allprevs.second().first().downgrade();}
     allprevs.reparent(newcombination.first);
     self.node.second().first(newcombination)
+  }
+  self.commit = function() {
+    $.ajax("/commit", {
+      type: "POST",
+      contentType: "application/json",
+      data: ko.toJSON({
+        sessionId:self.sessionId,
+        commit_message:"This is a temporary test."
+      }),
+      success: function(data){
+        console.log("RESPONSE",data);
+      }
+    });
   }
   $.ajax("/directories", {
     type: "POST",
