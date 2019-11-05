@@ -270,7 +270,7 @@
 
 {% macro importRecursiveArea() %}
 	<script type="text/html" id="rearrangeable-recursive-area">
-		<div style="margin-left:20px;padding-bottom:10px;" data-bind="dragula:{data:elems,group:draggroup,moves:moves,accepts:accepts, afterDrop:afterDrop}">
+		<div style="padding-bottom:10px;" data-bind="dragula:{data:elems,group:draggroup,moves:moves,accepts:accepts, afterDrop:afterDrop}">
 			<div class="recursiveunit">
 				<div class="recursiveelement" style="display: flex">
 					<div  class="recursiveexpander"  data-bind="if:$data.elems" style="flex-shrink:0;">
@@ -281,7 +281,7 @@
 					</div>
 				</div>
 				<!-- ko if:$data.elems -->
-					<div data-bind="visible: expanded()">
+					<div data-bind="visible: expanded()" style="margin-left:20px;">
 					<!-- ko template:{
 						name:'rearrangeable-recursive-area',
 						data:{onClick:$parent.onClick,moves:$parent.moves,accepts:$parent.accepts,afterDrop:$parent.afterDrop,draggroup:$parent.draggroup,elems:elems}} -->
