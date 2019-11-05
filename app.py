@@ -257,7 +257,61 @@ def directories():
 		return "too many files", 413
 	return github_request.json()
 
+@app.route("/commit", methods = ["POST"])
+def commit():
+	# request.json() = [sessionId : "" , commit_message : ""]
+	data == request.json()
+	# github.put(url = url, params = par_var)
+	# https://developer.github.com/v3/repos/contents/#create-or-update-a-file
+	# https://developer.github.com/v3/git/
+	# https://developer.github.com/v3/git/trees/
+	sesh = Session.query.filter_by(id = data['sessionId']).first()
+	commit_json_from_github = github.get("/repos/" + sesh.owner + "/" + sesh.repo + "/commits/" + sesh.sha).json()
+	print(commit_json_from_github)
+	commit_tree_sha = commit_json_from_github['tree']['sha']
+	github_tree = github.get("/repos/"+sesh.owner+"/"+sesh.repo+"/git/trees/"+sesh.sha+"?recursive=1,ref="+sesh.branch).json()
 
+	shas = []
+	params = {
+		"base_tree" : commit_tree_sha,
+		"tree" : []
+	}
+
+
+	for file in TemFile.query.filter_by(session_id = int(data['sessionId'])).all():
+		params["tree"].append({ "path" : file.path, "mode" : 100644, "type" : "blob", "sha" : file.sha, "content" : file.content })
+		# file == {id, session_id, path, content, sha, hash1-hash5}
+
+	# https://developer.github.com/v3/git/trees/#create-a-tree
+	post_response = github.post(url= "/repos/" + sesh.owner + "/" + sesh.repo + "/git/trees", params = params).json()
+	# https://developer.github.com/v3/git/trees/#response-2
+	print("post response: " , post_response)
+	shas.append(post_response['sha']) 
+	# out of for loop
+
+	# todo: commit
+	new_tree_sha = post_response['sha']
+	commit_params = {
+	 "message" : str(data['commit_message']),
+	 "parents" : str(sesh.sha),
+	 "tree" : str(new_tree_sha)
+	}
+	# POST /repos/:owner/:repo/git/commits
+	# https://developer.github.com/v3/git/commits/#create-a-commit
+	git_commit_json = github.post( url = "/repos/" + sesh.owner + "/" + sesh.repo + "/git/commits", params = commit_params).json()
+	git_commit_json['sha']
+	if (commit_json_from_github['verification']['verified'] == False):
+		print("Commit unverified")
+		print("Reason: ", commit_json_from_github["verification"]['reason'])
+
+
+	# todo: update the branch to point to the commit sha
+	# https://developer.github.com/v3/git/refs/#get-a-single-reference
+	if (github.get("/repos/" + sesh.owner + "/" + sesh.repo + "/git/ref/heads" + sesh.branch).response == 404):
+		# make a new branch if the branch doesn't exist
+		# github.post( url = "/repos/:user/:repo/git/refs/heads/" + sesh.branch)
+
+	return "Successful Commit", 201
 # do a double check the user has write permissions; query github to check 
 # https://developer.github.com/v3/repos/#list-user-repositories
 # or 
