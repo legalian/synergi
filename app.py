@@ -299,7 +299,7 @@ def commit():
 	# POST /repos/:owner/:repo/git/commits
 	# https://developer.github.com/v3/git/commits/#create-a-commit
 	git_commit_json = github.post( url = "/repos/" + sesh.owner + "/" + sesh.repo + "/git/commits", params = commit_params).json()
-	git_commit_json['sha']
+	sha = git_commit_json['sha']
 	if (commit_json_from_github['verification']['verified'] == False):
 		print("Commit unverified")
 		print("Reason: ", commit_json_from_github["verification"]['reason'])
@@ -307,9 +307,24 @@ def commit():
 
 	# todo: update the branch to point to the commit sha
 	# https://developer.github.com/v3/git/refs/#get-a-single-reference
-	if (github.get("/repos/" + sesh.owner + "/" + sesh.repo + "/git/ref/heads" + sesh.branch).response == 404):
+	committ =  {
+		"ref" : "refs/heads/" + sesh.branch,
+		"sha" : sha
+	}
+	if (github.get("/repos/" + sesh.owner + "/" + sesh.repo + "/git/ref/heads/" + sesh.branch).response == 404):
 		# make a new branch if the branch doesn't exist
-		# github.post( url = "/repos/:user/:repo/git/refs/heads/" + sesh.branch)
+		# test this 
+		# either post or patch, idk man
+		# POST /repos/:owner/:repo/git/refs
+		# PATCH /repos/:owner/:repo/git/refs/:ref
+		# POST :::: Create a branch
+		# PATCH ::: Update a branch
+		if(github.get("/repos/" + sesh.owner + "/"+ sesh.repo +"/git/refs/heads/synergi").content == 404):
+			github.post( url = "/repos/" + sesh.owner + "/"+ sesh.repo +"/git/refs/heads/synergi", params = {"ref" : "refs/heads/synergi", "sha" : sha})
+		else:
+			github.patch( url = "/repos/" + sesh.owner + "/"+ sesh.repo +"/git/refs/heads/synergi", params = {"sha" : sha, "force" : False})
+	else:
+		github.post( url = "/repos/" + sesh.owner + "/"+ sesh.repo +"/git/refs/heads/" + sesh.branch, params = {"ref" : "refs/heads/" + sesh.branch, "sha" : sha})
 
 	return "Successful Commit", 201
 # do a double check the user has write permissions; query github to check 
