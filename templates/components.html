@@ -10,23 +10,25 @@
 <script src="static/bower_components/ace/build/src/ace.js"></script>
 <script src="static/script/md5.js"></script>
 <script src="static/script/synchronize.js"></script>
+<style type="text/css">
+	::-webkit-scrollbar { width: 0 !important; height: 0 !important;}
+</style>
 {% endmacro %}
 
 {% macro importDivider() %}
 	<style type="text/css">
-		.split-pane-divider {background-color:gray;}
+		#resizeable-area {position:relative;}
+		.split-pane-divider {background-color:lightgray;position:absolute;}
 		.static-pane-horizontal {position: relative;height:100%;}
 		.static-pane-vertical {position: relative;height:100%;}
-		.static-pane-horizontal .static-pane-component {left:0;right:0;}
-		.static-pane-vertical .static-pane-component {bottom:0;top:0;}
+		.static-pane-horizontal .static-pane-component {left:0;right:0;overflow:scroll;}
+		.static-pane-vertical .static-pane-component {bottom:0;top:0;overflow:scroll;}
 		.static-pane-component {position: absolute;}
 	</style>
 	<script type="text/html" id="resizeable-area">
 		<div data-bind="class:resizeable?'split-pane '+type:'static-pane-'+align,attr:{id:id}">
 			<div data-bind="class:resizeable?'split-pane-component':'static-pane-component',template:{name:first().template,data:first(), afterRender:first().onLoad},style:style0"></div>
-			<!-- ko if:resizeable -->
 			<div class="split-pane-divider" data-bind="style:style1"></div>
-			<!-- /ko -->
 			<div data-bind="class:resizeable?'split-pane-component':'static-pane-component',template:{name:second().template,data:second(),afterRender:second().onLoad},style:style2"></div>
 		</div>
 	</script>
@@ -49,22 +51,22 @@
 			case "fixed-left":
 				self.style0 = {left:0,width:props.initialmeasure};
 				self.style1 = {left:props.initialmeasure,width:'5px'};
-				self.style2 = {right:0,left:props.initialmeasure,marginLeft:'5px'};
+				self.style2 = {right:0,left:props.initialmeasure,marginLeft:'5px',top:0,bottom:0};
 			break;
 			case "fixed-right":
 				self.style0 = {left:0,right:props.initialmeasure};
-				self.style1 = {right:props.initialmeasure,width:'5px'};
+				self.style1 = {right:props.initialmeasure,width:'5px',top:0,bottom:0};
 				self.style2 = {right:0,width:props.initialmeasure,marginLeft:'5px'};
 			break;
 			case "vertical-percent":
 			case "fixed-top":
 				self.style0 = {top:0,height:props.initialmeasure};
-				self.style1 = {top:props.initialmeasure,height:'5px'};
+				self.style1 = {top:props.initialmeasure,height:'5px',right:0,left:0};
 				self.style2 = {bottom:0,top:props.initialmeasure,marginTop:'5px'};
 			break;
 			case "fixed-bottom":
 				self.style0 = {top:0,bottom:props.initialmeasure};
-				self.style1 = {bottom:props.initialmeasure,height:'5px'};
+				self.style1 = {bottom:props.initialmeasure,height:'5px',right:0,left:0};
 				self.style2 = {bottom:0,height:props.initialmeasure,marginTop:'5px'};
 			break;
 			default: throw "unrecognized type";
@@ -75,6 +77,7 @@
 			self.parent = newparent;
 		}
 		self.onLoad = function(a) {
+			if (!self.resizeable) {return;}
 			$(a[1]).splitPane();
 			$(a[1]).on('splitpaneresize', function(event) {
 				var target = event.target === document ? window : event.target;
@@ -107,7 +110,7 @@
 			position:relative;
 			height:100%;
 			text-align:center;
-			background-color:lightgrey;
+			background-color:gray;
 			border-style: solid;
 			border-width: 1px;
 			border-color: black;
@@ -141,7 +144,8 @@
 			vertical-align: middle;
 		}
 		.tab.selected {
-			background-color: grey;
+			background-color: lightgray;
+			color: #05a8b3;
 		}
 	</style>
 	<script type="text/html" id="tabs-area">
@@ -266,7 +270,7 @@
 
 {% macro importRecursiveArea() %}
 	<script type="text/html" id="rearrangeable-recursive-area">
-		<div style="margin-left:20px;padding-bottom:10px;" data-bind="dragula:{data:elems,group:draggroup,moves:moves,accepts:accepts, afterDrop:afterDrop}">
+		<div style="padding-bottom:10px;" data-bind="dragula:{data:elems,group:draggroup,moves:moves,accepts:accepts, afterDrop:afterDrop}">
 			<div class="recursiveunit">
 				<div class="recursiveelement" style="display: flex">
 					<div  class="recursiveexpander"  data-bind="if:$data.elems" style="flex-shrink:0;">
@@ -277,7 +281,7 @@
 					</div>
 				</div>
 				<!-- ko if:$data.elems -->
-					<div data-bind="visible: expanded()">
+					<div data-bind="visible: expanded()" style="margin-left:20px;">
 					<!-- ko template:{
 						name:'rearrangeable-recursive-area',
 						data:{onClick:$parent.onClick,moves:$parent.moves,accepts:$parent.accepts,afterDrop:$parent.afterDrop,draggroup:$parent.draggroup,elems:elems}} -->

@@ -77,52 +77,9 @@
 		margin: 0 2% 10% 5%;
 
 	}
-	</style>
+</style>
 
 
-
-<!-- <div class="wrap-collabsible">
-  <input id="collapsible" class="toggle" type="checkbox">
-  <label for="collapsible" class="lbl-toggle">More Info</label>
-  <div class="collapsible-content">
-    <div class="content-inner">
-      <p>
-        QUnit is by calling one of the object that are embedded in JavaScript, and faster JavaScript program could also used with
-        its elegant, well documented, and functional programming using JS, HTML pages Modernizr is a popular browsers without
-        plug-ins. Test-Driven Development.
-      </p>
-    </div>
-  </div>
-</div> -->
-
-
-<div class="hover_bkgr_fricc">
-    <span class="helper"></span>
-    <div class = "popup_html_fricc">
-        <div class="popupCloseButton">X</div>
-        <form action = "/projects" method = "POST">
-        	<h2>Import Project</h2>
-			<input type="hidden" name="owner" data-bind="value:owner">
-			Name of Project: <input class="input_" type="text" name="name"><br>
-				Description: <input class="input_" type="text" name="description"><br>
-				<span class="custom-dropdown">
-				Repo: <select name="repo" data-bind="options: repochoices(),value:activerepo"></select>
-			</span>
-			<span class="custom-dropdown">
-				Branch: <select name="branch" data-bind="options: branches()"></select>
-				</span>
-				<input id="" class="btn" type="submit" value="Import Project">
-			</form>
-    </div>
-</div>
-
-
-
-
-<!-- 
-	collapsable project container
-
- -->
 <div id="extra" class="container" data-bind="foreach:synergi_repos">
 	<div class = "project wrap-collabsible">
 		<input data-bind="attr:{id:$index()}" class="toggle" type="checkbox">
@@ -131,7 +88,7 @@
 			<ul>
 				<li class = "name" data-bind="text:name">Name</li>
 				<li class="edit"><a data-bind="attr:{href:'/editor?projectId='+id}">Edit</a></li>
-				<li class="delete edit"><a data-bind = "click: deleteObject">Delete</a></li>
+				<li class="delete edit"><a data-bind = "click: $root.del">Delete</a></li>
 			</ul>
 			<ul class ="flex-h content-inner">
 				<div class = "flex-v content-left">
@@ -157,61 +114,30 @@
 <script>
 
 var justice = new AppViewModel();
-function deleteObject(dat) {
-	$.ajax("/deleteObject", {
-		type: "POST",
-		data: ko.toJSON({
-			projectid:dat.id
-		}),
-		contentType: "application/json",
-		success: function(data){
-			justice.synergi_repos.remove(dat);
-		}
-	});
-}
 
 function AppViewModel() {
 	var self =	this;
-	self.github_repos = ko.observableArray([]);
-	self.activerepo = ko.observable(null);
-	self.repochoices = ko.computed(function(){
-		return self.github_repos().map(function(item){return item.name})
-	})
-	self.branches = ko.computed(function(){
-		var ind = self.repochoices().indexOf(self.activerepo())
-		if (ind == -1) {return []}
-		return self.github_repos()[ind].branches
-	})
-	self.owner = ko.computed(function(){
-		var ind = self.repochoices().indexOf(self.activerepo())
-		if (ind == -1) {return null}
-		return self.github_repos()[ind].owner
-	});
-
-
-	self.synergi_repos  = ko.observableArray([]);
-	
-
-	// taking the place of ::: self.results(data['res']);
+	self.synergi_repos = ko.observableArray([]);
 	$.ajax("/synergi_repos", {
 		type: "GET",
 		success: function(data){
 			self.synergi_repos(data['payload'])
 		}
 	});
-	
-	$.ajax("/github_repos", {
-		type: "GET",
-		success: function(data){
-			self.github_repos(data['payload'])
-		}
-	});
-
-
-
+	self.del = function(dat) {
+		$.ajax("/deleteObject", {
+			type: "POST",
+			data: ko.toJSON({
+				projectid:dat.id
+			}),
+			contentType: "application/json",
+			success: function(data){
+				self.synergi_repos.remove(dat);
+			}
+		});
+	}
+	self.newprojectmodel = new NewProjectModel();
 }
-
-
 
 ko.applyBindings(justice);
 

@@ -1,49 +1,39 @@
 
 
 {% macro importNewProject() %}
-
 	<!-- <style type="text/css">
-		.split-pane-divider {background-color:gray;}
-		.static-pane-horizontal {position: relative;height:100%;}
-		.static-pane-vertical {position: relative;height:100%;}
-		.static-pane-horizontal .static-pane-component {left:0;right:0;}
-		.static-pane-vertical .static-pane-component {bottom:0;top:0;}
-		.static-pane-component {position: absolute;}
+
 	</style> -->
 	<script type="text/html" id="create-new-project">
-		<div data-bind="carousel: { content: { name: 'carouselItemTemplate', data: creationoptions } }"></div>
+		Name of Project: <input class="input_" type="text" data-bind="value:projname"><br>
+		Description: <input class="input_" type="text" data-bind="value:description"><br>
+		<span class="custom-dropdown">
+		Repo: <select name="repo" data-bind="options: github_repos(),optionsText:'name',value:activerepo"></select>
+		</span>
+		<span class="custom-dropdown">
+			Branch: <select name="branch" data-bind="options: branches(),value:activebranch"></select>
+		</span>
 	</script>
-
-	
-	<script type="text/html" id="carouselItemTemplate">
-		<h4 data-bind="text: primary"></h4>
-		<p data-bind="text: secondary"></p>
-	</script>
-
-
+	<!-- ko with:newprojectmodel -->
 	<div data-bind="modal: {
 		visible: modalVisible,
-		header: { data: { label: 'Create new project' } },
+		header: { data: { label: 'Import github repo' } },
 		body: { name: 'create-new-project', data: $data },
-		footer: { data: { action: switchTemplates, closeLabel:'Cancel', primaryLabel:'Create project'}}
+		footer: { data: { action: click, closeLabel:'Cancel',primaryLabel:'Create project'}}
 	}"></div>
+	<!-- /ko -->
 	<script type="text/javascript">
 		function NewProjectModel() {
 			var self =	this;
+			self.modalVisible = ko.observable(false);
 			self.github_repos = ko.observableArray([]);
 			self.activerepo = ko.observable(null);
-			self.repochoices = ko.computed(function(){
-				return self.github_repos().map(function(item){return item.name})
-			})
+			self.projname = ko.observable("");
+			self.description = ko.observable("");
+			self.activebranch = ko.observable(null);
 			self.branches = ko.computed(function(){
-				var ind = self.repochoices().indexOf(self.activerepo())
-				if (ind == -1) {return []}
-				return self.github_repos()[ind].branches
-			})
-			self.owner = ko.computed(function(){
-				var ind = self.repochoices().indexOf(self.activerepo())
-				if (ind == -1) {return null}
-				return self.github_repos()[ind].owner
+				if (self.activerepo()==null) {return [];}
+				return self.activerepo().branches;
 			});
 			$.ajax("/github_repos", {
 				type: "GET",
@@ -51,24 +41,28 @@
 					self.github_repos(data['payload'])
 				}
 			});
-			self.creationoptions = ko.observableArray([
-				{
-		            src: '/static/images/splash.png',
-		            alt: 'Github image',
-		            primary: 'Import repo from github',
-		            secondary: 'Import your existing project for editing in synergi.'
-		        }, {
-		            src: '/static/images/score.png',
-		            alt: 'Music image',
-		            primary: 'Create music project',
-		            secondary: 'Create a new project for musical editing.'
-		        }
-		    ]);
-
-
 			self.click = function() {
-				console.log("clicked");
+				var data = {
+						name:self.projname(),
+						description:self.description(),
+						branch:self.activebranch(),
+						repo:self.activerepo().name,
+						owner:self.activerepo().owner
+					}
+				console.log(data);
+				$.ajax("/projects", {
+					type: "POST",
+					contentType: "application/json",
+					data: ko.toJSON(data),
+					success: function(data){
+						window.location.href = '/editor?projectId='+data['projectId'];
+					}
+				});
 			};
+			self.spawn = function() {
+				console.log("ausdhifasdfhuoa");
+				self.modalVisible(true);
+			}
 		}
 	</script>
 {% endmacro %}

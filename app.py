@@ -87,6 +87,7 @@ def github_repos():
 		# https://developer.github.com/v3/repos/collaborators/#list-collaborators
 
 		# print(github.get("/repos/"+str(i['owner']['login'])+"/"+str(i['name'])+"/branches").json())
+
 		openrepos.append({
 			'owner':str(i['owner']['login']),
 			'name':str(i['name']),
@@ -126,8 +127,11 @@ def deleteObject():
 
 @app.route("/projects",methods=['POST'])
 def projects():
-	json_from_client = request.form
+	json_from_client = request.json
 	# formattedprint("/repos/" + str(json_from_client['owner']) + "/" + str(json_from_client['repo']) + "/contributors")
+	# print("-=-=-=->",json_from_client)
+
+
 	users = github.get("/repos/" + str(json_from_client['owner']) + "/" + str(json_from_client['repo']) + "/contributors").json()
 	# formattedprint(users)
 
@@ -145,7 +149,8 @@ def projects():
 	)
 	db.session.add(proj)
 	db.session.commit()
-	return redirect("/projectlist")
+	print("osdijfaosijdfoaisjdfoaisjdfoiasjdf\n\n\n\n")
+	return {"projectId":proj.id}
 
 @app.route("/editor")
 def editor():

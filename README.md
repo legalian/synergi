@@ -20,15 +20,12 @@
 	-- make the client show some kind of message or attempt a reconnect when it gets a network error (if you close your laptop and come back you have to refresh to make things work again... this would be a source of confusion for users.)
 	-- improve client side code so everything works even if the server takes obnoxiously long to respond
 	-- rewrite project post request to be an ajax post instead of html form (todolist.html line 103)
-
-
-
-
+-- make it so that when a pane is created or deleted it doesnt fuck up the sizes of all the other panes.
 
 
 <h2>Back end</h2>
 	-- update other database list to be an Array
-	-- BUG: you can be editing in a session, but not be in the session if the earlier connection you had expires
+	 not be in the session if the earlier connection you had expires
 	-- need a better way to determine when someone really disconnects
 		(currently, visiting and then refreshing the page sends two joins and then one disconnect.)
 		(the first join adds you to the list of accessors, the second join does nothing, and the first diconnect removes them from the list of connected users even though theyre still connected and currently editing)
