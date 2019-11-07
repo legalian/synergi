@@ -44,6 +44,17 @@ Stretch Goals
 -- invite system maybe
 
 
+-- more supported datatypes (for live editing in non-raw-text form):
+	JSON (completed)
+	CSV  (completed)
+	GSON (not completed, seems possible)
+	XML  (might be possible under current system, seems easy if not)
+	GEXF/GDF/GML/most of the formats supported by gephi. Most of them seem like they already work with the JSON synchronization library
+	newick format
+
+-- display images as images when opened. (not html... that would open a cross site scripting vulnerability)
+
+
 
 
 
