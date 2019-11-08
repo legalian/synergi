@@ -136,7 +136,9 @@ function AppViewModel() {
 			}
 		});
 	}
+	{% if creds != None %}
 	self.newprojectmodel = new NewProjectModel();
+	{% endif %}
 }
 
 ko.applyBindings(justice);

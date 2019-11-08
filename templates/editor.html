@@ -495,7 +495,6 @@ function AppViewModel(servedata) {
     allprevs.reparent(newcombination.first);
     self.node.second().first(newcombination)
   }
-  self.newprojectmodel = new NewProjectModel();
   self.commit = function() {
     $.ajax("/commit", {
       type: "POST",
@@ -530,6 +529,9 @@ function AppViewModel(servedata) {
       });
     }
   });
+  {% if creds != None %}
+  self.newprojectmodel = new NewProjectModel();
+  {% endif %}
 }
 
 

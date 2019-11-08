@@ -40,7 +40,9 @@
 	<title>Synergi Code Editor</title>
 </head>
 <body>
+	{% if creds != None %}
 	{{newproject.importNewProject()}}
+	{% endif %}
 	<div id="fulwrap">
 		<div id="header-wrapper" style="">
 			<div id="header" class="container" style="">
@@ -55,15 +57,16 @@
 				<div id="menu" style=" width:60%; ">
 					<ul style=" width:100%">
 						{% for href, id, caption in navigation_bar%}
-						<li {% if id == active_page %} class="current_page_item" {% endif %}><a href="{{href}}">{{caption}}</a></li>
+							<li {% if id == active_page %} class="current_page_item" {% endif %}><a href="{{href}}">{{caption}}</a></li>
 						{% endfor %}
-						<li><a data-bind="click:newprojectmodel.spawn">Create New Project</a></li>
-
+						{% if creds != None %}
+							<li><a data-bind="click:newprojectmodel.spawn">Create New Project</a></li>
+							<li style="float:right;"><a class="login" id="login" style="" data-bind="popover: { 
+        options: { content: 'Log out', trigger: 'focus', placement: 'bottom' } 
+    }" tabindex="0">{{creds}}</a></li>
+						{% endif %}
 						{% if creds == None %}
 							<li style="float:right;"><a class="login" id="login" style="" href="/gitlogin">Login</a></li>
-						{% endif %}
-						{% if creds != None %}
-							<li style="float:right;"><a class="login" id="login" style="" href="/logout">{{creds}}</a></li>
 						{% endif %}
 					</ul>
 				</div>

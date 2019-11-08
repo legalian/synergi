@@ -69,7 +69,7 @@
 	
 	.container
 	{
-		overflow: hidden;
+		/*overflow: hidden;*/
 		margin: 0em auto;
 		width: 1000px;
 	}
