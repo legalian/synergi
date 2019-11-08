@@ -253,14 +253,13 @@ def directories():
 	sesh = Session.query.filter_by(id=int(request.json['sessionId'])).first()
 	if sesh == None: return
 	github_request = github.get("/repos/"+sesh.owner+"/"+sesh.repo+"/git/trees/"+sesh.sha+"?recursive=1,ref="+sesh.branch)
-	if github_request.status_code != 200:
-		print(github_request.content)
-		return
+	if github_request.status_code != 200: return
+	json_github_request = github_request.json()
 
 	# https://developer.github.com/v3/git/trees/#get-a-tree
-	if len(github_request.json()['tree']) > 1000 or github_request.json()['truncated']:
+	if len(json_github_request['tree']) > 1000 or json_github_request['truncated']:
 		return "too many files", 413
-	return github_request.json()
+	return json_github_request
 
 
 # do a double check the user has write permissions; query github to check 

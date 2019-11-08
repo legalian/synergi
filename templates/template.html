@@ -60,13 +60,13 @@
 							<li {% if id == active_page %} class="current_page_item" {% endif %}><a href="{{href}}">{{caption}}</a></li>
 						{% endfor %}
 						{% if creds != None %}
-							<li><a data-bind="click:newprojectmodel.spawn">Create New Project</a></li>
-							<li style="float:right;"><a class="login" id="login" style="" data-bind="popover: { 
+							<li><a data-bind="click:newprojectmodel.spawn" style="cursor:pointer;">Create New Project</a></li>
+							<li style="float:right;"><a class="login" id="login" style="cursor:pointer;" data-bind="popover: { 
         options: { content: 'Log out', trigger: 'focus', placement: 'bottom' } 
     }" tabindex="0">{{creds}}</a></li>
 						{% endif %}
 						{% if creds == None %}
-							<li style="float:right;"><a class="login" id="login" style="" href="/gitlogin">Login</a></li>
+							<li style="float:right;"><a class="login" id="login" style="cursor:pointer;" style="" href="/gitlogin">Login</a></li>
 						{% endif %}
 					</ul>
 				</div>
