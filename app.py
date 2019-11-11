@@ -87,7 +87,7 @@ def github_repos():
 		# https://developer.github.com/v3/repos/collaborators/#list-collaborators
 
 		# print(github.get("/repos/"+str(i['owner']['login'])+"/"+str(i['name'])+"/branches").json())
-
+		print(i)
 		openrepos.append({
 			'owner':str(i['owner']['login']),
 			'name':str(i['name']),
@@ -149,7 +149,6 @@ def projects():
 	)
 	db.session.add(proj)
 	db.session.commit()
-	print("osdijfaosijdfoaisjdfoaisjdfoiasjdf\n\n\n\n")
 	return {"projectId":proj.id}
 
 @app.route("/editor")
@@ -265,45 +264,61 @@ def directories():
 @app.route("/commit", methods = ["POST"])
 def commit():
 	# request.json() = [sessionId : "" , commit_message : ""]
-	data == request.json()
+	data = request.json
 	# github.put(url = url, params = par_var)
 	# https://developer.github.com/v3/repos/contents/#create-or-update-a-file
 	# https://developer.github.com/v3/git/
 	# https://developer.github.com/v3/git/trees/
 	sesh = Session.query.filter_by(id = data['sessionId']).first()
-	commit_json_from_github = github.get("/repos/" + sesh.owner + "/" + sesh.repo + "/commits/" + sesh.sha).json()
-	print(commit_json_from_github)
-	commit_tree_sha = commit_json_from_github['tree']['sha']
-	github_tree = github.get("/repos/"+sesh.owner+"/"+sesh.repo+"/git/trees/"+sesh.sha+"?recursive=1,ref="+sesh.branch).json()
+	commits = github.get("/repos/" + sesh.owner + "/" + sesh.repo + "/commits").json()
+	last_commit_sha = commits[0]['sha']
+	commit_json_from_github = github.get("/repos/" + sesh.owner + "/" + sesh.repo + "/commits/" + last_commit_sha).json()
+	# formattedprint(commit_json_from_github)
+	commit_tree_sha = commit_json_from_github['commit']['tree']['sha']
+	github_tree = github.get("/repos/"+sesh.owner+"/"+sesh.repo+"/git/trees/"+commit_tree_sha+"?recursive=1,ref="+sesh.branch).json()
 
 	shas = []
 	params = {
 		"base_tree" : commit_tree_sha,
 		"tree" : []
 	}
-
-
 	for file in TemFile.query.filter_by(session_id = int(data['sessionId'])).all():
-		params["tree"].append({ "path" : file.path, "mode" : 100644, "type" : "blob", "sha" : file.sha, "content" : file.content })
+		params["tree"].append({ "path" : file.path, "mode" : 100644, "type" : "blob", "content" : str(base64.b64encode(str.encode(file.content)).decode("utf-8"))})
 		# file == {id, session_id, path, content, sha, hash1-hash5}
 
 	# https://developer.github.com/v3/git/trees/#create-a-tree
-	post_response = github.post(url= "/repos/" + sesh.owner + "/" + sesh.repo + "/git/trees", params = params).json()
+	# print("params")
+	# formattedprint(params)
+	
+	# print(github.get('/search/repositories', params={'q': 'requests+language:python'},).json())
+	# dict_keys(['_permanent', 'github_oauth_token', 'githubuser', 'sessionId'])
+	formattedprint(session.keys())
+	formattedprint(session['github_oauth_token'])
+	access_token = session['github_oauth_token']['access_token']
+	base_tree = params['base_tree']
+	tree = params['tree']
+	# formattedprint(github.get("/user").json())
+	post_response = github.post("/repos/" + sesh.owner + "/" + sesh.repo + "/git/trees" , params = params)
+
 	# https://developer.github.com/v3/git/trees/#response-2
-	print("post response: " , post_response)
+	formattedprint("post response: " , post_response.json())
+	formattedprint("post response: " , post_response.status_code)
+	post_response = post_response.json()
 	shas.append(post_response['sha']) 
 	# out of for loop
 
 	# todo: commit
 	new_tree_sha = post_response['sha']
-	commit_params = {
+	commit_data = {
 	 "message" : str(data['commit_message']),
 	 "parents" : str(sesh.sha),
 	 "tree" : str(new_tree_sha)
 	}
+
+
 	# POST /repos/:owner/:repo/git/commits
 	# https://developer.github.com/v3/git/commits/#create-a-commit
-	git_commit_json = github.post( url = "/repos/" + sesh.owner + "/" + sesh.repo + "/git/commits", params = commit_params).json()
+	git_commit_json = github.post("/repos/" + sesh.owner + "/" + sesh.repo + "/git/commits", params = commit_data).json()
 	sha = git_commit_json['sha']
 	if (commit_json_from_github['verification']['verified'] == False):
 		print("Commit unverified")
@@ -324,7 +339,7 @@ def commit():
 		# PATCH /repos/:owner/:repo/git/refs/:ref
 		# POST :::: Create a branch
 		# PATCH ::: Update a branch
-		if(github.get("/repos/" + sesh.owner + "/"+ sesh.repo +"/git/refs/heads/synergi").content == 404):
+		if(github.get("/repos/" + sesh.owner + "/"+ sesh.repo +"/git/refs/heads/synergi").response == 404):
 			github.post( url = "/repos/" + sesh.owner + "/"+ sesh.repo +"/git/refs/heads/synergi", params = {"ref" : "refs/heads/synergi", "sha" : sha})
 		else:
 			github.patch( url = "/repos/" + sesh.owner + "/"+ sesh.repo +"/git/refs/heads/synergi", params = {"sha" : sha, "force" : False})
