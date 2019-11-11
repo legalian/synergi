@@ -11,9 +11,10 @@
 {{components.importTabs()}}
 {{components.importTextArea()}}
 {{components.importHtmlArea()}}
+{{components.importErrMsgArea()}}
 {{components.importRecursiveArea()}}
 
-<div data-bind="template:{name:node.template,data:node,afterRender:node.onLoad}" style="height:100%"></div>
+<div data-bind="template:{name:node().template,data:node(),afterRender:node().onLoad}" style="height:100%"></div>
 
 <!-- add leading, following for batching changes, eliminate whitespace right off the bat. list of ignored changes -->
 
@@ -86,11 +87,10 @@ function GenericUI(files,prototype) {
   self.editor = ko.observable(null);
   self.node = ko.computed(function(){
     if (self.editor()==null){
-      return new HtmlArea({html:""});
+      return new ErrMsgArea({code:"loading"});
     }
     return self.editor().node;
   });
-
   var eachfileconnected = [];
   files.forEach(function(item,index){
     eachfileconnected.push(null);
@@ -99,6 +99,12 @@ function GenericUI(files,prototype) {
       if (eachfileconnected.every(a=>a!=null)) {
         self.editor(new (prototype)(eachfileconnected));
         // self.node = self.editor.node;
+      }
+    },function(data){
+      if (data.status==413) {
+        self.editor({node:new ErrMsgArea({code:"toolarge"})});
+      } else {
+        self.editor({node:new ErrMsgArea({code:"unknown"})});
       }
     });
   });
@@ -174,7 +180,8 @@ function Pane() {
   self.selected = ko.observable();
   self.ui = ko.observable(null);
 
-  self.blank = new HtmlArea({html:""});
+  self.blank = new ErrMsgArea({});
+  // self.toomanyfile = new ErrMsgArea({code:"toomanyfiles"});
 
 
   self.select = function(item) {
@@ -331,7 +338,7 @@ function File(data) {
     //might need to call sync.disableUI
     //then you might just throw away your synchronizer.
   }
-  self.format = function(format,ui,callback) {
+  self.format = function(format,ui,callback,failurecallback) {
     //format current data in accordance with given format. called anytime relevant UIs wake.
     var found = null;
     self.listeners.forEach(function(item) {
@@ -376,7 +383,6 @@ function File(data) {
         contentType: "application/json",
         success: function(data){
           self.md5buffer = data;
-
           self.editlistener = socket.on('edit',function(data){
             console.log("edit happen",data);
             var changedInterval = new ChangeInterval(data.delta.start,data.delta.amt,data.delta.msg);
@@ -384,9 +390,9 @@ function File(data) {
               item.sync.endpointDown(data.delta);
             })
           });
-
           makeSync();
-        }
+        },
+        error: failurecallback
       });
     } else {
       makeSync();
@@ -444,26 +450,16 @@ function AppViewModel(servedata) {
   // });
 
 
-  self.node = new Divider({
-    type:"fixed-left",
-    resizeable:true,
-    first:ko.observable(new RecursiveArea({elems:self.elems,onClick:function(item){item.open();}})),
-    second:ko.observable(new Divider({
-      type:"fixed-right",
-      resizeable:true,
-      first:ko.observable(new Pane()),
-      second:ko.observable(new RightPane())
-    }))
-  });
+  self.node = ko.observable(new ErrMsgArea({code:"loading"}));
   self.getFrontPane = function() {
-    if (self.node.second().first().first().template == "resizeable-area") {
-      return self.node.second().first().second();
+    if (self.node().second().first().first().template == "resizeable-area") {
+      return self.node().second().first().second();
     } else {
-      return self.node.second().first();
+      return self.node().second().first();
     }
   }
   self.paneCount = function() {
-    return self.countPanes(self.node.second().first());
+    return self.countPanes(self.node().second().first());
   }
   self.countPanes = function(eds) {
     if (eds.first().template == "resizeable-area") {
@@ -473,7 +469,7 @@ function AppViewModel(servedata) {
     }
   }
   self.extradd = function() {
-    var allprevs = self.node.second().first();
+    var allprevs = self.node().second().first();
     var newfirst = new Pane();
     var newcombination = new Divider({
       type:"fixed-right",
@@ -487,15 +483,14 @@ function AppViewModel(servedata) {
         else {mast = cheat.first();}
         mast.template = "add-split-tab";
         mast.downgrade = function(){mast.template = "tabs-area";}
-        self.node.second().first(cheat);
+        self.node().second().first(cheat);
       }
     });
     if (allprevs.first().template=='add-split-tab') {allprevs.first().downgrade();}
     else {allprevs.second().first().downgrade();}
     allprevs.reparent(newcombination.first);
-    self.node.second().first(newcombination)
+    self.node().second().first(newcombination)
   }
-  self.newprojectmodel = new NewProjectModel();
   self.commit = function() {
     $.ajax("/commit", {
       type: "POST",
@@ -516,6 +511,17 @@ function AppViewModel(servedata) {
       sessionId:self.sessionId
     }),
     success: function(data){
+      self.node(new Divider({
+        type:"fixed-left",
+        resizeable:true,
+        first:ko.observable(new RecursiveArea({elems:self.elems,onClick:function(item){item.open();}})),
+        second:ko.observable(new Divider({
+          type:"fixed-right",
+          resizeable:true,
+          first:ko.observable(new Pane()),
+          second:ko.observable(new RightPane())
+        }))
+      }));
       data.tree.forEach(function(ra){
         ra.title = ra.path;
         if (ra.title.indexOf('/') == -1) {
@@ -528,8 +534,20 @@ function AppViewModel(servedata) {
           self.elems()[self.elems().length-1].radd(ra);
         }
       });
+    },
+    error: function(data) {
+      if (data.status == 413){
+        self.node(new ErrMsgArea({code:"toomanyfiles"}));
+      } else if (data.status == 403) {
+        self.node(new ErrMsgArea({code:"unauthorized"}));
+      } else {
+        self.node(new ErrMsgArea({code:"unknown"}));
+      }
     }
   });
+  {% if creds != None %}
+  self.newprojectmodel = new NewProjectModel();
+  {% endif %}
 }
 
 

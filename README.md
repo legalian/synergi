@@ -12,6 +12,16 @@
 
 <h1>TODO</h1>
 
+-- more supported datatypes (for live editing in non-raw-text form):
+	JSON (completed)
+	CSV  (completed)
+	GSON (not completed, seems possible)
+	XML  (might be possible under current system, seems easy if not)
+	GEXF/GDF/GML/most of the formats supported by gephi. Most of them seem like they already work with the JSON synchronization library
+	newick format
+
+-- display images as images when opened. (not html... that would open a cross site scripting vulnerability)
+
 <h2>Front end</h2>
 	-- on the edit page make the file structure pane sized so you can see all of the file names, and it starts scrolled too far to the right
 	-- fix cursor bug when hovering over links. (files in edit page, delete project button, etc.)

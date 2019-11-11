@@ -58,6 +58,9 @@ def music():
 
 def gitcreds(github):
 	if not github.authorized: return None
+	if "repo" not in session['github_oauth_token']['scope']:
+		del session['github_oauth_token']
+		return None
 	resp = github.get("/user").json()["login"]
 	session['githubuser'] = resp
 	return resp
@@ -87,7 +90,7 @@ def github_repos():
 		# https://developer.github.com/v3/repos/collaborators/#list-collaborators
 
 		# print(github.get("/repos/"+str(i['owner']['login'])+"/"+str(i['name'])+"/branches").json())
-		print(i)
+		# print(i)
 		openrepos.append({
 			'owner':str(i['owner']['login']),
 			'name':str(i['name']),
@@ -252,14 +255,13 @@ def directories():
 	sesh = Session.query.filter_by(id=int(request.json['sessionId'])).first()
 	if sesh == None: return
 	github_request = github.get("/repos/"+sesh.owner+"/"+sesh.repo+"/git/trees/"+sesh.sha+"?recursive=1,ref="+sesh.branch)
-	if github_request.status_code != 200:
-		print(github_request.content)
-		return
+	if github_request.status_code != 200: return
+	json_github_request = github_request.json()
 
 	# https://developer.github.com/v3/git/trees/#get-a-tree
-	if len(github_request.json()['tree']) > 1000 or github_request.json()['truncated']:
+	if len(json_github_request['tree']) > 1000 or json_github_request['truncated']:
 		return "too many files", 413
-	return github_request.json()
+	return json_github_request
 
 @app.route("/commit", methods = ["POST"])
 def commit():
@@ -280,26 +282,31 @@ def commit():
 	shas = []
 	params = {
 		"base_tree" : commit_tree_sha,
-		"tree" : []
+		"tree" : [{
+			"path": "testcontentplzignore.txt",
+		  "mode": "100644",
+		  "type": "blob",
+		  "content":"testcontentplzignore"
+	}]
 	}
-	for file in TemFile.query.filter_by(session_id = int(data['sessionId'])).all():
-		params["tree"].append({ "path" : file.path, "mode" : 100644, "type" : "blob", "content" : str(base64.b64encode(str.encode(file.content)).decode("utf-8"))})
+	# for file in TemFile.query.filter_by(session_id = int(data['sessionId'])).all():
+	# 	params["tree"].append({ "path" : file.path, "mode" : "100644", "type" : "blob", "content" : str(base64.b64encode(str.encode(file.content)).decode("utf-8"))})
 		# file == {id, session_id, path, content, sha, hash1-hash5}
 
 	# https://developer.github.com/v3/git/trees/#create-a-tree
-	# print("params")
-	# formattedprint(params)
 	
-	# print(github.get('/search/repositories', params={'q': 'requests+language:python'},).json())
 	# dict_keys(['_permanent', 'github_oauth_token', 'githubuser', 'sessionId'])
 	formattedprint(session.keys())
 	formattedprint(session['github_oauth_token'])
 	access_token = session['github_oauth_token']['access_token']
 	base_tree = params['base_tree']
-	tree = params['tree']
+	# tree = params['tree']
 	# formattedprint(github.get("/user").json())
-	post_response = github.post("/repos/" + sesh.owner + "/" + sesh.repo + "/git/trees" , params = params)
+	post_response = github.post("/repos/" + sesh.owner + "/" + sesh.repo + "/git/trees", json= params)
 
+	print("\n"*10)
+	formattedprint(requests.post('http://httpbin.org/post', json = params).json())
+	print("\n"*10)
 	# https://developer.github.com/v3/git/trees/#response-2
 	formattedprint("post response: " , post_response.json())
 	formattedprint("post response: " , post_response.status_code)
@@ -311,14 +318,15 @@ def commit():
 	new_tree_sha = post_response['sha']
 	commit_data = {
 	 "message" : str(data['commit_message']),
-	 "parents" : str(sesh.sha),
+	 "parents" : [str(sesh.sha)],
 	 "tree" : str(new_tree_sha)
 	}
 
 
 	# POST /repos/:owner/:repo/git/commits
 	# https://developer.github.com/v3/git/commits/#create-a-commit
-	git_commit_json = github.post("/repos/" + sesh.owner + "/" + sesh.repo + "/git/commits", params = commit_data).json()
+	git_commit_json = github.post("/repos/" + sesh.owner + "/" + sesh.repo + "/git/commits", json = commit_data).json()
+	print("\n\nMake a new commit object response: ", git_commit_json)
 	sha = git_commit_json['sha']
 	if (commit_json_from_github['verification']['verified'] == False):
 		print("Commit unverified")
@@ -340,12 +348,14 @@ def commit():
 		# POST :::: Create a branch
 		# PATCH ::: Update a branch
 		if(github.get("/repos/" + sesh.owner + "/"+ sesh.repo +"/git/refs/heads/synergi").response == 404):
-			github.post( url = "/repos/" + sesh.owner + "/"+ sesh.repo +"/git/refs/heads/synergi", params = {"ref" : "refs/heads/synergi", "sha" : sha})
+			github.post( url = "/repos/" + sesh.owner + "/"+ sesh.repo +"/git/refs/heads/synergi", json = {"ref" : "refs/heads/synergi", "sha" : sha})
 		else:
-			github.patch( url = "/repos/" + sesh.owner + "/"+ sesh.repo +"/git/refs/heads/synergi", params = {"sha" : sha, "force" : False})
+			github.patch( url = "/repos/" + sesh.owner + "/"+ sesh.repo +"/git/refs/heads/synergi", json = {"sha" : sha, "force" : False})
 	else:
-		github.post( url = "/repos/" + sesh.owner + "/"+ sesh.repo +"/git/refs/heads/" + sesh.branch, params = {"ref" : "refs/heads/" + sesh.branch, "sha" : sha})
+		response = github.post( url = "/repos/" + sesh.owner + "/"+ sesh.repo +"/git/refs/heads/" + sesh.branch, json = {"ref" : "refs/heads/" + sesh.branch, "sha" : sha}).json()
+		print("pointing commit to branch response: ",response)
 
+	print("dear jesus you did it lad")
 	return "Successful Commit", 201
 # do a double check the user has write permissions; query github to check 
 # https://developer.github.com/v3/repos/#list-user-repositories

@@ -53,6 +53,7 @@
 	</div>
 	
 </div>
+{% if creds != None %}
 <script type="text/javascript">
 	function AppViewModel() {
 		var self = this;
@@ -61,5 +62,6 @@
 	var justice = new AppViewModel();
 	ko.applyBindings(justice);
 </script>
+{% endif %}
 	{% endblock %}
 

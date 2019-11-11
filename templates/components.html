@@ -107,6 +107,7 @@
 	<style type="text/css">
 		.tabs {height:100%;display: flex;}
 		.tab {
+			cursor:pointer;
 			position:relative;
 			height:100%;
 			text-align:center;
@@ -274,10 +275,10 @@
 			<div class="recursiveunit">
 				<div class="recursiveelement" style="display: flex">
 					<div  class="recursiveexpander"  data-bind="if:$data.elems" style="flex-shrink:0;">
-						<i data-bind="class:expanded()?'material-icons rotate-90':'material-icons',click:function(){expanded(!expanded())}">play_arrow</i>
+						<i data-bind="class:expanded()?'material-icons rotate-90':'material-icons',click:function(){expanded(!expanded())}" style="cursor:pointer;">play_arrow</i>
 					</div>
 					<div style="flex:1">
-						<span data-bind="text:title,click:$parent.onClick" style="overflow: hidden;white-space: nowrap;"></span>
+						<span data-bind="text:title,click:$parent.onClick" style="overflow: hidden;white-space: nowrap;cursor:pointer;"></span>
 					</div>
 				</div>
 				<!-- ko if:$data.elems -->
@@ -344,6 +345,82 @@
 {% endmacro %}
 
 
+
+
+{% macro importErrMsgArea() %}
+	<style type="text/css">
+		.loader {
+		  border: 8px solid darkgray; /* Light grey */
+		  border-top: 8px solid #05a8b3; /* Blue */
+		  border-radius: 50%;
+
+		  width: 120px;
+		  height: 120px;
+		  animation: spin 2s linear infinite;
+
+		  display: inline-block;
+		  /*transform: translate(-50%, -50%);*/
+		}
+		.centcontainer {
+		  text-align: center;
+
+		  position: absolute;
+		  top: 50%;
+		  left: 50%;
+		  transform: translate(-50%, -50%);
+		  /*transform: translate(-50%, -50%);*/
+		}
+		.erricon {
+			font-size: 120px;
+			color: darkgray;
+		}
+		@keyframes spin {
+		  0% { transform: rotate(0deg); }
+		  100% { transform: rotate(360deg); }
+		}
+	</style>
+	<script type="text/html" id="errmsg-area">
+		<div class="centcontainer">
+			<!-- ko if:code=="loading" -->
+			<div class="loader"></div>
+			<!-- /ko -->
+			<!-- ko if:code=="toolarge" -->
+			<i class="material-icons erricon">folder</i>
+			<H3>File too large.</H3>
+			<p>Files this large cannot be opened in Synergi.
+			The maximum suppored filesize is ASKERIC. Files this large aren't usually just code, so make sure this is a file you wanted to open in the first place.</p>
+			<!-- /ko -->
+			<!-- ko if:code=="toomanyfiles" -->
+			<i class="material-icons erricon">insert_drive_file</i>
+			<H3>Project too large.</H3>
+			<p>Your project contains too many files to be opened in Synergi.
+			We recommend that you clone your repo locally and pare down the number of files.
+			Usually, if you run into this error, it means you should revise your .gitignore to ensure that you are only including the files you want.</p>
+			<!-- /ko -->
+			<!-- ko if:code=="unauthorized" -->
+			<i class="material-icons erricon">lock</i>
+			<H3>Not authorized.</H3>
+			<p>It seems you are not authorized to access this session.</p>
+			<!-- /ko -->
+			<!-- ko if:code=="unknown" -->
+			<i class="material-icons erricon">sms_failed</i>
+			<H3>File could not be loaded.</H3>
+			<p>This file could not be loaded at this time.
+			Try refreshing the page.</p>
+			<!-- /ko -->
+		</div>
+	</script>
+	<script type="text/javascript">
+	function ErrMsgArea(props){
+		var self = this;
+		props = Object.assign({code:"empty"},props);
+		self.code = props.code;
+		self.template = "errmsg-area";
+		self.vresize = function() {}
+		self.onLoad = function() {}
+	}
+	</script>
+{% endmacro %}
 
 
 {% macro importHtmlArea() %}
