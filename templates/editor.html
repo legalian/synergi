@@ -30,7 +30,9 @@
 
 <script type='text/html' id='add-split-tab'>
   <div style="position:relative;height:100%;width:100%;">
-    <div data-bind="template:{name:'tabs-area',data:$data,afterRender:onLoad}"></div>
+    <div style="position:relative;height:100%;width:100%;overflow:scroll;">
+      <div data-bind="template:{name:'tabs-area',data:$data,afterRender:onLoad}"></div>
+    </div>
     <div style="position:absolute;top:0;right:5px;bottom:0;width:2em;background-color:black;">
       <i class="material-icons littleplus" data-bind="click:$root.extradd,clickBubble:false">add</i>
     </div>
