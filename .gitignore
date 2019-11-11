@@ -12,3 +12,5 @@ env/
 /static/bower_components
 activate.sh
 log.txt
+fiddlr.cer
+fiddlrkey.pem
