@@ -1,1 +1,25 @@
-ZnJvbSBmbGFzayBpbXBvcnQgRmxhc2sKZnJvbSBmbGFza19zb2NrZXRpbyBpbXBvcnQgU29ja2V0SU8KZnJvbSBmbGFza19zcWxhbGNoZW15IGltcG9ydCBTUUxBbGNoZW15CmZyb20gZmxhc2tfZGFuY2UuY29udHJpYi5naXRodWIgaW1wb3J0IG1ha2VfZ2l0aHViX2JsdWVwcmludApmcm9tIGZsYXNrX3Nlc3Npb24gaW1wb3J0IFNlc3Npb24KaW1wb3J0IG9zCmZyb20gZmxhc2tfbWlncmF0ZSBpbXBvcnQgTWlncmF0ZSwgTWlncmF0ZUNvbW1hbmQKCgphcHAgPSBGbGFzayhfX25hbWVfXykKc29ja2V0aW8gPSBTb2NrZXRJTyhhcHApCiMgaGVyb2t1ID0gSGVyb2t1KGFwcCkKYXBwLmNvbmZpZy5mcm9tX29iamVjdChvcy5lbnZpcm9uWydBUFBfU0VUVElOR1MnXSkKYXBwLmNvbmZpZ1snU1FMQUxDSEVNWV9UUkFDS19NT0RJRklDQVRJT05TJ10gPSBGYWxzZQpkYiA9IFNRTEFsY2hlbXkoYXBwKQpTZXNzaW9uKGFwcCkKCmJsdWVwcmludCA9IG1ha2VfZ2l0aHViX2JsdWVwcmludCgKICAgIGNsaWVudF9pZD1vcy5lbnZpcm9uWydHSVRIVUJfQ0xJRU5UX0lEJ10sCiAgICBjbGllbnRfc2VjcmV0PW9zLmVudmlyb25bJ0dJVEhVQl9DTElFTlRfU0VDUkVUJ10sCikKYXBwLnJlZ2lzdGVyX2JsdWVwcmludChibHVlcHJpbnQsIHVybF9wcmVmaXg9Ii9sb2dpbiIpCgptaWdyYXRlID0gTWlncmF0ZShhcHAsIGRiKQoK
+from flask import Flask
+from flask_socketio import SocketIO
+from flask_sqlalchemy import SQLAlchemy
+from flask_dance.contrib.github import make_github_blueprint
+from flask_session import Session
+import os
+from flask_migrate import Migrate, MigrateCommand
+
+
+app = Flask(__name__)
+socketio = SocketIO(app)
+# heroku = Heroku(app)
+app.config.from_object(os.environ['APP_SETTINGS'])
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+Session(app)
+
+blueprint = make_github_blueprint(
+    client_id=os.environ['GITHUB_CLIENT_ID'],
+    client_secret=os.environ['GITHUB_CLIENT_SECRET'],
+)
+app.register_blueprint(blueprint, url_prefix="/login")
+
+migrate = Migrate(app, db)
+

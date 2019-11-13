@@ -1,1 +1,53 @@
-I3N5bmVyZ2kKPGgxPklOLVBST0dSRVNTPC9oMT4KCmNvbW1pdCB0ZXN0IHN1Y2sgYXNzIGRpY2sKZmYKZApmCmZmCjwhLS0gaHR0cHM6Ly9kZXZlbG9wZXIuZ2l0aHViLmNvbS92My9naXQvY29tbWl0cy8jY3JlYXRlLWEtY29tbWl0IC0tPgo8IS0tIGh0dHBzOi8vZGV2ZWxvcGVyLmdpdGh1Yi5jb20vdjMvZ2l0L3JlZnMvI3VwZGF0ZS1hLXJlZmVyZW5jZSAtLT4KCjxoMT5UT0RPPC9oMT4KLS0gbWFrZSBpdCBzbyB0aGF0IHdoZW4gYSBwYW5lIGlzIGNyZWF0ZWQgb3IgZGVsZXRlZCBpdCBkb2VzbnQgZnVjayB1cCB0aGUgc2l6ZXMgb2YgYWxsIHRoZSBvdGhlciBwYW5lcy4KLS0gb24gdGhlIGVkaXQgcGFnZSBtYWtlIHRoZSBmaWxlIHN0cnVjdHVyZSBwYW5lIHNpemVkIHNvIHlvdSBjYW4gc2VlIGFsbCBvZiB0aGUgZmlsZSBuYW1lcywgYW5kIGl0IHN0YXJ0cyBzY3JvbGxlZCB0b28gZmFyIHRvIHRoZSByaWdodAotLSBmaXggY3Vyc29yIGJ1ZyB3aGVuIGhvdmVyaW5nIG92ZXIgbGlua3MuIChmaWxlcyBpbiBlZGl0IHBhZ2UsIGRlbGV0ZSBwcm9qZWN0IGJ1dHRvbiwgZXRjLikKLS0gZ2l0IHRoZSBtb3N0IHJlY2VudCBjb21taXQgd2hlbiBsb2FkaW5nIHNlc3Npb24KLS0gYmVhdXRpZnkgZHJvcGRvd24gbWVudXMgaW4gYnJvd3NlCi0tIHdoZW4gYSB1c2VyIHJlcXVlc3RzIGEgZmlsZSBvciB0cmllcyB0byBtYWtlIGEgY2hhbmdlIHRvIGEgZmlsZSwgbWFrZSBzdXJlIHRoZXkgaGF2ZSBqb2luZWQgdGhlIHNlc3Npb24gdGhleSBjbGFpbSB0byBiZSBlZGl0aW5nCgkoaXQgd291bGQgYmUgdG9vIG11Y2ggb2YgYSB0aW1lIHN5bmMgdG8gY2hlY2sgd2l0aCBnaXRodWIgZm9yIGV2ZXJ5IGxpdHRsZSBrZXlzdHJva2UsIHNvIGZvciBlYWNoIG9mIHRob3NlIGxpdHRsZSBjaGFuZ2VzIHdlIGp1c3QgY2hlY2sgd2l0aCBvdXIgZGF0YWJhc2UgdG8gc2VlIGlmIHRoZXkgaGF2ZSBqb2luZWQgdGhlIHNlc3Npb24uIFRoZXkgY2FuIG9ubHkgam9pbiB0aGUgc2Vzc2lvbiBpZiB0aGV5IGhhdmUgcmVhZCBwZXJtaXNzaW9ucywgc28gbG9uZyBhcyB3ZSBpbXBsZW1lbnQgdGhlIHByZXZpb3VzIGJ1bGxldCBwb2ludC4pCi0tIHVwZGF0ZSBvdGhlciBkYXRhYmFzZSBsaXN0IHRvIGJlIGFuIEFycmF5Ci0tIGZpeCBjc3Mgc3ludGF4IGVycm9yIG9uIHRvZG9saXN0Lmh0bWwKLS0gYWRkIGEgdmVyc2lvbmluZyBzeXN0ZW0gb24gY2xpZW50IHNpZGUgdGhhdCBtaW1pY3MgdGhlIHNlcnZlciBzaWRlLSB0aGF0IHdheSB3aGVuIHRoZSBzZXJ2ZXIgcmVqZWN0cyBhIGNoYW5nZSBvdXQgb2Ygc3RlcCB3aXRoIHRoZSBjbGllbnQsIHRoZXkgY2FuIGNvbWUgdG8gYSBjb21wcm9taXNlIG9yIHJlbG9hZCB3aGVuIHRoZSBzZXJ2ZXIgYW5kIGNsaWVudCBjYW4ndCBmaW5kIGNvbW1vbiBncm91bmQuCi0tIG1ha2UgdGhlIGNsaWVudCBzaG93IHNvbWUga2luZCBvZiBtZXNzYWdlIG9yIGF0dGVtcHQgYSByZWNvbm5lY3Qgd2hlbiBpdCBnZXRzIGEgbmV0d29yayBlcnJvciAoaWYgeW91IGNsb3NlIHlvdXIgbGFwdG9wIGFuZCBjb21lIGJhY2sgeW91IGhhdmUgdG8gcmVmcmVzaCB0byBtYWtlIHRoaW5ncyB3b3JrIGFnYWluLi4uIHRoaXMgd291bGQgYmUgYSBzb3VyY2Ugb2YgY29uZnVzaW9uIGZvciB1c2Vycy4pCi0tIGltcHJvdmUgY2xpZW50IHNpZGUgY29kZSBzbyBldmVyeXRoaW5nIHdvcmtzIGV2ZW4gaWYgdGhlIHNlcnZlciB0YWtlcyBvYm5veGlvdXNseSBsb25nIHRvIHJlc3BvbmQKLS0gcmV3cml0ZSBwcm9qZWN0IHBvc3QgcmVxdWVzdCB0byBiZSBhbiBhamF4IHBvc3QgaW5zdGVhZCBvZiBodG1sIGZvcm0gKHRvZG9saXN0Lmh0bWwgbGluZSAxMDMpCi0tIG5lZWQgYSBiZXR0ZXIgd2F5IHRvIGRldGVybWluZSB3aGVuIHNvbWVvbmUgcmVhbGx5IGRpc2Nvbm5lY3RzCgkoY3VycmVudGx5LCB2aXNpdGluZyBhbmQgdGhlbiByZWZyZXNoaW5nIHRoZSBwYWdlIHNlbmRzIHR3byBqb2lucyBhbmQgdGhlbiBvbmUgZGlzY29ubmVjdC4pCgkodGhlIGZpcnN0IGpvaW4gYWRkcyB5b3UgdG8gdGhlIGxpc3Qgb2YgYWNjZXNzb3JzLCB0aGUgc2Vjb25kIGpvaW4gZG9lcyBub3RoaW5nLCBhbmQgdGhlIGZpcnN0IGRpY29ubmVjdCByZW1vdmVzIHRoZW0gZnJvbSB0aGUgbGlzdCBvZiBjb25uZWN0ZWQgdXNlcnMgZXZlbiB0aG91Z2ggdGhleXJlIHN0aWxsIGNvbm5lY3RlZCBhbmQgY3VycmVudGx5IGVkaXRpbmcpCi0tIERvaW5nIGEgcHVsbAoJKGJ1dHRvbiB3aXRoIHBvcC11cCBzZXR0aW5ncy4gTm90IHN1cmUgaG93IHRoaXMgd291bGQgd29yayBiZWhpbmQgdGhlIHNjZW5lcy4pCi0tIENyZWF0ZSBhIG5ldyBicmFuY2gKCShidXR0b24gd2l0aCBwb3AtdXAgc2V0dGluZ3MuIFRoaXMgc2hvdWxkIGNoYW5nZSB0aGUgYnJhbmNoIGNvbHVtbiBpbiBldmVyeSByZWxldmFudCBwbGFjZSBpbiBvdXIgZGF0YWJhc2UuKQotLSBBbGxvd2luZyB0aGUgdXNlciB0byBtYWtlIGNoYW5nZXMgdG8gdGhlIGZpbGUgc3RydWN0dXJlCgkodGhlcmUncyBzb21lIG1hZ2ljIGJlaGluZCB0aGUgc2NlbmVzIHdpdGggZ2l0aHViIGFwaSB0aGF0IGknbSBub3QgdG90YWxseSBzdXJlIGFib3V0LiBBIGZpbGUgbW92ZSBpcyBhIGdpdGh1YiBvcGVyYXRpb24gdGhhdCBpcyBkaWZmZXJlbnQgZnJvbSBkZWxldGluZy1hbmQtY3JlYXRpbmcgYSBmaWxlLikKCShkZWxldGluZyBhbmQgKHBvc3NpYmx5KWNyZWF0aW5nIGZpbGVzIGNvdWxkIGFsc28gYmUgYSBnb2FsIGhlcmUgYnV0IGlkaykKLS0gUHVzaGluZyB0byBnaXRodWIKCSh3aXRoIHRoZSBwdXNoIGJ1dHRvbiBhbmQgY29tbWl0IG1lc3NhZ2UgZGlhbG9ndWUpCgkocHVzaGVzIHdvbid0IGJlIGFibGUgdG8gYmUgcGVyZm9ybWVkIGFsbCB0aGUgdGltZS0gaWYgc29tZW9uZSBwdXNoZXMgYSBjaGFuZ2Ugd2hpbGUgdGhleSBoYXZlIHRoZSByZXBvIG9wZW4gaW4gc3luZXJneSwgaXQncyBnb2luZyB0byByZWplY3Qgb3VyIHB1c2guKQoJKGlmIHRoZSBjb21taXQrcHVzaCBjYW5ub3QgYmUgcGVyZm9ybWVkLCByZXBvcnQgdGhlIG1lc3NhZ2UgYmFjayB0byB0aGUgdXNlciBzbyB0aGV5IGNhbiBjaG9vc2UgdG8gZWl0aGVyIHB1bGwgb3IgbWFrZSBhIG5ldyBicmFuY2ggdG8gcmVzb2x2ZSBpdC4pCi0tIEF1dG9tYXRpY2FsbHkgcHVzaGluZyB0byBnaXRodWIgYW5kIHJlbW92aW5nIHRoZSBzZXNzaW9uIHdoZW4gdGhlcmUgYXJlIG5vIGNvbm5lY3RlZCB1c2VycwoJKGluIHRoZSBkaXNjb25uZWN0IGZsYXNrIHJvdXRlLCBxdWVyeSBmb3IgYWxsIHNlc3Npb25zIHdoZXJlIGNvbm5lY3RlZCB1c2VycyA9PSAiIi4pCgkoaWYgdGhlIHB1c2ggZmFpbHMsIGJlY2F1c2UgeW91IGhhdmUgbm9ib2R5IHRvIG5vdGlmeSwganVzdCBjcmVhdGUgYSBuZXcgYnJhbmNoIHdpdGggYW4gYXV0b21hdGljYWxseSBnZW5lcmF0ZWQgbmFtZSB0byBjcmFtIHRoZSB1c2VycydzIGNoYW5nZXMuIFRoaXMgc2hvdWxkIGFsc28gY2hhbmdlIHRoZSBicmFuY2ggY29sdW1uIGluIHRoZSByZWxldmFudCBkYXRhYmFzZSBlbnRyaWVzLikKCSh0aGVyZSBpcyBhIHRlY2huaWNhbCBwb3NzaWJpbGl0eSB0aGF0IGEgdXNlciBtaWdodCBoaXQgdGhlIC9qb2luIHJvdXRlIGJ1dCBub3QgdGhlIHNvY2tldC5qb2luIHJvdXRlLCB3aGljaCB3b3VsZCBjcmVhdGUgYSBzZXNzaW9uIHdoZXJlIG5vYm9keSBldmVyIGNvbm5lY3RzIGluIHRoZSBmaXJzdCBwbGFjZS4gSWYgeW91IG9ubHkgY2xlYW4gdXAgc2Vzc2lvbnMgd2hlbiB0aGUgbGFzdCB1c2VyIGRpc2Nvbm5lY3RzLCB0aGVzZSB3aWxsIHBlcnNpc3QgaW4gb3VyIGRhdGFiYXNlIGluZGVmaW5pdGVseS4gQmVzdCB3YXkgdG8gY2xlYW4gdGhlc2UgdXAgaXMgdG8gcXVlcnkgKmFsbCogZ2hvc3QtdG93biBzZXNzaW9ucyB3aGVuIGFueW9uZSBkaXNjb25uZWN0cy4pCgoKU3RyZXRjaCBHb2FscwotLSBjaGFuZ2UgZmlsZW5hbWUgZnJvbSB0b2RvbGlzdCB0byBicm93c2UKLS0gaW52aXRlIHN5c3RlbSBtYXliZQoKCgoKCg==
+#synergi
+<h1>IN-PROGRESS</h1>
+
+commit test suck ass dick
+ff
+d
+f
+ff
+<!-- https://developer.github.com/v3/git/commits/#create-a-commit -->
+<!-- https://developer.github.com/v3/git/refs/#update-a-reference -->
+
+<h1>TODO</h1>
+-- make it so that when a pane is created or deleted it doesnt fuck up the sizes of all the other panes.
+-- on the edit page make the file structure pane sized so you can see all of the file names, and it starts scrolled too far to the right
+-- fix cursor bug when hovering over links. (files in edit page, delete project button, etc.)
+-- git the most recent commit when loading session
+-- beautify dropdown menus in browse
+-- when a user requests a file or tries to make a change to a file, make sure they have joined the session they claim to be editing
+	(it would be too much of a time sync to check with github for every little keystroke, so for each of those little changes we just check with our database to see if they have joined the session. They can only join the session if they have read permissions, so long as we implement the previous bullet point.)
+-- update other database list to be an Array
+-- fix css syntax error on todolist.html
+-- add a versioning system on client side that mimics the server side- that way when the server rejects a change out of step with the client, they can come to a compromise or reload when the server and client can't find common ground.
+-- make the client show some kind of message or attempt a reconnect when it gets a network error (if you close your laptop and come back you have to refresh to make things work again... this would be a source of confusion for users.)
+-- improve client side code so everything works even if the server takes obnoxiously long to respond
+-- rewrite project post request to be an ajax post instead of html form (todolist.html line 103)
+-- need a better way to determine when someone really disconnects
+	(currently, visiting and then refreshing the page sends two joins and then one disconnect.)
+	(the first join adds you to the list of accessors, the second join does nothing, and the first diconnect removes them from the list of connected users even though theyre still connected and currently editing)
+-- Doing a pull
+	(button with pop-up settings. Not sure how this would work behind the scenes.)
+-- Create a new branch
+	(button with pop-up settings. This should change the branch column in every relevant place in our database.)
+-- Allowing the user to make changes to the file structure
+	(there's some magic behind the scenes with github api that i'm not totally sure about. A file move is a github operation that is different from deleting-and-creating a file.)
+	(deleting and (possibly)creating files could also be a goal here but idk)
+-- Pushing to github
+	(with the push button and commit message dialogue)
+	(pushes won't be able to be performed all the time- if someone pushes a change while they have the repo open in synergy, it's going to reject our push.)
+	(if the commit+push cannot be performed, report the message back to the user so they can choose to either pull or make a new branch to resolve it.)
+-- Automatically pushing to github and removing the session when there are no connected users
+	(in the disconnect flask route, query for all sessions where connected users == "".)
+	(if the push fails, because you have nobody to notify, just create a new branch with an automatically generated name to cram the users's changes. This should also change the branch column in the relevant database entries.)
+	(there is a technical possibility that a user might hit the /join route but not the socket.join route, which would create a session where nobody ever connects in the first place. If you only clean up sessions when the last user disconnects, these will persist in our database indefinitely. Best way to clean these up is to query *all* ghost-town sessions when anyone disconnects.)
+
+
+Stretch Goals
+-- change filename from todolist to browse
+-- invite system maybe
+
+
+
+
+

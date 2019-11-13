@@ -1,1 +1,360 @@
-ZnJvbSBmbGFzayBpbXBvcnQgRmxhc2ssIHJlbmRlcl90ZW1wbGF0ZSwgcmVxdWVzdCwganNvbmlmeSwgcmVkaXJlY3QsIHVybF9mb3IsIHNlc3Npb24KZnJvbSBmbGFza19zb2NrZXRpbyBpbXBvcnQgU29ja2V0SU8sIHNlbmQsIGVtaXQsIGpvaW5fcm9vbSwgbGVhdmVfcm9vbQpmcm9tIGZsYXNrX3NxbGFsY2hlbXkgaW1wb3J0IFNRTEFsY2hlbXkKZnJvbSBmbGFza19kYW5jZS5jb250cmliLmdpdGh1YiBpbXBvcnQgbWFrZV9naXRodWJfYmx1ZXByaW50LCBnaXRodWIKZnJvbSBmbGFza19zZXNzaW9uIGltcG9ydCBTZXNzaW9uCmZyb20gYXBwX2ZhY3RvcnkgaW1wb3J0IGRiLGFwcCxibHVlcHJpbnQsc29ja2V0aW8KZnJvbSBtb2RlbHMgaW1wb3J0IFByb2plY3QsIFNlc3Npb24sIFRlbUZpbGUKaW1wb3J0IGJhc2U2NAppbXBvcnQgcmVxdWVzdHMKaW1wb3J0IG9zCmltcG9ydCBqc29uCmltcG9ydCBoYXNobGliCmltcG9ydCBzeXMKaW1wb3J0IGpzb24KaW1wb3J0IHBwcmludAoKCiNhcyBhIHNpZGUgbm90ZSwgaGVyZSBhcmUgdGhlIGJhc2ljIHBhdHRlcm5zIGZvciBub3RpZnlpbmcgY2xpZW50cyB0aHJvdWdoIHNvY2tldGlvOgojcm9vbT1yZXF1ZXN0LnNpZCAgICAgICAgPC0tLS0gbm90aWZpZXMgb25seSB0aGUgcGVyc29uIHRoYXQgc2VudCB0aGUgbWVzc2FnZQojYnJvYWRjYXN0PVRydWUgICAgICAgICAgICAgICAgICAgICAgPC0tLS0gKHdoZW4gaW5zaWRlIGEgc29ja2V0aW8gcm91dGUpIG5vdGlmaWVzIGV2ZXJ5b25lIGNvbm5lY3RlZCB0byB0aGUgc2Vzc2lvbgojYnJvYWRjYXN0PVRydWUsaW5jbHVkZV9zZWxmPUZhbHNlICAgPC0tLS0gKHdoZW4gaW5zaWRlIGEgc29ja2V0aW8gcm91dGUpIG5vdGlmaWVzIGV2ZXJ5b25lIGNvbm5lY3RlZCB0byB0aGUgc2Vzc2lvbiBleGNlcHQgZm9yIHRoZSBwZXJzb24gaW5pdGlhdGluZyB0aGUgZXZlbnQKI3Jvb209c3RyKHJlcG8uaWQpKyIsIitzdHIoc2VzaC5pZCkgICAgICAgICAgICAgICAgICAgICAgPC0tLS0od2hlbiBpbnNpZGUgYSBmbGFzayByb3V0ZSkgbm90aWZpZXMgZXZlcnlvbmUgY29ubmVjdGVkIHRvIHRoZSBzZXNzaW9uCiNyb29tPXN0cihyZXBvLmlkKSsiLCIrc3RyKHNlc2guaWQpLGluY2x1ZGVfc2VsZj1GYWxzZSAgIDwtLS0tKHdoZW4gaW5zaWRlIGEgZmxhc2sgcm91dGUpIG5vdGlmaWVzIGV2ZXJ5b25lIGNvbm5lY3RlZCB0byB0aGUgc2Vzc2lvbiBleGNlcHQgZm9yIHRoZSBwZXJzb24gaW5pdGlhdGluZyB0aGUgZXZlbnQKI2NsaWVudHMgcmVjaWV2ZSB0aGVzZSBldmVudHMgd2l0aCBzaGl0IGxpa2U6IHNvY2tldC5vbigncmVqZWN0ZWQnLGZ1bmN0aW9uKGRhdGEpe2NvbnNvbGUubG9nKGRhdGEpO30pCgoKCmFwcC5jb25maWdbJ3NzbF92ZXJpZnlfY2xpZW50X2NlcnQnXSA9IFRydWUKYXBwLmxvZ2dlci5kaXNhYmxlZCA9IFRydWUKCmRlZiBwcmludCgqYXJncyk6CglzYW1wbGUgPSBvcGVuKCdsb2cudHh0JywgJ2EnKSAKCXNhbXBsZS53cml0ZSgnICcuam9pbihbcmVwcihrKSBpZiB0eXBlKGspIGlzIG5vdCBzdHIgZWxzZSBrIGZvciBrIGluIGFyZ3NdKSsnXG4nKQoJc2FtcGxlLmNsb3NlKCkKCmRlZiBmb3JtYXR0ZWRwcmludCgqYXJncyk6CglzYW1wbGUgPSBvcGVuKCdsb2cudHh0JywgJ2EnKSAKCXNhbXBsZS53cml0ZSgnICcuam9pbihbcHByaW50LnBmb3JtYXQoayxjb21wYWN0PVRydWUpIGlmIHR5cGUoaykgaXMgbm90IHN0ciBlbHNlIGsgZm9yIGsgaW4gYXJnc10pKydcbicpCglzYW1wbGUuY2xvc2UoKQoKIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwoJCkBhcHAucm91dGUoJy9jb21wb25lbnRzJykKZGVmIGNvbXBvbmVudHMoKToKCXJldHVybiByZW5kZXJfdGVtcGxhdGUoJ3Rlc3QuaHRtbCcpCgpAYXBwLnJvdXRlKCcvYW5pbWF0aW9uJykKZGVmIGFuaW1hdGlvbigpOgoJcmV0dXJuIHJlbmRlcl90ZW1wbGF0ZSgnYW5pbWF0aW9uZWRpdG9yLmh0bWwnKQoKQGFwcC5yb3V0ZSgnL211c2ljJykKZGVmIG11c2ljKCk6CglyZXR1cm4gcmVuZGVyX3RlbXBsYXRlKCdncmFwaGVkaXRvci5odG1sJykKCgojIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCgoKZGVmIGdpdGNyZWRzKGdpdGh1Yik6CglpZiBub3QgZ2l0aHViLmF1dGhvcml6ZWQ6IHJldHVybiBOb25lCglyZXNwID0gZ2l0aHViLmdldCgiL3VzZXIiKS5qc29uKClbImxvZ2luIl0KCXNlc3Npb25bJ2dpdGh1YnVzZXInXSA9IHJlc3AKCXJldHVybiByZXNwCgoKQGFwcC5yb3V0ZSgiLyIpCmRlZiBpbmRleCgpOgoJcHJpbnQoIm9hc2RqZm9haXNkamZvaWFqc2RmIikKCXJldHVybiByZW5kZXJfdGVtcGxhdGUoJ2luZGV4Lmh0bWwnLGNyZWRzPWdpdGNyZWRzKGdpdGh1YikpCgpAYXBwLnJvdXRlKCIvcHJvamVjdGxpc3QiKQpkZWYgcHJvamVjdGxpc3QoKToKCWlmIG5vdCBnaXRodWIuYXV0aG9yaXplZDoKCQlyZXR1cm4gcmVkaXJlY3QodXJsX2ZvcigiZ2l0aHViLmxvZ2luIikpCglyZXR1cm4gcmVuZGVyX3RlbXBsYXRlKCd0b2RvbGlzdC5odG1sJyxjcmVkcz1naXRjcmVkcyhnaXRodWIpKQoKCgpAYXBwLnJvdXRlKCIvZ2l0aHViX3JlcG9zIikKZGVmIGdpdGh1Yl9yZXBvcygpOgoJb3BlbnJlcG9zID0gW10KCgkjIGdpdGh1Yi5nZXQoIi91c2VyL3JlcG9zIikKCSMgaHR0cHM6Ly9kZXZlbG9wZXIuZ2l0aHViLmNvbS92My9yZXBvcy8jbGlzdC15b3VyLXJlcG9zaXRvcmllcwoJZm9yIGkgaW4gZ2l0aHViLmdldCgiL3VzZXIvcmVwb3MiKS5qc29uKCk6CgkJIyBUT0RPOiBvbmx5IGFkZCBpZiB0aGV5IGFyZSBhIGNvbGxhYm9yYXRvciAKCQkjIGh0dHBzOi8vZGV2ZWxvcGVyLmdpdGh1Yi5jb20vdjMvcmVwb3MvY29sbGFib3JhdG9ycy8jbGlzdC1jb2xsYWJvcmF0b3JzCgoJCSMgcHJpbnQoZ2l0aHViLmdldCgiL3JlcG9zLyIrc3RyKGlbJ293bmVyJ11bJ2xvZ2luJ10pKyIvIitzdHIoaVsnbmFtZSddKSsiL2JyYW5jaGVzIikuanNvbigpKQoKCQlvcGVucmVwb3MuYXBwZW5kKHsKCQkJJ293bmVyJzpzdHIoaVsnb3duZXInXVsnbG9naW4nXSksCgkJCSduYW1lJzpzdHIoaVsnbmFtZSddKSwKCQkJJ2JyYW5jaGVzJzpbcFsnbmFtZSddIGZvciBwIGluIGdpdGh1Yi5nZXQoIi9yZXBvcy8iK3N0cihpWydvd25lciddWydsb2dpbiddKSsiLyIrc3RyKGlbJ25hbWUnXSkrIi9icmFuY2hlcyIpLmpzb24oKV0KCQl9KQoJcmV0dXJuIHsicGF5bG9hZCI6IG9wZW5yZXBvc30KCkBhcHAucm91dGUoIi9zeW5lcmdpX3JlcG9zIikKZGVmIHN5bmVyZ2lfcmVwb3MoKToKCXJlc3VsdHMgPSBbXQoJI2xvYWQgY2xpZW50IHJlcG9zIGZyb20gZGF0YWJhc2UKCXVzZXIgPSAieyIrc2Vzc2lvblsnZ2l0aHVidXNlciddKyJ9IgoJIyBQcm9qZWN0LnF1ZXJ5LmZpbHRlcl9ieShvd25lcj1zdHIoaVsnb3duZXInXVsnbG9naW4nXSkscmVwbz1zdHIoaVsnbmFtZSddKSkuYWxsKCkKCWZvciByZXBvIGluIFByb2plY3QucXVlcnkuZmlsdGVyKFByb2plY3Qud3JpdGVfYWNjZXNzX3VzZXJzLmNvbnRhaW5zKHVzZXIpKS5hbGwoKToKCQlyZXN1bHRzLmFwcGVuZChyZXBvLnNlcmlhbGl6ZSgpKQoKCXJldHVybiB7InBheWxvYWQiOnJlc3VsdHN9CgoKCgoKCkBhcHAucm91dGUoIi9kZWxldGVPYmplY3QiLCBtZXRob2RzPVsnUE9TVCddKQpkZWYgZGVsZXRlT2JqZWN0KCk6CglkYXRhID0gcmVxdWVzdC5qc29uCgoJZm9yIHNlc2ggaW4gU2Vzc2lvbi5xdWVyeS5maWx0ZXJfYnkocHJvamVjdF9pZCA9IGRhdGFbInByb2plY3RpZCJdKS5hbGwoKToKCQkjaW4gdGhlIGZ1dHVyZSB3ZSdkIGhhdmUgdG8gZW1lcmdlbmN5IHB1c2ggYWxsIGRhdGEgaW4gZWFjaCBzZXNzaW9uIGJlZm9yZSBhIHNlc3Npb24gZ2V0cyBkZWxldGVkLiBUaGlzIGFwcGxpZXMgaGVyZSBhbmQgYWxzbyB3aGVuIHBlb3BsZSBkaXNjb25uZWN0IGZyb20gc2Vzc2lvbnMuCgkJVGVtRmlsZS5xdWVyeS5maWx0ZXJfYnkoc2Vzc2lvbl9pZCA9IHNlc2guaWQpLmRlbGV0ZSgpCglTZXNzaW9uLnF1ZXJ5LmZpbHRlcl9ieShwcm9qZWN0X2lkID0gZGF0YVsicHJvamVjdGlkIl0pLmRlbGV0ZSgpCglQcm9qZWN0LnF1ZXJ5LmZpbHRlcl9ieShpZCA9IGRhdGFbInByb2plY3RpZCJdKS5kZWxldGUoKQoJCglkYi5zZXNzaW9uLmNvbW1pdCgpCglyZXR1cm4gIjIwMCIKCgpAYXBwLnJvdXRlKCIvcHJvamVjdHMiLG1ldGhvZHM9WydQT1NUJ10pCmRlZiBwcm9qZWN0cygpOgoJanNvbl9mcm9tX2NsaWVudCA9IHJlcXVlc3QuanNvbgoJIyBmb3JtYXR0ZWRwcmludCgiL3JlcG9zLyIgKyBzdHIoanNvbl9mcm9tX2NsaWVudFsnb3duZXInXSkgKyAiLyIgKyBzdHIoanNvbl9mcm9tX2NsaWVudFsncmVwbyddKSArICIvY29udHJpYnV0b3JzIikKCSMgcHJpbnQoIi09LT0tPS0+Iixqc29uX2Zyb21fY2xpZW50KQoKCgl1c2VycyA9IGdpdGh1Yi5nZXQoIi9yZXBvcy8iICsgc3RyKGpzb25fZnJvbV9jbGllbnRbJ293bmVyJ10pICsgIi8iICsgc3RyKGpzb25fZnJvbV9jbGllbnRbJ3JlcG8nXSkgKyAiL2NvbnRyaWJ1dG9ycyIpLmpzb24oKQoJIyBmb3JtYXR0ZWRwcmludCh1c2VycykKCgl3cml0ZV91c2VyX2xpc3QgPSBbXQoJZm9yIHVzZXIgaW4gdXNlcnM6CgkJd3JpdGVfdXNlcl9saXN0LmFwcGVuZCh1c2VyWydsb2dpbiddKQoKCXByb2ogPSBQcm9qZWN0KAoJCW5hbWUgICAgICAgPSBzdHIoanNvbl9mcm9tX2NsaWVudFsnbmFtZSddKSwKCQlyZXBvICAgICAgID0gc3RyKGpzb25fZnJvbV9jbGllbnRbJ3JlcG8nXSksCgkJYnJhbmNoICAgICA9IHN0cihqc29uX2Zyb21fY2xpZW50WydicmFuY2gnXSksCgkJb3duZXIgICAgICA9IHN0cihqc29uX2Zyb21fY2xpZW50Wydvd25lciddKSwKCQlkZXNjcmlwdGlvbiA9IHN0cihqc29uX2Zyb21fY2xpZW50WydkZXNjcmlwdGlvbiddKSwKCQl3cml0ZV9hY2Nlc3NfdXNlcnMgPSB3cml0ZV91c2VyX2xpc3QKCSkKCWRiLnNlc3Npb24uYWRkKHByb2opCglkYi5zZXNzaW9uLmNvbW1pdCgpCglwcmludCgib3NkaWpmYW9zaWpkZm9haXNqZGZvYWlzamRmb2lhc2pkZlxuXG5cblxuIikKCXJldHVybiB7InByb2plY3RJZCI6cHJvai5pZH0KCkBhcHAucm91dGUoIi9lZGl0b3IiKQpkZWYgZWRpdG9yKCk6CglyZXR1cm4gcmVuZGVyX3RlbXBsYXRlKCdlZGl0b3IuaHRtbCcsY3JlZHM9Z2l0Y3JlZHMoZ2l0aHViKSkKCgoKQGFwcC5yb3V0ZSgiL2dpdGxvZ2luIikKZGVmIGxvZ2luKCk6CglpZiBub3QgZ2l0aHViLmF1dGhvcml6ZWQ6CgkJcmV0dXJuIHJlZGlyZWN0KHVybF9mb3IoImdpdGh1Yi5sb2dpbiIpKQoJcmVzcCA9IGdpdGh1Yi5nZXQoIi91c2VyIikKCXJldHVybiByZWRpcmVjdCgiLyIpCgoKQGFwcC5yb3V0ZSgiL2xvZ291dCIpCmRlZiBsb2dvdXQoKToKCXJldHVybiAibm8geW91IGNhbnQiCgoKQHNvY2tldGlvLm9uKCdjb25uZWN0JykKZGVmIHNkYWhvdWZhKCk6CglwYXNzCgoKQGFwcC5yb3V0ZSgiL2ZpbGVzIixtZXRob2RzPVsnUE9TVCddKQpkZWYgZmlsZXMoKToKCWpzb25fZnJvbV9jbGllbnQgPSByZXF1ZXN0Lmpzb24KCXNlc2ggPSBTZXNzaW9uLnF1ZXJ5LmZpbHRlcl9ieShpZD1pbnQoanNvbl9mcm9tX2NsaWVudFsnc2Vzc2lvbklkJ10pKS5maXJzdCgpCglpZiBzZXNoID09IE5vbmU6IHJldHVybgoKCSNjcmVkcz1zZXNzaW9uWydnaXRodWJ1c2VyJ10KCSNpZiBjcmVkcyBub3QgaW4gc2VzaC5hY3RpdmVtZW1iZXJzLnNwbGl0KCcsJykgdGhlbiB0ZWxsIHRoZSB1c2VyIHRvIGdvIGRpcmVjdGx5IHRvIGhlbGwtIGRvbnQgZ2l2ZSB0aGVtIGFueSBmaWxlcyB0aGV5IGFyZW50IHRvIGJlIHRydXN0ZWQuCgljcmVkcyA9IHNlc3Npb25bJ2dpdGh1YnVzZXInXQoJIyBpZiBjcmVkcyBub3QgaW4gc2VzaC5hY3RpdmVtZW1iZXJzLnNwbGl0KCcsJyk6IHJldHVybiAidXIgbm90IGFsbG93ZWQgbG9sIiw0MDIKCglib29rID0gVGVtRmlsZS5xdWVyeS5maWx0ZXJfYnkoc2Vzc2lvbl9pZCA9IGludChzZXNoLmlkKSxwYXRoPXN0cihqc29uX2Zyb21fY2xpZW50WydwYXRoJ10pKS5maXJzdCgpCglwcmludChib29rKQoJaWYgYm9vayA9PSBOb25lOgoJCQoJCSMgcHVsbHMgdGhlIGluZm9ybWF0aW9uIG9mIHRoZSBmaWxlIGZyb20gZ2l0aHViIAoJCSMgaHR0cHM6Ly9kZXZlbG9wZXIuZ2l0aHViLmNvbS92My9yZXBvcy9jb250ZW50cy8KCQlnaXRodWJfcmVxdWVzdCA9IGdpdGh1Yi5nZXQoIi9yZXBvcy8iK3Nlc2gub3duZXIrIi8iK3Nlc2gucmVwbysiL2NvbnRlbnRzLyIranNvbl9mcm9tX2NsaWVudFsncGF0aCddKyI/cmVmPSIrc2VzaC5icmFuY2gpCgkJaWYgZ2l0aHViX3JlcXVlc3Quc3RhdHVzX2NvZGUgIT0gMjAwOgoJCQlwcmludChnaXRodWJfcmVxdWVzdC5jb250ZW50KQoJCQlyZXR1cm4KCgkJanNvbl9mcm9tX2dpdGh1YiA9IGpzb24ubG9hZHMoZ2l0aHViX3JlcXVlc3QuY29udGVudCkKCgkJIyBjaGVja3MgdG8gc2VlIGlmIHRoZSBmaWxlcyBhcmUgYWJvdmUgMjU2S0IsIGFuZCBpZiB0aGV5IGFyZSwgcmV0dXJuIGVycm9yIGNvZGUgNDEzCgkJaWYganNvbl9mcm9tX2dpdGh1Ylsnc2l6ZSddID4gMjYyMTQ0IDoKCQkJcmV0dXJuICJDb250ZW50IHRvbyBsYXJnZSIsNDEzCgkJCgkJZGVjb2RlZCA9IHN0cihiYXNlNjQuYjY0ZGVjb2RlKGpzb25fZnJvbV9naXRodWJbJ2NvbnRlbnQnXSkuZGVjb2RlKCJ1dGYtOCIpKQoKCQkjIG1ha2luZyB0aGUgZGF0YWJhc2UgZW50cnkgaW4gVGVtRmlsZSBvZiB0aGUgY3VycmVudCBmaWxlCgkJYm9vayA9IFRlbUZpbGUoCgkJCXNlc3Npb25faWQgPSBzZXNoLmlkLAoJCQlwYXRoID0ganNvbl9mcm9tX2NsaWVudFsncGF0aCddLAoJCQljb250ZW50ID0gZGVjb2RlZCwKCQkJc2hhID0ganNvbl9mcm9tX2dpdGh1Ylsnc2hhJ10sCgkJCW1kNSA9IGhhc2hsaWIubWQ1KGRlY29kZWQuZW5jb2RlKCJ1dGYtOCIpKS5oZXhkaWdlc3QoKQoJCSkKCgkJZGIuc2Vzc2lvbi5hZGQoYm9vaykKCQlkYi5zZXNzaW9uLmNvbW1pdCgpCglyZXR1cm4gYm9vay5jb250ZW50CgoKCkBzb2NrZXRpby5vbignZWRpdCcpCmRlZiBoYW5kbGVfZWRpdChlZGl0KToKCWNyZWRzPXNlc3Npb25bJ2dpdGh1YnVzZXInXQoJc2VzaCA9IFNlc3Npb24ucXVlcnkuZmlsdGVyX2J5KGlkPWludChlZGl0WydzZXNzaW9uSWQnXSkpLmZpcnN0KCkKCWlmIHNlc2ggPT0gTm9uZTogcmV0dXJuCglib29rID0gVGVtRmlsZS5xdWVyeS5maWx0ZXJfYnkoc2Vzc2lvbl9pZCA9IGludChzZXNoLmlkKSxwYXRoPXN0cihlZGl0WydwYXRoJ10pKS5maXJzdCgpCglpZiBib29rID09IE5vbmU6IHJldHVybgoJcHJpbnQoZWRpdCkKCSNzeW5jaHJvbml6ZS5qcyBsaW5lIDIzNyBpcyB3aGVyZSB0aGlzIGRhdGEgY29tZXMgZnJvbS4KCgkjaWYgY3JlZHMgbm90IGluIHNlc2guYWN0aXZlbWVtYmVycy5zcGxpdCgnLCcpIHRoZW4gYXV0b21hdGljYWxseSByZWplY3QgdGhlaXIgY2hhbmdlLSB0aGV5IGFyZW50IGluIHRoZSBzZXNzaW9uLgoJCgkjIGlmIChjcmVkcyBub3QgaW4gc2VzaC5hY3RpdmVtZW1iZXJzLnNwbGl0KCcsJykpOiAKCSMgCWVtaXQoJ3JlamVjdGVkJyx7ImRlbHRhIjplZGl0WydkZWx0YSddLCJyZWFzb24iOiJpbnZhbGlkIGNyZWRlbnRpYWxzIn0scm9vbT1yZXF1ZXN0LnNpZCkgCgkjIAlyZXR1cm4KCQoJaGFzaCA9IGVkaXRbJ21kNSddCglpZihub3QgYm9vay5hZGRIYXNoKGhhc2gsIGVkaXRbJ2RlbHRhJ10pKTogCgkJZW1pdCgncmVqZWN0ZWQnLHsiZGVsdGEiOmVkaXRbJ2RlbHRhJ10sIm1vc3RSZWNlbnRIYXNoIjpib29rLmhhc2gxLCJ5b3VySGFzaCI6aGFzaH0scm9vbT1yZXF1ZXN0LnNpZCkgCgkJcmV0dXJuCglwcmludCgiYWRkZWQgaGFzaDogIiAsIGhhc2gpCglkYi5zZXNzaW9uLmNvbW1pdCgpCgllbWl0KCdlZGl0JyxlZGl0LGJyb2FkY2FzdD1UcnVlLGluY2x1ZGVfc2VsZj1GYWxzZSkKCgoJCgpAYXBwLnJvdXRlKCIvZGlyZWN0b3JpZXMiLG1ldGhvZHM9WydQT1NUJ10pCmRlZiBkaXJlY3RvcmllcygpOgoJc2VzaCA9IFNlc3Npb24ucXVlcnkuZmlsdGVyX2J5KGlkPWludChyZXF1ZXN0Lmpzb25bJ3Nlc3Npb25JZCddKSkuZmlyc3QoKQoJaWYgc2VzaCA9PSBOb25lOiByZXR1cm4KCWdpdGh1Yl9yZXF1ZXN0ID0gZ2l0aHViLmdldCgiL3JlcG9zLyIrc2VzaC5vd25lcisiLyIrc2VzaC5yZXBvKyIvZ2l0L3RyZWVzLyIrc2VzaC5zaGErIj9yZWN1cnNpdmU9MSxyZWY9IitzZXNoLmJyYW5jaCkKCWlmIGdpdGh1Yl9yZXF1ZXN0LnN0YXR1c19jb2RlICE9IDIwMDogcmV0dXJuCglqc29uX2dpdGh1Yl9yZXF1ZXN0ID0gZ2l0aHViX3JlcXVlc3QuanNvbigpCgoJIyBodHRwczovL2RldmVsb3Blci5naXRodWIuY29tL3YzL2dpdC90cmVlcy8jZ2V0LWEtdHJlZQoJaWYgbGVuKGpzb25fZ2l0aHViX3JlcXVlc3RbJ3RyZWUnXSkgPiAxMDAwIG9yIGpzb25fZ2l0aHViX3JlcXVlc3RbJ3RydW5jYXRlZCddOgoJCXJldHVybiAidG9vIG1hbnkgZmlsZXMiLCA0MTMKCXJldHVybiBqc29uX2dpdGh1Yl9yZXF1ZXN0CgoKIyBkbyBhIGRvdWJsZSBjaGVjayB0aGUgdXNlciBoYXMgd3JpdGUgcGVybWlzc2lvbnM7IHF1ZXJ5IGdpdGh1YiB0byBjaGVjayAKIyBodHRwczovL2RldmVsb3Blci5naXRodWIuY29tL3YzL3JlcG9zLyNsaXN0LXVzZXItcmVwb3NpdG9yaWVzCiMgb3IgCiMgZ2l2ZW4gcmVwbyBvdXRwdXQgY29sbGFib3JhdG9ycyAKQGFwcC5yb3V0ZSgiL2pvaW4iLCBtZXRob2RzPVsnUE9TVCddKQpkZWYgam9pbmpvaW4oKToKCWRhdGEgPSByZXF1ZXN0Lmpzb24KCXJlcG8gPSBQcm9qZWN0LnF1ZXJ5LmZpbHRlcl9ieShpZD1pbnQoZGF0YVsncHJvamVjdElkJ10pKS5maXJzdCgpCglpZiByZXBvID09IE5vbmU6IHJldHVybiAibmFoIGJydWgiLDQwMwoJY3JlZHM9c2Vzc2lvblsnZ2l0aHVidXNlciddCglpZiBjcmVkcyA9PSBOb25lOiByZXR1cm4gIm5haCBzb24tIHlvdSBnb3Qgbm8gY3JlZGVudGlhbHMiLDQwMwoKCSNnaXRodWIgYXBpIGNhbGxzIGFyZSBkb25lIHdpdGggZ2l0aHViLmdldChwYXRoKSBvciBnaXRodWIucG9zdChwYXRoKS4geW91IGNhbiBzZWUgdGhlIHBhdHRlcm4gYmVsb3cuCgkjaGVyZSB3ZSBuZWVkIHRvIHRlbGwgdGhlIHVzZXIgdG8gZnVjayB0aGVtc2VsdmVzIHdpdGggYSBydXN0eSBwaXBlIGlmIHRoZXkgdHJ5IHRvIGVkaXQgYSByZXBvIHRoZXkgZG9udCBoYXZlIHdyaXRlIHBlcm1pc3Npb25zIGZvcgoJI2R1bm5vIHdoaWNoIGFwaSBlbmRwb2ludCB0byBoaXQgYnV0IGl0cyBwcm9iYWJseSBub3QgdG9vIGJhZAoKCXdyaXRlX3VzZXJfbGlzdCA9IGdpdGh1Yi5nZXQoIi9yZXBvcy8iK3JlcG8ub3duZXIrIi8iK3JlcG8ucmVwbyArICIvY29udHJpYnV0b3JzIikuanNvbigpCglmb3IgdXNlciBpbiB3cml0ZV91c2VyX2xpc3Q6CgkJaWYgdXNlclsnbG9naW4nXSA9PSBzZXNzaW9uWydnaXRodWJ1c2VyJ106CgkJCWJyZWFrCgllbHNlOgoJCXJldHVybiAiVXNlciBkb2VzIG5vdCBoYXZlIHdyaXRlIGFjY2VzcyIsIDQwMwoKCglzZXNoID0gU2Vzc2lvbi5xdWVyeS5maWx0ZXJfYnkocHJvamVjdF9pZD1pbnQocmVwby5pZCkpLmZpcnN0KCkKCWlmIHNlc2ggPT0gTm9uZToKCQltYXN0ZXIgPSBnaXRodWIuZ2V0KCIvcmVwb3MvIityZXBvLm93bmVyKyIvIityZXBvLnJlcG8rIi9icmFuY2hlcy8iK3JlcG8uYnJhbmNoKQoJCWhlYWRfdHJlZV9zaGEgPSBtYXN0ZXIuanNvbigpWydjb21taXQnXVsnY29tbWl0J11bJ3RyZWUnXVsnc2hhJ10KCQlzZXNoID0gU2Vzc2lvbigKCQkJb3duZXIgICAgICA9IHJlcG8ub3duZXIsCgkJCXJlcG8gICAgICAgPSByZXBvLnJlcG8sCgkJCWJyYW5jaCAgICAgPSByZXBvLmJyYW5jaCwKCQkJc2hhICAgICAgICA9IGhlYWRfdHJlZV9zaGEsCgkJCXByb2plY3RfaWQgPSByZXBvLmlkLAoJCQlhY3RpdmVtZW1iZXJzID0gIiIsCgkJKQoJCWRiLnNlc3Npb24uYWRkKHNlc2gpCgkJZGIuc2Vzc2lvbi5jb21taXQoKQoKCglzZXNzaW9uWydzZXNzaW9uSWQnXSA9IHNlc2guaWQKCglyZXR1cm4gIk9LIgoKCkBzb2NrZXRpby5vbignam9pbicpCmRlZiBvbl9qb2luKGRhdGEpOgoJcmVwbyA9IFByb2plY3QucXVlcnkuZmlsdGVyX2J5KGlkPWludChkYXRhWydwcm9qZWN0SWQnXSkpLmZpcnN0KCkKCWlmIHJlcG8gPT0gTm9uZTogcmV0dXJuCgljcmVkcyA9IHNlc3Npb25bJ2dpdGh1YnVzZXInXQoJaWYgY3JlZHMgPT0gTm9uZTogcmV0dXJuCgoJZm9yIHVzZXIgaW4gcmVwby53cml0ZV9hY2Nlc3NfdXNlcnM6CgkJaWYgdXNlciA9PSBzZXNzaW9uWydnaXRodWJ1c2VyJ106CgkJCWJyZWFrCgllbHNlOgoJCXJldHVybiAiVXNlciBkb2VzIG5vdCBoYXZlIHdyaXRlIGFjY2VzcyIsIDQwMwoKCXNlc2ggPSBTZXNzaW9uLnF1ZXJ5LmZpbHRlcl9ieShwcm9qZWN0X2lkPWludChyZXBvLmlkKSkuZmlyc3QoKQoJaWYgc2VzaCA9PSBOb25lOiByZXR1cm4KCW1lbWJlcnMgPSBzZXNoLmFjdGl2ZW1lbWJlcnMKCW1lbWJlcnNfYXJyYXkgPSBbXSBpZiBtZW1iZXJzID09ICIiIGVsc2UgbWVtYmVycy5zcGxpdCgiLCIpCglpZiBjcmVkcyBub3QgaW4gbWVtYmVyc19hcnJheToKCQltZW1iZXJzX2FycmF5LmFwcGVuZChjcmVkcykKCQlzZXNoLmFjdGl2ZW1lbWJlcnMgPSAiLCIuam9pbihtZW1iZXJzX2FycmF5KQoJCWRiLnNlc3Npb24uY29tbWl0KCkKCglqb2luX3Jvb20oc3RyKHJlcG8uaWQpKyIsIitzdHIoc2VzaC5pZCkpCgllbWl0KCdhY2NlcHQnLHsnc2Vzc2lvbklkJzpzZXNoLmlkLCdhY3RpdmVtZW1iZXJzJzpzZXNoLmFjdGl2ZW1lbWJlcnN9LHJvb209cmVxdWVzdC5zaWQpCgllbWl0KCdwbGF5ZXJfam9pbicseyduYW1lJzpjcmVkc30scm9vbT1zdHIocmVwby5pZCkrIiwiK3N0cihzZXNoLmlkKSxpbmNsdWRlX3NlbGY9RmFsc2UpCgoKQHNvY2tldGlvLm9uKCdkaXNjb25uZWN0JykKZGVmIG9uX2Rpc2Nvbm5lY3QoKToKCWNyZWRzID0gc2Vzc2lvblsnZ2l0aHVidXNlciddCglmb3Igc2VzaCBpbiBTZXNzaW9uLnF1ZXJ5LmZpbHRlcl9ieShpZD1pbnQoc2Vzc2lvblsnc2Vzc2lvbklkJ10pKS5hbGwoKToKCQltZW1iZXJzX2FycmF5ID0gc2VzaC5hY3RpdmVtZW1iZXJzLnNwbGl0KCIsIikKCQlpZiBjcmVkcyBpbiBtZW1iZXJzX2FycmF5OgoJCQlwcmludCgiXG5cblxuZm91bmQgIiwgbWVtYmVyc19hcnJheSwgY3JlZHMgKQoJCQltZW1iZXJzX2FycmF5LnJlbW92ZShjcmVkcykKCQkJcHJpbnQoIlxuXG5cbnJlbW92ZWQgIiwgbWVtYmVyc19hcnJheSwgY3JlZHMpCgkJZWxzZToKCQkJcHJpbnQoIlxuXG5cbm5vdCBmb3VuZDogIiwgbWVtYmVyc19hcnJheSwgY3JlZHMgKQoJCXNlc2guYWN0aXZlbWVtYmVycyA9ICIsIi5qb2luKG1lbWJlcnNfYXJyYXkpCglkYi5zZXNzaW9uLmNvbW1pdCgpCgllbWl0KCdwbGF5ZXJfbGVhdmUnLHsnbmFtZSc6Y3JlZHN9LGluY2x1ZGVfc2VsZj1GYWxzZSkKCgppZiBfX25hbWVfXyA9PSAnX19tYWluX18nOgoJc29ja2V0aW8ucnVuKGFwcCxkZWJ1Zz1UcnVlLGtleWZpbGU9J2tleS5wZW0nLCBjZXJ0ZmlsZT0nY2VydC5wZW0nKQoKCgoKCgo=
+from flask import Flask, render_template, request, jsonify, redirect, url_for, session
+from flask_socketio import SocketIO, send, emit, join_room, leave_room
+from flask_sqlalchemy import SQLAlchemy
+from flask_dance.contrib.github import make_github_blueprint, github
+from flask_session import Session
+from app_factory import db,app,blueprint,socketio
+from models import Project, Session, TemFile
+import base64
+import requests
+import os
+import json
+import hashlib
+import sys
+import json
+import pprint
+
+
+#as a side note, here are the basic patterns for notifying clients through socketio:
+#room=request.sid        <---- notifies only the person that sent the message
+#broadcast=True                      <---- (when inside a socketio route) notifies everyone connected to the session
+#broadcast=True,include_self=False   <---- (when inside a socketio route) notifies everyone connected to the session except for the person initiating the event
+#room=str(repo.id)+","+str(sesh.id)                      <----(when inside a flask route) notifies everyone connected to the session
+#room=str(repo.id)+","+str(sesh.id),include_self=False   <----(when inside a flask route) notifies everyone connected to the session except for the person initiating the event
+#clients recieve these events with shit like: socket.on('rejected',function(data){console.log(data);})
+
+
+
+app.config['ssl_verify_client_cert'] = True
+app.logger.disabled = True
+
+def print(*args):
+	sample = open('log.txt', 'a') 
+	sample.write(' '.join([repr(k) if type(k) is not str else k for k in args])+'\n')
+	sample.close()
+
+def formattedprint(*args):
+	sample = open('log.txt', 'a') 
+	sample.write(' '.join([pprint.pformat(k,compact=True) if type(k) is not str else k for k in args])+'\n')
+	sample.close()
+
+##################################
+	
+@app.route('/components')
+def components():
+	return render_template('test.html')
+
+@app.route('/animation')
+def animation():
+	return render_template('animationeditor.html')
+
+@app.route('/music')
+def music():
+	return render_template('grapheditor.html')
+
+
+##################################
+
+
+def gitcreds(github):
+	if not github.authorized: return None
+	resp = github.get("/user").json()["login"]
+	session['githubuser'] = resp
+	return resp
+
+
+@app.route("/")
+def index():
+	print("oasdjfoaisdjfoiajsdf")
+	return render_template('index.html',creds=gitcreds(github))
+
+@app.route("/projectlist")
+def projectlist():
+	if not github.authorized:
+		return redirect(url_for("github.login"))
+	return render_template('todolist.html',creds=gitcreds(github))
+
+
+
+@app.route("/github_repos")
+def github_repos():
+	openrepos = []
+
+	# github.get("/user/repos")
+	# https://developer.github.com/v3/repos/#list-your-repositories
+	for i in github.get("/user/repos").json():
+		# TODO: only add if they are a collaborator 
+		# https://developer.github.com/v3/repos/collaborators/#list-collaborators
+
+		# print(github.get("/repos/"+str(i['owner']['login'])+"/"+str(i['name'])+"/branches").json())
+
+		openrepos.append({
+			'owner':str(i['owner']['login']),
+			'name':str(i['name']),
+			'branches':[p['name'] for p in github.get("/repos/"+str(i['owner']['login'])+"/"+str(i['name'])+"/branches").json()]
+		})
+	return {"payload": openrepos}
+
+@app.route("/synergi_repos")
+def synergi_repos():
+	results = []
+	#load client repos from database
+	user = "{"+session['githubuser']+"}"
+	# Project.query.filter_by(owner=str(i['owner']['login']),repo=str(i['name'])).all()
+	for repo in Project.query.filter(Project.write_access_users.contains(user)).all():
+		results.append(repo.serialize())
+
+	return {"payload":results}
+
+
+
+
+
+
+@app.route("/deleteObject", methods=['POST'])
+def deleteObject():
+	data = request.json
+
+	for sesh in Session.query.filter_by(project_id = data["projectid"]).all():
+		#in the future we'd have to emergency push all data in each session before a session gets deleted. This applies here and also when people disconnect from sessions.
+		TemFile.query.filter_by(session_id = sesh.id).delete()
+	Session.query.filter_by(project_id = data["projectid"]).delete()
+	Project.query.filter_by(id = data["projectid"]).delete()
+	
+	db.session.commit()
+	return "200"
+
+
+@app.route("/projects",methods=['POST'])
+def projects():
+	json_from_client = request.json
+	# formattedprint("/repos/" + str(json_from_client['owner']) + "/" + str(json_from_client['repo']) + "/contributors")
+	# print("-=-=-=->",json_from_client)
+
+
+	users = github.get("/repos/" + str(json_from_client['owner']) + "/" + str(json_from_client['repo']) + "/contributors").json()
+	# formattedprint(users)
+
+	write_user_list = []
+	for user in users:
+		write_user_list.append(user['login'])
+
+	proj = Project(
+		name       = str(json_from_client['name']),
+		repo       = str(json_from_client['repo']),
+		branch     = str(json_from_client['branch']),
+		owner      = str(json_from_client['owner']),
+		description = str(json_from_client['description']),
+		write_access_users = write_user_list
+	)
+	db.session.add(proj)
+	db.session.commit()
+	print("osdijfaosijdfoaisjdfoaisjdfoiasjdf\n\n\n\n")
+	return {"projectId":proj.id}
+
+@app.route("/editor")
+def editor():
+	return render_template('editor.html',creds=gitcreds(github))
+
+
+
+@app.route("/gitlogin")
+def login():
+	if not github.authorized:
+		return redirect(url_for("github.login"))
+	resp = github.get("/user")
+	return redirect("/")
+
+
+@app.route("/logout")
+def logout():
+	return "no you cant"
+
+
+@socketio.on('connect')
+def sdahoufa():
+	pass
+
+
+@app.route("/files",methods=['POST'])
+def files():
+	json_from_client = request.json
+	sesh = Session.query.filter_by(id=int(json_from_client['sessionId'])).first()
+	if sesh == None: return
+
+	#creds=session['githubuser']
+	#if creds not in sesh.activemembers.split(',') then tell the user to go directly to hell- dont give them any files they arent to be trusted.
+	creds = session['githubuser']
+	# if creds not in sesh.activemembers.split(','): return "ur not allowed lol",402
+
+	book = TemFile.query.filter_by(session_id = int(sesh.id),path=str(json_from_client['path'])).first()
+	print(book)
+	if book == None:
+		
+		# pulls the information of the file from github 
+		# https://developer.github.com/v3/repos/contents/
+		github_request = github.get("/repos/"+sesh.owner+"/"+sesh.repo+"/contents/"+json_from_client['path']+"?ref="+sesh.branch)
+		if github_request.status_code != 200:
+			print(github_request.content)
+			return
+
+		json_from_github = json.loads(github_request.content)
+
+		# checks to see if the files are above 256KB, and if they are, return error code 413
+		if json_from_github['size'] > 262144 :
+			return "Content too large",413
+		
+		decoded = str(base64.b64decode(json_from_github['content']).decode("utf-8"))
+
+		# making the database entry in TemFile of the current file
+		book = TemFile(
+			session_id = sesh.id,
+			path = json_from_client['path'],
+			content = decoded,
+			sha = json_from_github['sha'],
+			md5 = hashlib.md5(decoded.encode("utf-8")).hexdigest()
+		)
+
+		db.session.add(book)
+		db.session.commit()
+	return book.content
+
+
+
+@socketio.on('edit')
+def handle_edit(edit):
+	creds=session['githubuser']
+	sesh = Session.query.filter_by(id=int(edit['sessionId'])).first()
+	if sesh == None: return
+	book = TemFile.query.filter_by(session_id = int(sesh.id),path=str(edit['path'])).first()
+	if book == None: return
+	print(edit)
+	#synchronize.js line 237 is where this data comes from.
+
+	#if creds not in sesh.activemembers.split(',') then automatically reject their change- they arent in the session.
+	
+	# if (creds not in sesh.activemembers.split(',')): 
+	# 	emit('rejected',{"delta":edit['delta'],"reason":"invalid credentials"},room=request.sid) 
+	# 	return
+	
+	hash = edit['md5']
+	if(not book.addHash(hash, edit['delta'])): 
+		emit('rejected',{"delta":edit['delta'],"mostRecentHash":book.hash1,"yourHash":hash},room=request.sid) 
+		return
+	print("added hash: " , hash)
+	db.session.commit()
+	emit('edit',edit,broadcast=True,include_self=False)
+
+
+	
+
+@app.route("/directories",methods=['POST'])
+def directories():
+	sesh = Session.query.filter_by(id=int(request.json['sessionId'])).first()
+	if sesh == None: return
+	github_request = github.get("/repos/"+sesh.owner+"/"+sesh.repo+"/git/trees/"+sesh.sha+"?recursive=1,ref="+sesh.branch)
+	if github_request.status_code != 200: return
+	json_github_request = github_request.json()
+
+	# https://developer.github.com/v3/git/trees/#get-a-tree
+	if len(json_github_request['tree']) > 1000 or json_github_request['truncated']:
+		return "too many files", 413
+	return json_github_request
+
+
+# do a double check the user has write permissions; query github to check 
+# https://developer.github.com/v3/repos/#list-user-repositories
+# or 
+# given repo output collaborators 
+@app.route("/join", methods=['POST'])
+def joinjoin():
+	data = request.json
+	repo = Project.query.filter_by(id=int(data['projectId'])).first()
+	if repo == None: return "nah bruh",403
+	creds=session['githubuser']
+	if creds == None: return "nah son- you got no credentials",403
+
+	#github api calls are done with github.get(path) or github.post(path). you can see the pattern below.
+	#here we need to tell the user to fuck themselves with a rusty pipe if they try to edit a repo they dont have write permissions for
+	#dunno which api endpoint to hit but its probably not too bad
+
+	write_user_list = github.get("/repos/"+repo.owner+"/"+repo.repo + "/contributors").json()
+	for user in write_user_list:
+		if user['login'] == session['githubuser']:
+			break
+	else:
+		return "User does not have write access", 403
+
+
+	sesh = Session.query.filter_by(project_id=int(repo.id)).first()
+	if sesh == None:
+		master = github.get("/repos/"+repo.owner+"/"+repo.repo+"/branches/"+repo.branch)
+		head_tree_sha = master.json()['commit']['commit']['tree']['sha']
+		sesh = Session(
+			owner      = repo.owner,
+			repo       = repo.repo,
+			branch     = repo.branch,
+			sha        = head_tree_sha,
+			project_id = repo.id,
+			activemembers = "",
+		)
+		db.session.add(sesh)
+		db.session.commit()
+
+
+	session['sessionId'] = sesh.id
+
+	return "OK"
+
+
+@socketio.on('join')
+def on_join(data):
+	repo = Project.query.filter_by(id=int(data['projectId'])).first()
+	if repo == None: return
+	creds = session['githubuser']
+	if creds == None: return
+
+	for user in repo.write_access_users:
+		if user == session['githubuser']:
+			break
+	else:
+		return "User does not have write access", 403
+
+	sesh = Session.query.filter_by(project_id=int(repo.id)).first()
+	if sesh == None: return
+	members = sesh.activemembers
+	members_array = [] if members == "" else members.split(",")
+	if creds not in members_array:
+		members_array.append(creds)
+		sesh.activemembers = ",".join(members_array)
+		db.session.commit()
+
+	join_room(str(repo.id)+","+str(sesh.id))
+	emit('accept',{'sessionId':sesh.id,'activemembers':sesh.activemembers},room=request.sid)
+	emit('player_join',{'name':creds},room=str(repo.id)+","+str(sesh.id),include_self=False)
+
+
+@socketio.on('disconnect')
+def on_disconnect():
+	creds = session['githubuser']
+	for sesh in Session.query.filter_by(id=int(session['sessionId'])).all():
+		members_array = sesh.activemembers.split(",")
+		if creds in members_array:
+			print("\n\n\nfound ", members_array, creds )
+			members_array.remove(creds)
+			print("\n\n\nremoved ", members_array, creds)
+		else:
+			print("\n\n\nnot found: ", members_array, creds )
+		sesh.activemembers = ",".join(members_array)
+	db.session.commit()
+	emit('player_leave',{'name':creds},include_self=False)
+
+
+if __name__ == '__main__':
+	socketio.run(app,debug=True,keyfile='key.pem', certfile='cert.pem')
+
+
+
+
+
+
