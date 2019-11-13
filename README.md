@@ -22,7 +22,7 @@
 
 -- display images as images when opened. (not html... that would open a cross site scripting vulnerability)
 
-<h2>Front end</h2>
+<h1>Front end</h1>
 	-- on the edit page make the file structure pane sized so you can see all of the file names, and it starts scrolled too far to the right
 	-- fix cursor bug when hovering over links. (files in edit page, delete project button, etc.)
 	-- beautify dropdown menus in browse
@@ -33,7 +33,7 @@
 -- make it so that when a pane is created or deleted it doesnt fuck up the sizes of all the other panes.
 
 
-<h2>Back end</h2>
+<h1>Back end</h1>
 	-- update other database list to be an Array
 	 not be in the session if the earlier connection you had expires
 	-- need a better way to determine when someone really disconnects
