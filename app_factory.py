@@ -18,7 +18,6 @@ Session(app)
 blueprint = make_github_blueprint(
     client_id=os.environ['GITHUB_CLIENT_ID'],
     client_secret=os.environ['GITHUB_CLIENT_SECRET'],
-    scope = "repo"
 )
 app.register_blueprint(blueprint, url_prefix="/login")
 

@@ -1,17 +1,5 @@
 #synergi
 <h1>IN-PROGRESS</h1>
--- Pushing to github
-	(with the push button and commit message dialogue)
-	(pushes won't be able to be performed all the time- if someone pushes a change while they have the repo open in synergy, it's going to reject our push.)
-	(if the commit+push cannot be performed, report the message back to the user so they can choose to either pull or make a new branch to resolve it.)
--- fix css syntax error on todolist.html when creating project. 
-
-
-<!-- https://developer.github.com/v3/git/commits/#create-a-commit -->
-<!-- https://developer.github.com/v3/git/refs/#update-a-reference -->
-
-<h1>TODO</h1>
-
 -- more supported datatypes (for live editing in non-raw-text form):
 	JSON (completed)
 	CSV  (completed)

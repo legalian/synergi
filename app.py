@@ -58,9 +58,6 @@ def music():
 
 def gitcreds(github):
 	if not github.authorized: return None
-	if "repo" not in session['github_oauth_token']['scope']:
-		del session['github_oauth_token']
-		return None
 	resp = github.get("/user").json()["login"]
 	session['githubuser'] = resp
 	return resp
@@ -90,7 +87,7 @@ def github_repos():
 		# https://developer.github.com/v3/repos/collaborators/#list-collaborators
 
 		# print(github.get("/repos/"+str(i['owner']['login'])+"/"+str(i['name'])+"/branches").json())
-		# print(i)
+
 		openrepos.append({
 			'owner':str(i['owner']['login']),
 			'name':str(i['name']),
@@ -152,6 +149,7 @@ def projects():
 	)
 	db.session.add(proj)
 	db.session.commit()
+	print("osdijfaosijdfoaisjdfoaisjdfoiasjdf\n\n\n\n")
 	return {"projectId":proj.id}
 
 @app.route("/editor")
@@ -263,6 +261,7 @@ def directories():
 		return "too many files", 413
 	return json_github_request
 
+
 @app.route("/commit", methods = ["POST"])
 def commit():
 	# request.json() = [sessionId : "" , commit_message : ""]
@@ -353,8 +352,6 @@ def commit():
 		response = github.post( url = "/repos/" + sesh.owner + "/"+ sesh.repo +"/git/refs/heads/" + sesh.branch, json = {"ref" : "refs/heads/" + sesh.branch, "sha" : sha}).json()
 		print("pointing commit to branch response: ", response)
 
-	print("dear jesus you did it lad")
-	return "Successful Commit", 201
 # do a double check the user has write permissions; query github to check 
 # https://developer.github.com/v3/repos/#list-user-repositories
 # or 
