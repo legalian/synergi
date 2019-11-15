@@ -12,6 +12,7 @@
 		</ol>
 	</li>
 	<li>display images as images when opened. (not html... that would open a cross site scripting vulnerability)</li>
+	<li>do a git pull every time the page refreshes</li>
 </ol>
 
 
@@ -68,4 +69,9 @@
 		<li>Doing a manual pull(button with pop-up settings.)</li>
 		<li>change filename from todolist to browse</li>
 		<li>invite system maybe</li>
+	</ol>
+
+<h1>Known bugs</h1>
+	<ol>
+		<li>putting underlined characters in a file prevents editing</li>
 	</ol>

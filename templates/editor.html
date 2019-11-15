@@ -384,6 +384,7 @@ function File(data) {
         }),
         contentType: "application/json",
         success: function(data){
+          console.log(data);
           self.md5buffer = data;
           self.editlistener = socket.on('edit',function(data){
             console.log("edit happen",data);

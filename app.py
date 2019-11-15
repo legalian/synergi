@@ -193,6 +193,7 @@ def files():
 		
 		# pulls the information of the file from github 
 		# https://developer.github.com/v3/repos/contents/
+		print("git pull")
 		github_request = github.get("/repos/"+sesh.owner+"/"+sesh.repo+"/contents/"+json_from_client['path']+"?ref="+sesh.branch)
 		if github_request.status_code != 200:
 			print(github_request.content)
@@ -228,7 +229,6 @@ def handle_edit(edit):
 	if sesh == None: return
 	book = TemFile.query.filter_by(session_id = int(sesh.id),path=str(edit['path'])).first()
 	if book == None: return
-	print(edit)
 	#synchronize.js line 237 is where this data comes from.
 
 	#if creds not in sesh.activemembers.split(',') then automatically reject their change- they arent in the session.
@@ -262,10 +262,8 @@ def directories():
 	return json_github_request
 
 
-@app.route("/commit", methods = ["POST"])
-def commit():
+def git_commit(data):
 	# request.json() = [sessionId : "" , commit_message : ""]
-	data = request.json
 	# github.put(url = url, params = par_var)
 	# https://developer.github.com/v3/repos/contents/#create-or-update-a-file
 	# https://developer.github.com/v3/git/
@@ -289,20 +287,20 @@ def commit():
 	# https://developer.github.com/v3/git/trees/#create-a-tree
 	
 	# dict_keys(['_permanent', 'github_oauth_token', 'githubuser', 'sessionId'])
-	formattedprint(session.keys())
-	formattedprint(session['github_oauth_token'])
+	# formattedprint(session.keys())
+	# formattedprint(session['github_oauth_token'])
 	access_token = session['github_oauth_token']['access_token']
 	base_tree = params['base_tree']
 	# tree = params['tree']
 	# formattedprint(github.get("/user").json())
 	post_response = github.post("/repos/" + sesh.owner + "/" + sesh.repo + "/git/trees", json= params)
 
-	print("\n"*10)
-	formattedprint(requests.post('http://httpbin.org/post', json = params).json())
-	print("\n"*10)
+	# print("\n"*10)
+	# formattedprint(requests.post('http://httpbin.org/post', json = params).json())
+	# print("\n"*10)
 	# https://developer.github.com/v3/git/trees/#response-2
-	formattedprint("post response: " , post_response.json())
-	formattedprint("post response: " , post_response.status_code)
+	# formattedprint("post response: " , post_response.json())
+	# formattedprint("post response: " , post_response.status_code)
 	post_response = post_response.json()
 	
 	# out of for loop
@@ -319,7 +317,7 @@ def commit():
 	# POST /repos/:owner/:repo/git/commits
 	# https://developer.github.com/v3/git/commits/#create-a-commit
 	git_commit_json = github.post("/repos/" + sesh.owner + "/" + sesh.repo + "/git/commits", json = commit_data).json()
-	print("\n\nMake a new commit object response: ", git_commit_json)
+	# print("\n\nMake a new commit object response: ", git_commit_json)
 	sha = git_commit_json['sha']
 	if (git_commit_json['verification']['verified'] == False):
 		print("Commit unverified")
@@ -351,6 +349,12 @@ def commit():
 	else:
 		response = github.post( url = "/repos/" + sesh.owner + "/"+ sesh.repo +"/git/refs/heads/" + sesh.branch, json = {"ref" : "refs/heads/" + sesh.branch, "sha" : sha}).json()
 		print("pointing commit to branch response: ", response)
+
+@app.route("/commit", methods = ["POST"])
+def commit():
+	data = request.json
+	git_commit(data)
+	
 
 # do a double check the user has write permissions; query github to check 
 # https://developer.github.com/v3/repos/#list-user-repositories
@@ -432,7 +436,7 @@ def on_disconnect():
 		if creds in members_array:
 			print("\n\n\nfound ", members_array, creds )
 			members_array.remove(creds)
-			print("\n\n\nremoved ", members_array, creds)
+			print("removed ", members_array, creds)
 		else:
 			print("\n\n\nnot found: ", members_array, creds )
 		sesh.activemembers = ",".join(members_array)
