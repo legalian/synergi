@@ -1,17 +1,7 @@
 #synergi
 <h1>IN-PROGRESS</h1>
 <ol>
-	<li>more supported datatypes (for live editing in non-raw-text form): 
-		<ol>
-			<li>JSON (completed)</li>
-			<li>CSV  (completed)</li>
-			<li>GSON (not completed, seems possible)</li>
-			<li>XML  (might be possible under current system, seems easy if not)</li>
-			<li>GEXF/GDF/GML/most of the formats supported by gephi. Most of them seem like they already work with the JSON synchronization library</li>
-			<li>Newick format</li>
-		</ol>
-	</li>
-	<li>display images as images when opened. (not html... that would open a cross site scripting vulnerability)</li>
+	
 </ol>
 
 <h1>Updates to Synergi 2.0</h1>
