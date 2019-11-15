@@ -247,7 +247,24 @@ def handle_edit(edit):
 	emit('edit',edit,broadcast=True,include_self=False)
 
 
-	
+
+
+@socketio.on('set_project_settings')
+def handle_edit(edit):
+	creds=session['githubuser']
+	repo = Project.query.filter_by(id=int(edit['projectId'])).first()
+	if repo == None: return
+
+	if 'description' in edit.keys():
+		repo.description = edit['description']
+	if 'name' in edit.keys():
+		repo.name = edit['name']
+
+	db.session.commit()
+	emit('set_project_settings',{'description':repo.description,'name':repo.name},broadcast=True,include_self=False)
+
+
+
 
 @app.route("/directories",methods=['POST'])
 def directories():
@@ -433,7 +450,8 @@ def on_join(data):
 
 	join_room(str(repo.id)+","+str(sesh.id))
 	print("active members::::: ", sesh.activemembers)
-	emit('accept',{'sessionId':sesh.id,'activemembers':sesh.activemembers},room=request.sid)
+	
+	emit('accept',{'project':repo.serialize(),'sessionId':sesh.id,'activemembers':sesh.activemembers},room=request.sid)
 	emit('player_join',{'name':creds},room=str(repo.id)+","+str(sesh.id),include_self=False)
 	print(members_array)
 

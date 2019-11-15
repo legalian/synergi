@@ -107,6 +107,10 @@
 <h1>Stretch Goals</h1>
 	<ol>
 		<li>3rd party editors</li>
+		<li>add color indicators to see who's editing what<ol>
+			<li>at the file level</li>
+			<li>at the individual text level</li>
+		</ol></li>
 		<li>add tools to editor page</li>
 		<li>remove favicons 500 error</li>
 		<li>Doing a manual pull(button with pop-up settings.)</li>

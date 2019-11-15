@@ -10,6 +10,7 @@
 <script src="static/bower_components/ace/build/src/ace.js"></script>
 <script src="static/script/md5.js"></script>
 <script src="static/script/synchronize.js"></script>
+<script src="static/bower_components/ace/build/src/ext-modelist.js"></script>
 <style type="text/css">
 	::-webkit-scrollbar { width: 0 !important; height: 0 !important;}
 </style>
@@ -119,14 +120,13 @@
 			border-top-right-radius:5px;
 			border-top-left-radius:5px;*/
 
-			
+
 			/*display: inline-block;*/
 			text-align: center;
 		}
 		.littlex {
 			position:absolute;
-			right:5px;
-			bottom: 50%;
+			right:0px;
 			width: 12px;
 			height: 12px;
 			font-size: 12px !important;
@@ -153,7 +153,7 @@
 		<div class="tabs" data-bind="dragula:{data:tabs,group:draggroup,afterDrop:afterDrop},attr:{id:id}">
 			<div class="tab" data-bind="class:$data==$parent.selected()?'selected':'',style:$parent.fill?{flex:1}:{},click:$parent.select">
 				<div class="innertabtext" data-bind="text:title"></div>
-				<!-- ko if:$parent.closeable -->
+				<!-- ko if:$parent.closeable && ( $parent.alwaysShowX || $data==$parent.selected() )  -->
 				<i class="material-icons littlex" data-bind="click:$parent.remove,clickBubble:false">close</i>
 				<!-- /ko -->
 			</div>
@@ -163,7 +163,7 @@
 		<div class="tabs" data-bind="foreach:tabs,attr:{id:id}">
 			<div class="tab" data-bind="class:$data==$parent.selected()?'selected':'',style:$parent.fill?{flex:1}:{},click:function(){$parent.select($index(),$data);}">
 				<div class="innertabtext" data-bind="text:title"></div>
-				<!-- ko if:$parent.closeable -->
+				<!-- ko if:$parent.closeable && ( $parent.alwaysShowX || $data==$parent.selected() ) -->
 				<i class="material-icons littlex" data-bind="click:$parent.remove,clickBubble:false">close</i>
 				<!-- /ko -->
 			</div>
@@ -174,10 +174,11 @@
 	var tabsdragulagroups = 0;
 	function Tabs(props) {
 		var self = this;
-		props = Object.assign({closeable:false,rearrangeable:false,fill:false,tabs:null,id:"",didSelect:null,draggroup:null,selected:ko.observable(null),afterDrop:function(){},onClick:null,onRemove:null},props);
+		props = Object.assign({closeable:false,rearrangeable:false,fill:false,tabs:null,id:"",didSelect:null,draggroup:null,alwaysShowX:false,selected:ko.observable(null),afterDrop:function(){},onClick:null,onRemove:null},props);
 		if (props.draggroup == null) {self.draggroup = 'TabsGroup'+tabsdragulagroups++;}
 		else                         {self.draggroup = props.draggroup;}
 		self.template = "tabs-area";
+		self.alwaysShowX = props.alwaysShowX;
 		self.rearrangeable = props.rearrangeable;
 		self.closeable = props.closeable;
 		self.tabs = props.tabs;
@@ -221,6 +222,7 @@
 		<div class="editor"></div>
 	</script>
 	<script type="text/javascript">
+	var modelist = ace.require("ace/ext/modelist");
 	function TextArea(props){
 		var self = this;
 		props = Object.assign({sync:null},props);
@@ -228,12 +230,24 @@
 		self.template="text-area";
 		self.sync = props.sync;
 		self.editor = null;
+		self.mode = null;
+		self.setPath = function(path){
+			self.mode = modelist.getModeForPath(path).mode;
+			if (self.editor!=null) {
+				self.editor.getSession().setMode(self.mode);
+			}
+		}
 		self.vresize = function() {
 			if (self.editor != null) {self.editor.resize();}
 		}
 		self.onLoad = function(a) {
 			self.editor = ace.edit(a[1]);
+			self.editor.setTheme('ace/theme/tomorrow_night');
 		    var listening = true;
+			if (self.mode!=null) {
+				self.editor.getSession().setMode(self.mode);
+			}
+
 		    var acsub = self.editor.session.on('change', function(delta) {
 		      if (!listening) {return;}
 		      var yaya = self.sync.getdata()()
@@ -270,6 +284,11 @@
 
 {% macro importRecursiveArea() %}
 	<style type="text/css">
+
+/*.rotate-90 {
+	transform: rotate(90deg);
+}*/
+
 		.recursiveexpander {
 			width:1em;
 			text-align: right;
