@@ -58,9 +58,6 @@ def music():
 
 def gitcreds(github):
 	if not github.authorized: return None
-	if "repo" not in session['github_oauth_token']['scope']:
-		del session['github_oauth_token']
-		return None
 	resp = github.get("/user").json()["login"]
 	session['githubuser'] = resp
 	return resp
@@ -90,7 +87,7 @@ def github_repos():
 		# https://developer.github.com/v3/repos/collaborators/#list-collaborators
 
 		# print(github.get("/repos/"+str(i['owner']['login'])+"/"+str(i['name'])+"/branches").json())
-		# print(i)
+
 		openrepos.append({
 			'owner':str(i['owner']['login']),
 			'name':str(i['name']),
@@ -152,6 +149,7 @@ def projects():
 	)
 	db.session.add(proj)
 	db.session.commit()
+	print("osdijfaosijdfoaisjdfoaisjdfoiasjdf\n\n\n\n")
 	return {"projectId":proj.id}
 
 @app.route("/editor")
@@ -263,6 +261,7 @@ def directories():
 		return "too many files", 413
 	return json_github_request
 
+
 @app.route("/commit", methods = ["POST"])
 def commit():
 	# request.json() = [sessionId : "" , commit_message : ""]
@@ -279,18 +278,12 @@ def commit():
 	commit_tree_sha = commit_json_from_github['commit']['tree']['sha']
 	github_tree = github.get("/repos/"+sesh.owner+"/"+sesh.repo+"/git/trees/"+commit_tree_sha+"?recursive=1,ref="+sesh.branch).json()
 
-	shas = []
 	params = {
 		"base_tree" : commit_tree_sha,
-		"tree" : [{
-			"path": "testcontentplzignore.txt",
-		  "mode": "100644",
-		  "type": "blob",
-		  "content":"testcontentplzignore"
-	}]
+		"tree" : []
 	}
-	# for file in TemFile.query.filter_by(session_id = int(data['sessionId'])).all():
-	# 	params["tree"].append({ "path" : file.path, "mode" : "100644", "type" : "blob", "content" : str(base64.b64encode(str.encode(file.content)).decode("utf-8"))})
+	for file in TemFile.query.filter_by(session_id = int(data['sessionId'])).all():
+		params["tree"].append({ "path" : file.path, "mode" : "100644", "type" : "blob", "content" : file.content})
 		# file == {id, session_id, path, content, sha, hash1-hash5}
 
 	# https://developer.github.com/v3/git/trees/#create-a-tree
@@ -311,14 +304,14 @@ def commit():
 	formattedprint("post response: " , post_response.json())
 	formattedprint("post response: " , post_response.status_code)
 	post_response = post_response.json()
-	shas.append(post_response['sha']) 
+	
 	# out of for loop
 
 	# todo: commit
 	new_tree_sha = post_response['sha']
 	commit_data = {
 	 "message" : str(data['commit_message']),
-	 "parents" : [str(sesh.sha)],
+	 "parents" : [str(last_commit_sha)],
 	 "tree" : str(new_tree_sha)
 	}
 
@@ -328,9 +321,9 @@ def commit():
 	git_commit_json = github.post("/repos/" + sesh.owner + "/" + sesh.repo + "/git/commits", json = commit_data).json()
 	print("\n\nMake a new commit object response: ", git_commit_json)
 	sha = git_commit_json['sha']
-	if (commit_json_from_github['verification']['verified'] == False):
+	if (git_commit_json['verification']['verified'] == False):
 		print("Commit unverified")
-		print("Reason: ", commit_json_from_github["verification"]['reason'])
+		print("Reason: ", git_commit_json["verification"]['reason'])
 
 
 	# todo: update the branch to point to the commit sha
@@ -339,7 +332,8 @@ def commit():
 		"ref" : "refs/heads/" + sesh.branch,
 		"sha" : sha
 	}
-	if (github.get("/repos/" + sesh.owner + "/" + sesh.repo + "/git/ref/heads/" + sesh.branch).response == 404):
+	print("Committing....")
+	if (github.get("/repos/" + sesh.owner + "/" + sesh.repo + "/git/ref/heads/" + sesh.branch).status_code == 404):
 		# make a new branch if the branch doesn't exist
 		# test this 
 		# either post or patch, idk man
@@ -347,16 +341,17 @@ def commit():
 		# PATCH /repos/:owner/:repo/git/refs/:ref
 		# POST :::: Create a branch
 		# PATCH ::: Update a branch
-		if(github.get("/repos/" + sesh.owner + "/"+ sesh.repo +"/git/refs/heads/synergi").response == 404):
+		print("Branch " + str(sesh.branch) + " not found, committing to branch 'synergi'")
+		if(github.get("/repos/" + sesh.owner + "/"+ sesh.repo +"/git/refs/heads/synergi").status_code == 404):
+			print("Branch synergi not found, making synergi then committing to branch synergi")
 			github.post( url = "/repos/" + sesh.owner + "/"+ sesh.repo +"/git/refs/heads/synergi", json = {"ref" : "refs/heads/synergi", "sha" : sha})
 		else:
+			print("Committing to branch synergi")
 			github.patch( url = "/repos/" + sesh.owner + "/"+ sesh.repo +"/git/refs/heads/synergi", json = {"sha" : sha, "force" : False})
 	else:
 		response = github.post( url = "/repos/" + sesh.owner + "/"+ sesh.repo +"/git/refs/heads/" + sesh.branch, json = {"ref" : "refs/heads/" + sesh.branch, "sha" : sha}).json()
-		print("pointing commit to branch response: ",response)
+		print("pointing commit to branch response: ", response)
 
-	print("dear jesus you did it lad")
-	return "Successful Commit", 201
 # do a double check the user has write permissions; query github to check 
 # https://developer.github.com/v3/repos/#list-user-repositories
 # or 
