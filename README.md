@@ -63,9 +63,6 @@
 		need to support aws login
 		expand versioning system to remember all changes since last commit
 
-
-
-
 <h1>Front end</h1>
 	<ol>
 		<li>Site beauty<ol>
@@ -83,9 +80,6 @@
 			<li>batch changes together into one message to reduce network overhead</li>
 		</ol></li>
 	</ol>
-
-
-
 
 <h1>Back end</h1>
 	<ol>

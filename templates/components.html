@@ -112,16 +112,15 @@
 			height:100%;
 			text-align:center;
 			background-color:#2d2d2d;
-			border-style: solid;
+
+			/*border-style: solid;
 			border-width: 1px;
 			border-color: black;
 			border-top-right-radius:5px;
-			border-top-left-radius:5px;
+			border-top-left-radius:5px;*/
+
+			
 			/*display: inline-block;*/
-			text-align: center;
-		}
-		.recursiveexpander {
-			width:30px;
 			text-align: center;
 		}
 		.littlex {
@@ -270,19 +269,27 @@
 {% endmacro %}
 
 {% macro importRecursiveArea() %}
+	<style type="text/css">
+		.recursiveexpander {
+			width:1em;
+			text-align: right;
+			flex-shrink:0;
+			line-height: 20px;
+		}
+	</style>
 	<script type="text/html" id="rearrangeable-recursive-area">
-		<div style="padding-bottom:10px;" data-bind="dragula:{data:elems,group:draggroup,moves:moves,accepts:accepts, afterDrop:afterDrop}">
+		<div style="padding-bottom:0px;" data-bind="dragula:{data:elems,group:draggroup,moves:moves,accepts:accepts, afterDrop:afterDrop}">
 			<div class="recursiveunit">
 				<div class="recursiveelement" style="display: flex">
-					<div  class="recursiveexpander"  data-bind="if:$data.elems" style="flex-shrink:0;">
-						<i data-bind="class:expanded()?'material-icons rotate-90':'material-icons',click:function(){expanded(!expanded())}" style="cursor:pointer;">play_arrow</i>
+					<div  class="recursiveexpander"  data-bind="if:$data.elems">
+						<i data-bind="class:expanded()?'material-icons rotate-90':'material-icons',click:function(){expanded(!expanded())}" style="cursor:pointer;font-size: inherit;line-height: inherit;">play_arrow</i>
 					</div>
 					<div style="flex:1">
 						<span data-bind="text:title,click:$parent.onClick" style="overflow: hidden;white-space: nowrap;cursor:pointer;"></span>
 					</div>
 				</div>
 				<!-- ko if:$data.elems -->
-					<div data-bind="visible: expanded()" style="margin-left:20px;">
+					<div data-bind="visible: expanded()" style="margin-left:1em;">
 					<!-- ko template:{
 						name:'rearrangeable-recursive-area',
 						data:{onClick:$parent.onClick,moves:$parent.moves,accepts:$parent.accepts,afterDrop:$parent.afterDrop,draggroup:$parent.draggroup,elems:elems}} -->
@@ -296,8 +303,8 @@
 		<div style="margin-left:20px;margin-bottom:5px;" data-bind="foreach:elems">
 			<div>
 				<div class="recursiveelement" style="display: flex">
-					<div class="recursiveexpander" data-bind="if:$data.elems" style="flex-shrink:0;">
-						<i data-bind="class:expanded()?'material-icons rotate-90':'material-icons',click:function(){expanded(!expanded())}">play_arrow</i>
+					<div class="recursiveexpander" data-bind="if:$data.elems">
+						<i data-bind="class:expanded()?'material-icons rotate-90':'material-icons',click:function(){expanded(!expanded())}"  style="cursor:pointer;font-size: inherit;line-height: inherit;">play_arrow</i>
 					</div>
 					<div style="flex:1">
 						<span data-bind="text:title,click:$parent.onClick" style="overflow: hidden;white-space: nowrap;"></span>

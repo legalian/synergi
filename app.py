@@ -228,7 +228,7 @@ def handle_edit(edit):
 	if sesh == None: return
 	book = TemFile.query.filter_by(session_id = int(sesh.id),path=str(edit['path'])).first()
 	if book == None: return
-	print(edit)
+	# print(edit)
 	#synchronize.js line 237 is where this data comes from.
 
 	#if creds not in sesh.activemembers.split(',') then automatically reject their change- they arent in the session.
