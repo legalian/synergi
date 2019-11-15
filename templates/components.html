@@ -51,23 +51,23 @@
 			case "fixed-left":
 				self.style0 = {left:0,width:props.initialmeasure};
 				self.style1 = {left:props.initialmeasure,width:'5px'};
-				self.style2 = {right:0,left:props.initialmeasure,marginLeft:'5px',top:0,bottom:0};
+				self.style2 = {right:0,left:props.initialmeasure,top:0,bottom:0};//,marginLeft:'5px'
 			break;
 			case "fixed-right":
 				self.style0 = {left:0,right:props.initialmeasure};
 				self.style1 = {right:props.initialmeasure,width:'5px',top:0,bottom:0};
-				self.style2 = {right:0,width:props.initialmeasure,marginLeft:'5px'};
+				self.style2 = {right:0,width:props.initialmeasure};//,marginLeft:'5px'
 			break;
 			case "vertical-percent":
 			case "fixed-top":
 				self.style0 = {top:0,height:props.initialmeasure};
 				self.style1 = {top:props.initialmeasure,height:'5px',right:0,left:0};
-				self.style2 = {bottom:0,top:props.initialmeasure,marginTop:'5px'};
+				self.style2 = {bottom:0,top:props.initialmeasure};//,marginTop:'5px'
 			break;
 			case "fixed-bottom":
 				self.style0 = {top:0,bottom:props.initialmeasure};
 				self.style1 = {bottom:props.initialmeasure,height:'5px',right:0,left:0};
-				self.style2 = {bottom:0,height:props.initialmeasure,marginTop:'5px'};
+				self.style2 = {bottom:0,height:props.initialmeasure};//,marginTop:'5px'
 			break;
 			default: throw "unrecognized type";
 		}
@@ -105,13 +105,13 @@
 
 {% macro importTabs() %}
 	<style type="text/css">
-		.tabs {height:100%;display: flex;}
+		.tabs {height:100%;display: flex;background-color:#252426;}
 		.tab {
 			cursor:pointer;
 			position:relative;
 			height:100%;
 			text-align:center;
-			background-color:gray;
+			background-color:#2d2d2d;
 			border-style: solid;
 			border-width: 1px;
 			border-color: black;
@@ -145,7 +145,7 @@
 			vertical-align: middle;
 		}
 		.tab.selected {
-			background-color: lightgray;
+			background-color: #202020;
 			color: #05a8b3;
 		}
 	</style>
@@ -344,8 +344,8 @@
 	</script>
 {% endmacro %}
 
-
-
+{% macro importAdvTextArea() %}
+{% endmacro %}
 
 {% macro importErrMsgArea() %}
 	<style type="text/css">

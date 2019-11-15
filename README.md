@@ -23,6 +23,7 @@
 -- display images as images when opened. (not html... that would open a cross site scripting vulnerability)
 
 <h2>Front end</h2>
+	-- batch changes together to be one transmit
 	-- beautify dropdown menus in browse
 	-- add a versioning system on client side that mimics the server side- that way when the server rejects a change out of step with the client, they can come to a compromise or reload when the server and client can't find common ground.
 	-- make the client show some kind of message or attempt a reconnect when it gets a network error (if you close your laptop and come back you have to refresh to make things work again... this would be a source of confusion for users.)
@@ -103,6 +104,12 @@
 				- if they're not logged into github, it tells them to login. (and then prompts them to create a repo)
 				- if they're logged into github but they don't have a repo created, it prompts the user to create a repo for it.
 				- otherwise, it's the same as the commit button on the github page.
+	--backend changes:
+		owners and repos should be stored as UUIDs, instead of names.
+		sessions can be spawned without hitting a projectID (editor will have to add the sessionID to the query string on client side so you can refresh without losing your progress.)
+		someone who isn't logged in should be able to spawn a session, they just can't edit an existing repo.
+		need to support aws login
+		expand versioning system to remember all changes since last commit
 
 
 

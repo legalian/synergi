@@ -1,11 +1,106 @@
 
 
 
-{% extends "template.html" %}
-{% set active_page = "editor" %}
 {% import "components.html" as components %}
 
-{% block body %}
+
+<html>
+<head>
+
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="description" content="" />
+  <meta name="keywords" content="" />
+  <link rel="stylesheet" href="static/css/styles.css">
+
+  <script src="static/bower_components/knockout/dist/knockout.js"></script>
+  <script src="static/bower_components/jquery/dist/jquery.min.js"></script>
+
+  <link href="static/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+  <script src="static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="static/bower_components/knockstrap/build/knockstrap.min.js"></script>
+
+  <link href="static/css/fonts.css" rel="stylesheet" type="text/css" media="all" />
+  <link href="static/css/default.css" rel="stylesheet" type="text/css" media="all" />
+  <link href="https://fonts.googleapis.com/css?family=Varela" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
+
+  <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+
+  <style type="text/css">
+    .modal-header {
+       background:#05a8b3;
+    }
+    .modal-footer {
+       background:#05a8b3;
+    }
+
+    .menuitem {
+      padding: 1em 1.5em;
+      letter-spacing: 1px;
+      text-decoration: none;
+      text-transform: uppercase;
+      font-size: 0.8em;
+      color: #FFF;
+    }
+    .menuitem:hover, .menuitem:focus {
+      color: #FFF;
+      background-color: #292929;
+      transition: background-color .2s;
+      -webkit-transition: background-color .2s;
+      text-decoration:none;
+    }
+
+    .logotext {
+      text-decoration: none;
+      text-transform: uppercase;
+      color: #FFF;
+    }
+  </style>
+  
+  <title>Synergi Code Editor</title>
+</head>
+<body>
+  <div id="fulwrap">
+    <div id="header-wrapper" style="height:3em;">
+      <div id="header" class="container" style="padding:0 1em;height:3em;display: flex;align-items: center;width:100%">
+        <img style = "float:left; width:30px; height:30px;" src="/static/images/Synergi_Logo.png" alt="Logo"/>
+        <h3><a href="/" class="logotext">Synergi</a></h3>
+            <div style="flex:1"></div>
+            {% if creds != None %}
+              <a class="login menuitem" id="login" style="cursor:pointer;" data-bind="popover: { 
+        options: { content: 'Log out', trigger: 'focus', placement: 'bottom' } 
+    }" tabindex="0">{{creds}}</a>
+            {% endif %}
+            {% if creds == None %}
+              <a class="login menuitem" id="login" style="cursor:pointer;" style="" href="/gitlogin">Login</a>
+            {% endif %}
+      </div>
+    </div>
+
+  <!-- parkers junk code -->
+  <!-- 
+    <svg width="0" height="0" style="position:absolute;" viewBox="0 0 0 0">
+      <defs>
+        <pattern id="smallGrid" width="6" height="6" patternUnits="userSpaceOnUse">
+          <path d="M 8 0 L 0 0 0 6" fill="none" stroke="gray" stroke-width="0.5"/>
+        </pattern>
+        <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+          <rect width="60" height="60" fill="url(#smallGrid)"/>
+          <path d="M 60 0 L 0 0 0 60" fill="none" stroke="gray" stroke-width="1"/>
+        </pattern>
+      </defs>
+    </svg>
+  -->
+
+  <!-- ///////////////// -->
+    <div id="bodycontent">
+
+
+
+
+
 {{components.importscripts()}}
 {{components.importDivider()}}
 {{components.importTabs()}}
@@ -14,26 +109,76 @@
 {{components.importErrMsgArea()}}
 {{components.importRecursiveArea()}}
 
+<style type="text/css">
+  #leftribbon {
+    background-color: #333333;
+    height:100%;
+    width:100%;
+  }
+  #settingsribbon {
+    background-color: #252426;
+    height:100%;
+    width:100%;
+  }
+  #selectedtab {
+    background-color: #202020;
+  }
+  #unselectedtab {
+    background-color: #2d2d2d;
+  }
+</style>
+
 <div data-bind="template:{name:node().template,data:node(),afterRender:node().onLoad}" style="height:100%"></div>
 
 <!-- add leading, following for batching changes, eliminate whitespace right off the bat. list of ignored changes -->
 
-<script type='text/html' id='right-pane'>
-  Connected Users:
-  <div data-bind="foreach:$root.activeusers">
-    <div data-bind="style:{color:color},text:name"></div>
+
+
+  <!-- self.settings = [{"icon":"file","ribbon":"file-ribbon"},{"icon":"github","ribbon":"github-ribbon"},{"icon":"search","ribbon":"search-ribbon"},{"icon":"nodes","ribbon":"nodes-ribbon"}]; -->
+
+<script type='text/html' id='menu-ribbon'>
+  <div id="leftribbon" data-bind="foreach:$root.settings">
+    <div data-bind="text:icon,click:function(){$root.activeribbon(ribbon)}"></div>
   </div>
-  Editor:
-  <select data-bind="options:$root.availableeditors,optionsText: 'name',optionsValue: 'func',"></select>
-  <button type="button" data-bind="click:$root.commit">Commit</button>
 </script>
+
+<script type='text/html' id='github-ribbon'>
+  <div id="settingsribbon">
+    This is the github ribbon
+    Connected Users:
+    <div data-bind="foreach:$root.activeusers">
+      <div data-bind="style:{color:color},text:name"></div>
+    </div>
+    <button type="button" data-bind="click:$root.commit">Commit</button>
+  </div>
+</script>
+
+<script type='text/html' id='search-ribbon'>
+  <div id="settingsribbon">
+    This is the search ribbon
+  </div>
+</script>
+
+<script type='text/html' id='nodes-ribbon'>
+  <div id="settingsribbon">
+    This is the nodes ribbon
+  </div>
+</script>
+
+<script type='text/html' id='file-ribbon'>
+  <div id="settingsribbon">
+    This is the file ribbon
+  </div>
+</script>
+
+
 
 <script type='text/html' id='add-split-tab'>
   <div style="position:relative;height:100%;width:100%;">
     <div style="position:relative;height:100%;width:100%;overflow:scroll;">
       <div data-bind="template:{name:'tabs-area',data:$data,afterRender:onLoad}"></div>
     </div>
-    <div style="position:absolute;top:0;right:5px;bottom:0;width:2em;background-color:black;">
+    <div style="position:absolute;top:0;right:0;bottom:0;width:2em;background-color:black;">
       <i class="material-icons littleplus" data-bind="click:$root.extradd,clickBubble:false">add</i>
     </div>
   </div>
@@ -61,25 +206,7 @@ var COLORS = shuffle([
 var colori = 0;
 
 
-
-
 var justice;
-
-
-
-
-
-
-
-// EDITOR
-// selected file ->
-//   select each tab
-
-
-// DUAL EDITOR
-// selected file1 ->
-// selected file2 ->
-
 
 
 
@@ -135,38 +262,10 @@ function TextEditor(files) {
 }
 TextEditor.formats = [RawTextDataFormat];
 
-
-
-// function AnimationEditor() {
-//   var self = this;
-//   self.name = "Animation Editor";
-//   self.node = new TextArea();
-
-// }
-// function MusicEditor() {
-//   var self = this;
-//   self.name = "Music Editor";
-//   self.node = new TextArea();
-
-// }
-
-
-
-
 function RawTextDataFormat(data) {
   return SyncObservable.fromObservable({str:false},ko.observable(data));
 }
 
-//last pane interacted with...
-//always add tab to rightmost/ select on rightmost...
-
-
-function RightPane() {
-  var self = this;
-  self.template = "right-pane";
-  self.vresize = function() {}
-  self.onLoad = function() {}
-}
 function AddSplitTab(props) {
   var self = this;
   Tabs.bind(self)(props)
@@ -441,7 +540,7 @@ function AppViewModel(servedata) {
   socket.on('player_leave',function(data){self.activeusers.remove(data.name);});
   socket.on('rejected',function(data){console.log("REJECTED",data);});
 
-
+  self.panes = null;
   // self.ui = ko.observable(null);
   // self.selected = ko.observable(null);
 
@@ -451,17 +550,19 @@ function AppViewModel(servedata) {
   //   if (self.selected()!=null) {self.selected().form();}
   // });
 
+  self.settings = [{"icon":"file","ribbon":"file-ribbon"},{"icon":"github","ribbon":"github-ribbon"},{"icon":"search","ribbon":"search-ribbon"},{"icon":"nodes","ribbon":"nodes-ribbon"}];
+  self.activeribbon = ko.observable("file-ribbon");
 
   self.node = ko.observable(new ErrMsgArea({code:"loading"}));
   self.getFrontPane = function() {
-    if (self.node().second().first().first().template == "resizeable-area") {
-      return self.node().second().first().second();
+    if (self.panes().first().template == "resizeable-area") {
+      return self.panes().second();
     } else {
-      return self.node().second().first();
+      return self.panes();
     }
   }
   self.paneCount = function() {
-    return self.countPanes(self.node().second().first());
+    return self.countPanes(self.panes());
   }
   self.countPanes = function(eds) {
     if (eds.first().template == "resizeable-area") {
@@ -471,7 +572,7 @@ function AppViewModel(servedata) {
     }
   }
   self.extradd = function() {
-    var allprevs = self.node().second().first();
+    var allprevs = self.panes();
     var newfirst = new Pane();
     var newcombination = new Divider({
       type:"fixed-right",
@@ -485,13 +586,13 @@ function AppViewModel(servedata) {
         else {mast = cheat.first();}
         mast.template = "add-split-tab";
         mast.downgrade = function(){mast.template = "tabs-area";}
-        self.node().second().first(cheat);
+        self.panes(cheat);
       }
     });
     if (allprevs.first().template=='add-split-tab') {allprevs.first().downgrade();}
     else {allprevs.second().first().downgrade();}
     allprevs.reparent(newcombination.first);
-    self.node().second().first(newcombination)
+    self.panes(newcombination)
   }
   self.commit = function() {
     $.ajax("/commit", {
@@ -515,15 +616,23 @@ function AppViewModel(servedata) {
     success: function(data){
       self.node(new Divider({
         type:"fixed-left",
-        resizeable:true,
-        first:ko.observable(new RecursiveArea({elems:self.elems,onClick:function(item){item.open();}})),
+        resizeable:false,
+        initialmeasure:"3em",
+        first:ko.observable({template:"menu-ribbon",vresize:function(){},onLoad:function(){}}),//self.activeribbon
         second:ko.observable(new Divider({
-          type:"fixed-right",
-          resizeable:true,
-          first:ko.observable(new Pane()),
-          second:ko.observable(new RightPane())
+          type:"fixed-left",
+          resizeable:true,//new RecursiveArea({elems:self.elems,onClick:function(item){item.open();}})
+          first:ko.observable({template:self.activeribbon,vresize:function(){},onLoad:function(){}}),
+          second:ko.observable(new Pane())
+          // second:ko.observable(new Divider({
+          //   type:"fixed-right",
+          //   resizeable:true,
+          //   first:ko.observable(new Pane()),
+          //   second:ko.observable(new RightPane())
+          // }))
         }))
       }));
+      self.panes = self.node().second().second;
       data.tree.forEach(function(ra){
         ra.title = ra.path;
         if (ra.title.indexOf('/') == -1) {
@@ -547,9 +656,6 @@ function AppViewModel(servedata) {
       }
     }
   });
-  {% if creds != None %}
-  self.newprojectmodel = new NewProjectModel();
-  {% endif %}
 }
 
 
@@ -567,10 +673,9 @@ handshake(function(servedata){
 
 </script>
 
-{% endblock %}
-{% block footer %}
-{% endblock %}
-
+    </div>
+  </div>
+</body>
 
 
 
