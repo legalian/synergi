@@ -1,8 +1,10 @@
 #synergi
 <h1>IN-PROGRESS</h1>
+<ol>
+	
+</ol>
 
-
-<h2>Updates to Synergi 2.0</h2>
+<h1>Updates to Synergi 2.0</h1>
 	-- All pages:
 		- you should be able to open an editor even if youre not logged in- you just can't save
 		- logged in with github should also show your github icon
@@ -102,7 +104,7 @@
 		</li>
 	</ol>
 
-<h2>Stretch Goals</h2>
+<h1>Stretch Goals</h1>
 	<ol>
 		<li>3rd party editors</li>
 		<li>add color indicators to see who's editing what<ol>
@@ -124,6 +126,9 @@
 		<li>display images as images when opened</li>
 	</ol>
 
-
-
+<h1>Known bugs</h1>
+	<ol>
+		<li>putting underlined characters in a file prevents editing</li>
+	</ol>
+		
 
