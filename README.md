@@ -100,7 +100,7 @@
 			</ol>
 		</li>
 		<li>Fork into new branch
-			<ol><li>button with pop-up settings. This should change the branch column in every relevant place in our database.</li></ol>
+			<ol><li>button with pop-up settings. This should change the branch column in every relevant place in our database.</li></o>
 		</li>
 	</ol>
 

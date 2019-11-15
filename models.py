@@ -54,7 +54,7 @@ class Session(db.Model):
     branch     = db.Column(db.String())
     sha        = db.Column(db.String())
     project_id = db.Column(db.Integer, db.ForeignKey('project.id'))
-    activemembers = db.Column(db.String())
+    activemembers = db.Column(pg.ARRAY(db.String))
 
     def __init__(self, owner, repo, branch, sha,project_id,activemembers):
         self.owner = owner,

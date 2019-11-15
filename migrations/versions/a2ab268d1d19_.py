@@ -1,4 +1,4 @@
-"""empty message
+"""Database initialization
 
 Revision ID: a2ab268d1d19
 Revises: 

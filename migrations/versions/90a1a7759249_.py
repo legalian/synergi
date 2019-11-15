@@ -1,4 +1,4 @@
-"""empty message
+"""Added postgres arrays
 
 Revision ID: 90a1a7759249
 Revises: a2ab268d1d19

@@ -383,6 +383,7 @@ def joinjoin():
 
 	sesh = Session.query.filter_by(project_id=int(repo.id)).first()
 	if sesh == None:
+		print("session does not exist, creating new session")
 		master = github.get("/repos/"+repo.owner+"/"+repo.repo+"/branches/"+repo.branch)
 		head_tree_sha = master.json()['commit']['commit']['tree']['sha']
 		sesh = Session(
@@ -391,7 +392,7 @@ def joinjoin():
 			branch     = repo.branch,
 			sha        = head_tree_sha,
 			project_id = repo.id,
-			activemembers = "",
+			activemembers = [],
 		)
 		db.session.add(sesh)
 		db.session.commit()
@@ -417,30 +418,38 @@ def on_join(data):
 
 	sesh = Session.query.filter_by(project_id=int(repo.id)).first()
 	if sesh == None: return
-	members = sesh.activemembers
-	members_array = [] if members == "" else members.split(",")
-	if creds not in members_array:
-		members_array.append(creds)
-		sesh.activemembers = ",".join(members_array)
-		db.session.commit()
+	
+	members_array = sesh.activemembers
+	print("current members:: ", members_array)
+	print("user " , creds , " joining session")
+	
+	if creds in members_array:
+		print("member in session already")
+	members_array.append(creds)
+	print("appended array: ", members_array)
+	sesh.activemembers = members_array
+	db.session.commit()
+	print("user ", creds, " joined")
 
 	join_room(str(repo.id)+","+str(sesh.id))
+	print("active members::::: ", sesh.activemembers)
 	emit('accept',{'sessionId':sesh.id,'activemembers':sesh.activemembers},room=request.sid)
 	emit('player_join',{'name':creds},room=str(repo.id)+","+str(sesh.id),include_self=False)
-
+	print(members_array)
 
 @socketio.on('disconnect')
 def on_disconnect():
 	creds = session['githubuser']
+	print("disconnecting....")
 	for sesh in Session.query.filter_by(id=int(session['sessionId'])).all():
-		members_array = sesh.activemembers.split(",")
+		members_array = sesh.activemembers
 		if creds in members_array:
 			print("\n\n\nfound ", members_array, creds )
 			members_array.remove(creds)
-			print("removed ", members_array, creds)
+			print("disconnected ", members_array, creds)
 		else:
 			print("\n\n\nnot found: ", members_array, creds )
-		sesh.activemembers = ",".join(members_array)
+		sesh.activemembers = members_array
 	db.session.commit()
 	emit('player_leave',{'name':creds},include_self=False)
 
