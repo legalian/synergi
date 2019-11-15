@@ -26,6 +26,12 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
 
+  <!-- <link rel="import" href="mdi-logo-iconset-svg.html"> -->
+
+
+  <!-- <link href="static/bower_components/mdi/css/materialdesignicons.min.css" rel="stylesheet" type="text/css" /> -->
+  <link href="https://cdn.materialdesignicons.com/4.5.95/css/materialdesignicons.min.css" rel="stylesheet" type="text/css" />
+
   <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
 
   <style type="text/css">
@@ -144,24 +150,22 @@
   <!-- self.settings = [{"icon":"file","ribbon":"file-ribbon"},{"icon":"github","ribbon":"github-ribbon"},{"icon":"search","ribbon":"search-ribbon"},{"icon":"nodes","ribbon":"nodes-ribbon"}]; -->
 
 <script type='text/html' id='menu-ribbon'>
-  <div id="leftribbon" data-bind="foreach:$root.settings">
-    <div data-bind="text:icon,click:function(){$root.activeribbon(ribbon)}"></div>
+  <div id="leftribbon" data-bind="foreach:$root.settings" style="font-size:3em;text-align:center">
+    <div data-bind="class:'mdi '+icon,click:function(){$root.activeribbon(ribbon)},style:$root.activeribbon()==ribbon?{color:'#05a8b3'}:{color:'#ccc'}"></div>
   </div>
 </script>
 
 <script type='text/html' id='github-ribbon'>
   <div id="settingsribbon">
     This is the github ribbon
-    Connected Users:
-    <div data-bind="foreach:$root.activeusers">
-      <div data-bind="style:{color:color},text:name"></div>
-    </div>
     <button type="button" data-bind="click:$root.commit">Commit</button>
   </div>
 </script>
 
 <script type='text/html' id='search-ribbon'>
   <div id="settingsribbon">
+    <iron-icon icon="mdi-logo:polymer"></iron-icon>
+    <span class="mdi mdi-home"></span>
     This is the search ribbon
   </div>
 </script>
@@ -181,10 +185,33 @@
     font-weight: 500;
     background-color: #383838;
   }
+  #panedivider > .split-pane-divider {
+    border-style: solid;
+    border-width: 0px 1px 0px 0px;
+    border-color: white;
+  }
 </style>
+
+
+<!-- 
+  self.description = ko.observable(servedata['project']['description']);
+  self.projname = ko.observable(servedata['project']['name']); -->
+
 
 <script type='text/html' id='file-ribbon'>
   <div id="settingsribbon">
+    <br>
+    <div class="headersettingsbar">PROJECT</div>
+    <div style="width:100%;padding-left:1em;">
+      name:
+      <input data-bind="textInput:$root.projname" />
+      description:
+      <input data-bind="textInput:$root.description" />
+    </div>
+    <div class="headersettingsbar">USERS</div>
+    <div style="width:100%;padding-left:1em;" data-bind="foreach:$root.activeusers">
+      <div data-bind="style:{color:color},text:name"></div>
+    </div>
     <div class="headersettingsbar">FILES</div>
     <div style="width:100%;height:100%;padding-left:1em;">
       <div data-bind="template:{name:$root.files.template,data:$root.files,afterRender:$root.files.onLoad}"></div>
@@ -247,7 +274,7 @@ function GenericUI(files,prototype) {
     item.format(prototype.formats[index],self,function(sync){
       eachfileconnected[index]=sync;
       if (eachfileconnected.every(a=>a!=null)) {
-        self.editor(new (prototype)(eachfileconnected));
+        self.editor(new (prototype)(files,eachfileconnected));
         // self.node = self.editor.node;
       }
     },function(data){
@@ -276,10 +303,11 @@ function GenericUI(files,prototype) {
 
 
 
-function TextEditor(files) {
+function TextEditor(filenames,files) {
   var self  = this;
   self.mosync = files[0];
   self.node = new TextArea({sync:self.mosync});
+  self.node.setPath(filenames[0].title);
 }
 TextEditor.formats = [RawTextDataFormat];
 
@@ -337,7 +365,7 @@ function Pane() {
     TI.ownerpane.ui(ui);
     TI.ownerpane.ui().wake();
     for (var i=TI().length;i>=0;i--) {
-      if (i!=ti) {TI.splice(i,1);}
+      if (TI()[i]==item && i!=ti) {TI.splice(i,1);}
     }
   }
   self.closeEverything = function() {
@@ -543,6 +571,7 @@ function File(data) {
   }
 }
 function User(data) {
+  var self = this;
   self.name = data;
   self.color = COLORS[colori];
   colori = (colori+1)%12;
@@ -552,11 +581,29 @@ function AppViewModel(servedata) {
   self.elems = ko.observableArray([]);
   // self.tabs  = ko.observableArray([]);
 
+            // 'id': self.id, 
+            // 'name': self.name,
+            // 'description': self.description,
+            // 'created_date': self.created_date,
+            // 'owner':self.owner,
+            // 'repo':self.repo,
+            // 'branch':self.branch,
+            // 'write_access_users': self.write_access_users
+
+  self.sessionId = servedata['sessionId'];
+  self.projectId = $.urlParam('projectId');
+
+  var listen = true;
+  self.description = ko.observable(servedata['project']['description']);
+  self.projname = ko.observable(servedata['project']['name']);
+  self.repo = servedata['project']['repo'];
+  self.repoowner = servedata['project']['owner'];
+  self.branch = servedata['project']['branch'];
+  socket.on('set_project_settings',function(data){listen=false;self.projname(data.name);self.description(data.description);listen=true;});
+  self.description.subscribe(function(newval){if (!listen) {return;} socket.emit('set_project_settings',{projectId:self.projectId,description:newval});});
+  self.projname.subscribe(function(newval){if (!listen) {return;} socket.emit('set_project_settings',{projectId:self.projectId,name:newval});});
 
   self.activeusers = ko.observableArray(servedata['activemembers'].split(",").map(function(item){return new User(item);}));
-  self.sessionId = servedata.sessionId
-
-
   socket.on('player_join', function(data){self.activeusers.push(data.name);});
   socket.on('player_leave',function(data){self.activeusers.remove(data.name);});
   socket.on('rejected',function(data){console.log("REJECTED",data);});
@@ -571,7 +618,7 @@ function AppViewModel(servedata) {
   //   if (self.selected()!=null) {self.selected().form();}
   // });
 
-  self.settings = [{"icon":"file","ribbon":"file-ribbon"},{"icon":"github","ribbon":"github-ribbon"},{"icon":"search","ribbon":"search-ribbon"},{"icon":"nodes","ribbon":"nodes-ribbon"}];
+  self.settings = [{"icon":"mdi-file","ribbon":"file-ribbon"},{"icon":"mdi-github-circle","ribbon":"github-ribbon"},{"icon":"mdi-magnify","ribbon":"search-ribbon"},{"icon":"mdi-graph","ribbon":"nodes-ribbon"}];
   self.activeribbon = ko.observable("file-ribbon");
 
   self.files = new RecursiveArea({elems:self.elems,onClick:function(item){item.open();}});
@@ -603,6 +650,7 @@ function AppViewModel(servedata) {
       first:ko.observable(allprevs),
       second:ko.observable(newfirst),
       slidesout:true,
+      id:"panedivider",
       parent:function(cheat){
         var mast;
         if (cheat.first().template=='resizeable-area') {mast = cheat.second().first();}
@@ -640,10 +688,11 @@ function AppViewModel(servedata) {
       self.node(new Divider({
         type:"fixed-left",
         resizeable:false,
-        initialmeasure:"3em",
+        initialmeasure:"4em",
         first:ko.observable({template:"menu-ribbon",vresize:function(){},onLoad:function(){}}),//self.activeribbon
         second:ko.observable(new Divider({
           type:"fixed-left",
+          initialmeasure:"20em",
           resizeable:true,//new RecursiveArea({elems:self.elems,onClick:function(item){item.open();}})
           first:ko.observable({template:self.activeribbon,vresize:function(){},onLoad:function(){}}),
           second:ko.observable(new Pane())
