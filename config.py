@@ -10,8 +10,6 @@ class Config(object):
     SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
     ssl_verify_client_cert = True
 
-
-
 class ProductionConfig(Config):
     DEBUG = False
 
@@ -28,5 +26,7 @@ class DevelopmentConfig(Config):
 
 class TestingConfig(Config):
     TESTING = True
+
+
 
 

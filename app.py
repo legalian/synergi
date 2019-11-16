@@ -15,6 +15,8 @@ import json
 import pprint
 
 
+
+
 #as a side note, here are the basic patterns for notifying clients through socketio:
 #room=request.sid        <---- notifies only the person that sent the message
 #broadcast=True                      <---- (when inside a socketio route) notifies everyone connected to the session
@@ -196,7 +198,6 @@ def files():
 		
 		# pulls the information of the file from github 
 		# https://developer.github.com/v3/repos/contents/
-		print("git pull")
 		github_request = github.get("/repos/"+sesh.owner+"/"+sesh.repo+"/contents/"+json_from_client['path']+"?ref="+sesh.branch)
 		if github_request.status_code != 200:
 			print(github_request.content)
@@ -232,7 +233,7 @@ def handle_edit(edit):
 	if sesh == None: return
 	book = TemFile.query.filter_by(session_id = int(sesh.id),path=str(edit['path'])).first()
 	if book == None: return
-
+	print(edit)
 	#synchronize.js line 237 is where this data comes from.
 
 	#if creds not in sesh.activemembers.split(',') then automatically reject their change- they arent in the session.
@@ -250,24 +251,7 @@ def handle_edit(edit):
 	emit('edit',edit,broadcast=True,include_self=False)
 
 
-
-
-@socketio.on('set_project_settings')
-def handle_edit(edit):
-	creds=session['githubuser']
-	repo = Project.query.filter_by(id=int(edit['projectId'])).first()
-	if repo == None: return
-
-	if 'description' in edit.keys():
-		repo.description = edit['description']
-	if 'name' in edit.keys():
-		repo.name = edit['name']
-
-	db.session.commit()
-	emit('set_project_settings',{'description':repo.description,'name':repo.name},broadcast=True,include_self=False)
-
-
-
+	
 
 @app.route("/directories",methods=['POST'])
 def directories():
@@ -502,7 +486,7 @@ def on_disconnect():
 		if creds in members_array:
 			print("\n\n\nfound ", members_array, creds )
 			members_array.remove(creds)
-			print("removed ", members_array, creds)
+			print("\n\n\nremoved ", members_array, creds)
 		else:
 			print("\n\n\nnot found: ", members_array, creds )
 		sesh.activemembers = ",".join(members_array)

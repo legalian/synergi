@@ -7,6 +7,7 @@ import os
 from flask_migrate import Migrate, MigrateCommand
 
 
+
 app = Flask(__name__)
 socketio = SocketIO(app)
 # heroku = Heroku(app)
@@ -22,4 +23,7 @@ blueprint = make_github_blueprint(
 app.register_blueprint(blueprint, url_prefix="/login")
 
 migrate = Migrate(app, db)
+
+
+
 
