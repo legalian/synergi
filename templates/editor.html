@@ -460,6 +460,12 @@ function Directory(data){
   self.hover = ko.observable(false);
   self.editing = ko.observable(data.editing||false);
 
+  self.replacebase = function(from,to) {
+    if (self.path.startsWith(from)) {self.path = to+self.path.slice(from.length)}
+    for (const item of self.elems()) {
+      item.replacebase(from,to);
+    }
+  }
   self.find = function(path) {
     if (path == self.path) {return self;}
     for (const item of self.elems()) {
@@ -512,6 +518,9 @@ function File(data) {
 
   self.editlistener = null
 
+  self.replacebase = function(from,to) {
+    if (self.path.startsWith(from)) {self.path = to+self.path.slice(from.length)}
+  }
   self.find = function(path) {
     if (path == self.path) {return self}
   }
@@ -766,7 +775,7 @@ function AppViewModel(servedata) {
         newpath:newpath,
         directory:file.type=='tree'
       });
-      file.path = newpath;
+      self.replacebase(file.path,newpath);
     },
     onRenameObject:function(elems,file){
         console.log("on rename");
@@ -921,6 +930,11 @@ function AppViewModel(servedata) {
   self.fork = function() {
     self.userWantsToFork(false);
     console.log("this is where you fork")
+  }
+  self.replacebase = function(from,to) {
+    for (const item of self.elems()) {
+      item.replacebase(from,to);
+    }
   }
   self.find = function(path) {
     for (const item of self.elems()) {
