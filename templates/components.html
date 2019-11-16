@@ -323,7 +323,7 @@
 					</div>
 					<!-- ko if:editing -->
 					<div style="flex:1">
-						<input data-bind="value:edittitle,event:{blur:function(){editing(false);$parent.transmit.onRenameObject($parent.elems,$data)}}" style="overflow: hidden;white-space: nowrap;min-width:10em;"/>
+						<input data-bind="value:edittitle,hasfocus: true,event:{blur:function(){editing(false);$parent.transmit.onRenameObject($parent.elems,$data)}}" style="overflow: hidden;white-space: nowrap;min-width:10em;"/>
 					</div>
 					<!-- /ko -->
 					<!-- ko ifnot:editing -->

@@ -754,7 +754,7 @@ function AppViewModel(servedata) {
   self.files = new RecursiveArea({
     newfiledata:self.newfiledata,
     newfolderdata:self.newfolderdata,
-    afterDrop:function(file,_,SI,_,TI) {
+    afterDrop:function(file,si,SI,_,TI) {
       if (SI == TI) {return;}
       var newpath = file.path;
       if (SI.ownerdirectory!=undefined) {
@@ -766,7 +766,7 @@ function AppViewModel(servedata) {
       }
       if (self.find(newpath)!=undefined) {
         TI.remove(file);
-        SI.push(file);
+        SI.splice(si,1,file);
         return;
       }
       socket.emit('fileupdate',{
@@ -775,7 +775,7 @@ function AppViewModel(servedata) {
         newpath:newpath,
         directory:file.type=='tree'
       });
-      self.replacebase(file.path,newpath);
+      self.replacebase(file.path+"/",newpath+"/");
     },
     onRenameObject:function(elems,file){
         console.log("on rename");
