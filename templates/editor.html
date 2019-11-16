@@ -266,10 +266,10 @@
     <div class="headersettingsbar" data-bind="event: { mouseover:function(){$root.fileribbonmouseover(true);},mouseleave:function(){$root.fileribbonmouseover(false);}}">
       FILES
       <div data-bind="if:$root.fileribbonmouseover()" style="position: absolute;right:0;top:0;bottom:0;background-color:#383838;font-size:10pt;cursor: pointer;">
-        <span data-bind="click:function(){elems.push($root.newfiledata($data));},clickBubble:false">
+        <span data-bind="click:function(){$root.elems.push($root.newfiledata($data));},clickBubble:false">
           <i data-bind="class:'material-icons'" style="font-size: inherit;line-height: inherit;" >note_add</i>
         </span>
-        <span data-bind="click:function(){elems.push($root.newfolderdata($data));},clickBubble:false">
+        <span data-bind="click:function(){$root.elems.push($root.newfolderdata($data));},clickBubble:false">
           <i data-bind="class:'material-icons'" style="font-size: inherit;line-height: inherit;">create_new_folder</i>
         </span>
       </div>
@@ -462,10 +462,15 @@ function Directory(data){
 
   self.find = function(path) {
     if (path == self.path) {return self;}
-    self.elems().forEach(function(item){
+    for (const item of self.elems()) {
       var tem = item.find(path);
       if (tem!=undefined) {return tem;}
-    })
+    }
+  }
+  self.findcontainer = function(path) {
+    if (path.slice(0,path.indexOf('/')) == self.path) {
+      return self.elems;
+    }
   }
   self.radd = function(ra) {
     ra.title = ra.title.substr(ra.title.indexOf('/')+1);
@@ -493,7 +498,7 @@ function File(data) {
   self.sha = data.sha;
   self.connectedusers = ko.observableArray([]);
   self.hover = ko.observable(false);
-  self.editing = ko.observable(false);
+  self.editing = ko.observable(data.editing||false);
 
   self.defaultEditor = TextEditor;
   self.defaultOtherFiles = [];
@@ -510,6 +515,7 @@ function File(data) {
   self.find = function(path) {
     if (path == self.path) {return self}
   }
+  self.findcontainer = function(path) {}
   //from pane:
   self.transferPanes = function(pane1,pane2) {//transfer pane->ui
     self.removePane(pane2);
@@ -618,10 +624,8 @@ function File(data) {
         }),
         contentType: "application/json",
         success: function(data){
-          console.log(data);
           self.md5buffer = data;
           self.editlistener = socket.on('edit',function(data){
-            console.log("edit happen",data);
             var changedInterval = new ChangeInterval(data.delta.start,data.delta.amt,data.delta.msg);
             self.listeners.forEach(function(item){
               item.sync.endpointDown(data.delta);
@@ -649,12 +653,14 @@ function File(data) {
   //   }
   // }
   self.open = function(){
-    var pane = justice.getFrontPane();
-    if (!pane.tabs().includes(self)) {
-      pane.tabs.push(self);
-      self.personalUiChanged(pane,new GenericUI([self].concat(self.defaultOtherFiles),self.defaultEditor));
+    if (self.title()!="") {
+      var pane = justice.getFrontPane();
+      if (!pane.tabs().includes(self)) {
+        pane.tabs.push(self);
+        self.personalUiChanged(pane,new GenericUI([self].concat(self.defaultOtherFiles),self.defaultEditor));
+      }
+      pane.select(self);
     }
-    pane.select(self);
   }
 }
 function User(data) {
@@ -743,7 +749,7 @@ function AppViewModel(servedata) {
       if (SI == TI) {return;}
       var newpath = file.path;
       if (SI.ownerdirectory!=undefined) {
-        if (!file.path.startsWith(SI.ownerdirectory.path)+"/") {throw "Unknown problem...";}
+        if (!file.path.startsWith(SI.ownerdirectory.path+"/")) {throw "Unknown problem...";}
         newpath = file.path.slice(SI.ownerdirectory.path.length+1);
       }
       if (TI.ownerdirectory!=undefined) {
@@ -751,7 +757,7 @@ function AppViewModel(servedata) {
       }
       if (self.find(newpath)!=undefined) {
         TI.remove(file);
-        SI.add(file);
+        SI.push(file);
         return;
       }
       socket.emit('fileupdate',{
@@ -763,9 +769,14 @@ function AppViewModel(servedata) {
       file.path = newpath;
     },
     onRenameObject:function(elems,file){
+        console.log("on rename");
       if (!file.path.endsWith(file.title())) {throw "Unknown problem...";}
       var newpath = file.path.slice(0,file.path.length-file.title().length)+file.edittitle();
-      if (file.edittitle()=="" || self.find(newpath)!=undefined) {
+      console.log(newpath)
+      var npanp = self.find(newpath)
+      console.log(npanp)
+      if (file.edittitle()=="" || npanp!=undefined) {
+        console.log("vetoed");
         if (file.title()=="") {elems.remove(file);}
         return
       }
@@ -802,7 +813,7 @@ function AppViewModel(servedata) {
     if (newcontainer==undefined || self.find(data.newpath)!=undefined ) {throw "Desynchronized at the project level."}
     file.title(data.newpath.split("/")[data.newpath.split("/").length-1]);
     file.path = data.newpath
-    newcontainer.add(file);
+    newcontainer.push(file);
   });
 
   socket.on('deletefile',function(data) {
@@ -912,14 +923,17 @@ function AppViewModel(servedata) {
     console.log("this is where you fork")
   }
   self.find = function(path) {
-    self.elems().forEach(function(item){
+    for (const item of self.elems()) {
       var tem = item.find(path);
       if (tem!=undefined) {return tem;}
-    })
+    }
   }
   self.findcontainer = function(path) {
     if (path.indexOf('/') == -1) {return self.elems;}
-    return self.find(path.slice(0,path.indexOf('/')));
+    for (const item of self.elems()) {
+      var tem = item.find(path);
+      if (tem!=undefined) {return tem;}
+    }
   }
   $.ajax("/directories", {
     type: "POST",

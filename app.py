@@ -390,6 +390,7 @@ def fileupdate(data):
 		#data['directory'] #true if the file in question is a directory. False if the file is not a directory.
 	#output:
 		#if they supply a source path and but you can't find the file to move, the call is invalid.
+		#if a file already exists at the destination path, the call is invalid.
 		#if the user inputs an invalid destination path, the call is invalid.
 		#if the call is invalid, emit suspect_desynchronization to that client (don't broadcast it to everyone)
 		#if the call is valid, emit fileupdate with the same data to all the other clients (broadcast and do not include self)

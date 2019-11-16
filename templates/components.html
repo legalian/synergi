@@ -317,13 +317,13 @@
 	<script type="text/html" id="rearrangeable-recursive-area">
 		<div data-bind="dragula:{data:elems,group:transmit.draggroup,moves:transmit.moves,accepts:transmit.accepts, afterDrop:transmit.afterDrop}">
 			<div class="recursiveunit">
-				<div class="recursiveelement" style="display: flex;cursor:pointer;position:relative;" data-bind="click:$parent.transmit.onClick,event: { mouseover:function(){if (hover){hover(true);}},mouseleave:function(){if (hover){hover(false);}}}">
+				<div class="recursiveelement" style="display: flex;cursor:pointer;position:relative;height: 17px" data-bind="click:$parent.transmit.onClick,event: { mouseover:function(){if (hover){hover(true);}},mouseleave:function(){if (hover){hover(false);}}}">
 					<div  class="recursiveexpander"  data-bind="if:$data.elems">
 						<i data-bind="class:expanded()?'material-icons rotate-90 inlineicon':'material-icons inlineicon',click:function(){expanded(!expanded())},clickBubble:false">play_arrow</i>
 					</div>
 					<!-- ko if:editing -->
 					<div style="flex:1">
-						<input data-bind="value:edittitle,event:{blur:function(){editing(false);$parent.transmit.onRenameObject($parent.elems,$data)}}" style="overflow: hidden;white-space: nowrap;"/>
+						<input data-bind="value:edittitle,event:{blur:function(){editing(false);$parent.transmit.onRenameObject($parent.elems,$data)}}" style="overflow: hidden;white-space: nowrap;min-width:10em;"/>
 					</div>
 					<!-- /ko -->
 					<!-- ko ifnot:editing -->
