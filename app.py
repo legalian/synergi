@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for, session
 from flask_socketio import SocketIO, send, emit, join_room, leave_room
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import update
 from flask_dance.contrib.github import make_github_blueprint, github
 from flask_session import Session
 from app_factory import db,app,blueprint,socketio
@@ -409,7 +410,7 @@ def joinjoin():
 			branch     = repo.branch,
 			sha        = head_tree_sha,
 			project_id = repo.id,
-			activemembers = [],
+			activemembers = [""],
 		)
 		db.session.add(sesh)
 		db.session.commit()
@@ -436,6 +437,7 @@ def on_join(data):
 	sesh = Session.query.filter_by(project_id=int(repo.id)).first()
 	if sesh == None: return
 	
+	print()
 	members_array = sesh.activemembers
 	print("current members:: ", members_array)
 	print("user " , creds , " joining session")
@@ -445,6 +447,14 @@ def on_join(data):
 	members_array.append(creds)
 	print("appended array: ", members_array)
 	sesh.activemembers = members_array
+	print("\nUsers:")
+	for item in sesh.activemembers:
+		print(item)
+	print("sesh.activemembers: ", sesh.activemembers)
+	print("member 0 ", members_array[0])
+	db.session.commit()
+
+	sesh.update({activemembers : members_array})
 	db.session.commit()
 	print("user ", creds, " joined")
 
