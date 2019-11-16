@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, redirect, url_for, session
+from flask import Flask, render_template, request, jsonify, redirect, url_for, session, send_from_directory
 from flask_socketio import SocketIO, send, emit, join_room, leave_room
 from flask_sqlalchemy import SQLAlchemy
 from flask_dance.contrib.github import make_github_blueprint, github
@@ -19,8 +19,6 @@ import pprint
 #room=request.sid        <---- notifies only the person that sent the message
 #broadcast=True                      <---- (when inside a socketio route) notifies everyone connected to the session
 #broadcast=True,include_self=False   <---- (when inside a socketio route) notifies everyone connected to the session except for the person initiating the event
-#room=str(repo.id)+","+str(sesh.id)                      <----(when inside a flask route) notifies everyone connected to the session
-#room=str(repo.id)+","+str(sesh.id),include_self=False   <----(when inside a flask route) notifies everyone connected to the session except for the person initiating the event
 #clients recieve these events with shit like: socket.on('rejected',function(data){console.log(data);})
 
 
@@ -53,6 +51,7 @@ def music():
 	return render_template('grapheditor.html')
 
 
+
 ##################################
 
 
@@ -74,6 +73,10 @@ def projectlist():
 		return redirect(url_for("github.login"))
 	return render_template('todolist.html',creds=gitcreds(github))
 
+
+@app.route('/favicon.ico')
+def send_js():
+    return send_from_directory('static/icons', 'favicon.ico')
 
 
 @app.route("/github_repos")
@@ -374,6 +377,51 @@ def commit():
 	git_commit(data)
 	
 
+
+
+
+@socketio.on('deletefile')
+def fileupdate(data):
+	#input:
+		#data['sessionId']
+		#data['path']      #the place the file is
+		#data['directory'] #true if the file in question is a directory. False if the file is not a directory.
+	#output:
+		#if you can't find the file, the call is invalid and you should emit suspect_desynchronization to the user. (don't broadcast)
+		#emit deletefile to everyone (including the user/include_self) if the call is valid
+
+	#considerations:
+		#you need to worry about the case where the user tries to delete a directory full of files.
+			#directories contain other files, so when they are moved, many files end up being deleted at once.
+			#the server needs to delete everything contained inside the folder if a folder is deleted.
+	pass
+
+
+@socketio.on('fileupdate')
+def fileupdate(data):
+	#input:
+		#data['sessionId']
+		#data['oldpath']   #the place the file used to be. This is None if the user is creating a file.
+		#data['newpath']   #the place the file ought to be.
+		#data['directory'] #true if the file in question is a directory. False if the file is not a directory.
+	#output:
+		#if they supply a source path and but you can't find the file to move, the call is invalid.
+		#if the user inputs an invalid destination path, the call is invalid.
+		#if the call is invalid, emit suspect_desynchronization to that client (don't broadcast it to everyone)
+		#if the call is valid, emit fileupdate with the same data to all the other clients (broadcast and do not include self)
+
+	#considerations:
+		#you need to worry about the case where the user tries to move a directory from one spot to another.
+			#directories contain other files, so when they are moved, many files end up being moved at once.
+			#the server needs to update the paths of every file/directory moved, which may be more than one if the user moves a folder.
+		#make sure the destination path is valid i.e. it's located inside a directory and it's written with characters that are allowed to appear in the path.
+	pass
+
+
+
+
+
+
 # do a double check the user has write permissions; query github to check 
 # https://developer.github.com/v3/repos/#list-user-repositories
 # or 
@@ -443,7 +491,7 @@ def on_join(data):
 
 	join_room(str(repo.id)+","+str(sesh.id))
 	emit('accept',{'project':repo.serialize(),'sessionId':sesh.id,'activemembers':sesh.activemembers},room=request.sid)
-	emit('player_join',{'name':creds},room=str(repo.id)+","+str(sesh.id),include_self=False)
+	emit('player_join',{'name':creds},broadcast=True,include_self=False)
 
 
 @socketio.on('disconnect')

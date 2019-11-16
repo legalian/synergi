@@ -11,6 +11,8 @@
   <meta name="description" content="" />
   <meta name="keywords" content="" />
   <link rel="stylesheet" href="static/css/styles.css">
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 
   <script src="static/bower_components/knockout/dist/knockout.js"></script>
   <script src="static/bower_components/jquery/dist/jquery.min.js"></script>
@@ -72,10 +74,57 @@
   <title>Synergi Code Editor</title>
 </head>
 <body>
+
+  <script type="text/html" id="user-wants-commit">
+    committing settings here
+  </script>
+  <script type="text/html" id="user-wants-pull">
+    pulling settings here
+  </script>
+  <script type="text/html" id="user-wants-fork">
+    forking settings here
+  </script>
+  <script type="text/html" id="user-wants-delete">
+    <!-- ko if:$root.filetodelete -->
+    Are you sure you want to delete <span data-bind="text:$root.filetodelete.title()"></span>? This action cannot be undone.
+    <!-- /ko -->
+  </script>
+
+
+
+  <div data-bind="modal: {
+    visible: userWantsToCommit(),
+    header: { data: { label: 'Git commit' } },
+    body: { name: commitdata()==null?'errmsg-area':'user-wants-commit', data:commitdata()==null?{code:'loading',height:'300px'}:commitdata() },
+    footer: { data: { action: commit, closeLabel:'Cancel',primaryLabel:'Commit and push'}}
+  }"></div>
+  <div data-bind="modal: {
+    visible: userWantsToPull(),
+    header: { data: { label: 'Git pull' } },
+    body: { name: pulldata()==null?'errmsg-area':'user-wants-pull', data:pulldata()==null?{code:'loading',height:'300px'}:pulldata() },
+    footer: { data: { action: pull, closeLabel:'Cancel',primaryLabel:'Pull'}}
+  }"></div>
+  <div data-bind="modal: {
+    visible: userWantsToFork(),
+    header: { data: { label: 'Git Fork' } },
+    body: { name: forkdata()==null?'errmsg-area':'user-wants-fork', data:forkdata()==null?{code:'loading',height:'300px'}:forkdata() },
+    footer: { data: { action: fork, closeLabel:'Cancel',primaryLabel:'Fork'}}
+  }"></div>
+  <div data-bind="modal: {
+    visible: false,
+    header: { data: { label: 'Delete File' } },
+    body: { name: 'user-wants-delete' },
+    footer: { data: { action: deleteFile, closeLabel:'Cancel',primaryLabel:'Delete'}}
+  }"></div>
+
+
+
+
+
   <div id="fulwrap">
     <div id="header-wrapper" style="height:3em;">
       <div id="header" class="container" style="padding:0 1em;height:3em;display: flex;align-items: center;width:100%">
-        <img style = "float:left; width:30px; height:30px;" src="/static/images/Synergi_Logo.png" alt="Logo"/>
+        <img style = "float:left; width:30px; height:30px;" src="/static/images/Synergi_Logo.svg" alt="Logo"/>
         <h3><a href="/" class="logotext">Synergi</a></h3>
             <div style="flex:1"></div>
             {% if creds != None %}
@@ -126,10 +175,11 @@
     width:100%;
   }
   #settingsribbon {
-    background-color: #252426;
+    background-color: #222427;
     height:100%;
     width:100%;
-
+    overflow-x: hidden;
+    /*overflow-x: hidden;*/
   }
   #selectedtab {
     line-height: 1em;
@@ -157,15 +207,15 @@
 
 <script type='text/html' id='github-ribbon'>
   <div id="settingsribbon">
-    This is the github ribbon
-    <button type="button" data-bind="click:$root.commit">Commit</button>
+    This is the github ribbon<br/>
+    <button type="button" data-bind="click:$root.getcommitdata">Commit</button><br/>
+    <button type="button" data-bind="click:$root.getpulldata">Pull</button><br/>
+    <button type="button" data-bind="click:$root.getforkdata">Fork</button><br/>
   </div>
 </script>
 
 <script type='text/html' id='search-ribbon'>
   <div id="settingsribbon">
-    <iron-icon icon="mdi-logo:polymer"></iron-icon>
-    <span class="mdi mdi-home"></span>
     This is the search ribbon
   </div>
 </script>
@@ -184,6 +234,7 @@
     /*height: 1em;*/
     font-weight: 500;
     background-color: #383838;
+    position: relative;
   }
   #panedivider > .split-pane-divider {
     border-style: solid;
@@ -203,17 +254,27 @@
     <br>
     <div class="headersettingsbar">PROJECT</div>
     <div style="width:100%;padding-left:1em;">
-      name:
-      <input data-bind="textInput:$root.projname" />
-      description:
-      <input data-bind="textInput:$root.description" />
+      name:<br/>
+      <input data-bind="textInput:$root.projname" /><br/>
+      description:<br/>
+      <input data-bind="textInput:$root.description" /><br/>
     </div>
     <div class="headersettingsbar">USERS</div>
     <div style="width:100%;padding-left:1em;" data-bind="foreach:$root.activeusers">
       <div data-bind="style:{color:color},text:name"></div>
     </div>
-    <div class="headersettingsbar">FILES</div>
-    <div style="width:100%;height:100%;padding-left:1em;">
+    <div class="headersettingsbar" data-bind="event: { mouseover:function(){$root.fileribbonmouseover(true);},mouseleave:function(){$root.fileribbonmouseover(false);}}">
+      FILES
+      <div data-bind="if:$root.fileribbonmouseover()" style="position: absolute;right:0;top:0;bottom:0;background-color:#383838;font-size:10pt;cursor: pointer;">
+        <span data-bind="click:function(){elems.push($root.newfiledata($data));},clickBubble:false">
+          <i data-bind="class:'material-icons'" style="font-size: inherit;line-height: inherit;" >note_add</i>
+        </span>
+        <span data-bind="click:function(){elems.push($root.newfolderdata($data));},clickBubble:false">
+          <i data-bind="class:'material-icons'" style="font-size: inherit;line-height: inherit;">create_new_folder</i>
+        </span>
+      </div>
+    </div>
+    <div style="width:100%;">
       <div data-bind="template:{name:$root.files.template,data:$root.files,afterRender:$root.files.onLoad}"></div>
     </div>
   </div>
@@ -307,7 +368,10 @@ function TextEditor(filenames,files) {
   var self  = this;
   self.mosync = files[0];
   self.node = new TextArea({sync:self.mosync});
-  self.node.setPath(filenames[0].title);
+  self.node.setPath(filenames[0].title());
+  filenames[0].title.subscribe(function(nval){
+    self.node.setPath(nval);
+  })
 }
 TextEditor.formats = [RawTextDataFormat];
 
@@ -386,10 +450,23 @@ function Pane() {
 function Directory(data){
   var self = this;
   self.type = 'tree';
-  self.title = data.title;
+  self.title = ko.observable(data.title);
+  self.edittitle = ko.observable("");
   self.path = data.path;
+  self.sha = data.sha;
   self.elems = ko.observableArray([]);
+  self.elems.ownerdirectory = self;
   self.expanded = ko.observable(false);
+  self.hover = ko.observable(false);
+  self.editing = ko.observable(data.editing||false);
+
+  self.find = function(path) {
+    if (path == self.path) {return self;}
+    self.elems().forEach(function(item){
+      var tem = item.find(path);
+      if (tem!=undefined) {return tem;}
+    })
+  }
   self.radd = function(ra) {
     ra.title = ra.title.substr(ra.title.indexOf('/')+1);
     if (ra.title.indexOf('/') == -1) {
@@ -402,15 +479,21 @@ function Directory(data){
       self.elems()[self.elems().length-1].radd(ra);
     }
   }
-  self.open = function(){}
+  self.open = function(){
+    self.expanded(!self.expanded());
+  }
 }
 function File(data) {
   var self = this;
   self.type = 'blob';
-  self.title = data.title;
+  self.title = ko.observable(data.title);
+  self.edittitle = ko.observable("");
+
   self.path = data.path;
   self.sha = data.sha;
   self.connectedusers = ko.observableArray([]);
+  self.hover = ko.observable(false);
+  self.editing = ko.observable(false);
 
   self.defaultEditor = TextEditor;
   self.defaultOtherFiles = [];
@@ -424,6 +507,9 @@ function File(data) {
 
   self.editlistener = null
 
+  self.find = function(path) {
+    if (path == self.path) {return self}
+  }
   //from pane:
   self.transferPanes = function(pane1,pane2) {//transfer pane->ui
     self.removePane(pane2);
@@ -591,6 +677,11 @@ function AppViewModel(servedata) {
             // 'branch':self.branch,
             // 'write_access_users': self.write_access_users
 
+  socket.on('suspect_desynchronization',function() {
+    throw "The server suspects that you have become desynchronized."
+  })
+
+
   self.sessionId = servedata['sessionId'];
   self.projectId = $.urlParam('projectId');
 
@@ -622,7 +713,111 @@ function AppViewModel(servedata) {
   self.settings = [{"icon":"mdi-file","ribbon":"file-ribbon"},{"icon":"mdi-github-circle","ribbon":"github-ribbon"},{"icon":"mdi-magnify","ribbon":"search-ribbon"},{"icon":"mdi-graph","ribbon":"nodes-ribbon"}];
   self.activeribbon = ko.observable("file-ribbon");
 
-  self.files = new RecursiveArea({elems:self.elems,onClick:function(item){item.open();}});
+  self.fileribbonmouseover = ko.observable(false);
+
+  socket.on('rejected',function(data){console.log("REJECTED",data);});
+
+  self.newfiledata = function(container){
+    return new File({
+      path:container.path==undefined?"":container.path+"/",
+      title:"",
+      sha:null,
+      editing:true
+    });
+  };
+  self.newfolderdata = function(container) {
+    return new Directory({
+      path:container.path==undefined?"":container.path+"/",
+      title:"",
+      sha:null,
+      editing:true
+    });
+  };
+  self.filetodelete = null;
+  self.userWantsToDelete = ko.observable(false);
+
+  self.files = new RecursiveArea({
+    newfiledata:self.newfiledata,
+    newfolderdata:self.newfolderdata,
+    afterDrop:function(file,_,SI,_,TI) {
+      if (SI == TI) {return;}
+      var newpath = file.path;
+      if (SI.ownerdirectory!=undefined) {
+        if (!file.path.startsWith(SI.ownerdirectory.path)+"/") {throw "Unknown problem...";}
+        newpath = file.path.slice(SI.ownerdirectory.path.length+1);
+      }
+      if (TI.ownerdirectory!=undefined) {
+        newpath = TI.ownerdirectory.path+"/"+newpath;
+      }
+      if (self.find(newpath)!=undefined) {
+        TI.remove(file);
+        SI.add(file);
+        return;
+      }
+      socket.emit('fileupdate',{
+        sessionId:self.sessionId,
+        oldpath:file.path,
+        newpath:newpath,
+        directory:file.type=='tree'
+      });
+      file.path = newpath;
+    },
+    onRenameObject:function(elems,file){
+      if (!file.path.endsWith(file.title())) {throw "Unknown problem...";}
+      var newpath = file.path.slice(0,file.path.length-file.title().length)+file.edittitle();
+      if (file.edittitle()=="" || self.find(newpath)!=undefined) {
+        if (file.title()=="") {elems.remove(file);}
+        return
+      }
+      console.log("movepath needs to be a recursive operation, bubbo.")
+      socket.emit('fileupdate',{
+        sessionId:self.sessionId,
+        oldpath:file.title()==""?null:file.path,
+        newpath:newpath,
+        directory:file.type=='tree'
+      });
+      file.path = newpath;
+      file.title(file.edittitle());
+    },
+    onDestroyItem:function(elems,file){
+      self.filetodelete = file;
+      self.userWantsToDelete(true);
+    },
+    elems:self.elems,
+    onClick:function(item){item.open();}
+  });
+
+
+  socket.on('fileupdate',function(data) {
+    var file;
+    if (data.oldpath==null) {
+      file = new File({title:"",path:"",sha:""})
+    } else {
+      file = self.find(data.oldpath);
+      var oldcontainer = self.findcontainer(data.oldpath);
+      if (file==undefined || oldcontainer==undefined) {throw "Desynchronized at the project level."}
+      oldcontainer.remove(file);
+    }
+    var newcontainer = self.findcontainer(data.newpath);
+    if (newcontainer==undefined || self.find(data.newpath)!=undefined ) {throw "Desynchronized at the project level."}
+    file.title(data.newpath.split("/")[data.newpath.split("/").length-1]);
+    file.path = data.newpath
+    newcontainer.add(file);
+  });
+
+  socket.on('deletefile',function(data) {
+    console.log("file deletion will not occur until UI cleanup is implemented. (flush/die)");
+    return;
+    var file = self.find(data.path);
+    var container = self.findcontainer(data.path);
+    if (file==undefined || container==undefined) {throw "Desynchronized at the project level."}
+    file.flushdie();
+    container.remove(file);
+  });
+
+  self.deleteFile = function() {
+    socket.emit('deletefile',{sessionId:self.sessionId,path:self.filetodelete.path,directory:filetodelete.type=='tree'})
+  }
 
   self.node = ko.observable(new ErrMsgArea({code:"loading"}));
   self.getFrontPane = function() {
@@ -666,7 +861,36 @@ function AppViewModel(servedata) {
     allprevs.reparent(newcombination.first);
     self.panes(newcombination)
   }
+
+
+
+  self.userWantsToCommit = ko.observable(false);
+  self.userWantsToPull = ko.observable(false);
+  self.userWantsToFork = ko.observable(false);
+  self.commitdata = ko.observable(null);
+  self.pulldata = ko.observable(null);
+  self.forkdata = ko.observable(null);
+  self.getcommitdata = function() {
+    self.commitdata(null);
+    self.userWantsToCommit(false);
+    console.log("this is where you make a /get to get commit information. (diff stuff)")
+    self.userWantsToCommit(true);
+  }
+  self.getpulldata = function() {
+    self.pulldata(null);
+    self.userWantsToPull(false);
+    console.log("this is where you make a /get to get pull information. (branch stuff)")
+    self.userWantsToPull(true);
+  }
+  self.getforkdata = function() {
+    self.forkdata(null);
+    self.userWantsToFork(false);
+    console.log("this is where you make a /get to get fork information. (branch stuff)")
+    self.userWantsToFork(true);
+
+  }
   self.commit = function() {
+    self.userWantsToCommit(false);
     $.ajax("/commit", {
       type: "POST",
       contentType: "application/json",
@@ -678,6 +902,24 @@ function AppViewModel(servedata) {
         console.log("RESPONSE",data);
       }
     });
+  }
+  self.pull = function() {
+    self.userWantsToPull(false);
+    console.log("this is where you pull")
+  }
+  self.fork = function() {
+    self.userWantsToFork(false);
+    console.log("this is where you fork")
+  }
+  self.find = function(path) {
+    self.elems().forEach(function(item){
+      var tem = item.find(path);
+      if (tem!=undefined) {return tem;}
+    })
+  }
+  self.findcontainer = function(path) {
+    if (path.indexOf('/') == -1) {return self.elems;}
+    return self.find(path.slice(0,path.indexOf('/')));
   }
   $.ajax("/directories", {
     type: "POST",
@@ -697,12 +939,6 @@ function AppViewModel(servedata) {
           resizeable:true,//new RecursiveArea({elems:self.elems,onClick:function(item){item.open();}})
           first:ko.observable({template:self.activeribbon,vresize:function(){},onLoad:function(){}}),
           second:ko.observable(new Pane())
-          // second:ko.observable(new Divider({
-          //   type:"fixed-right",
-          //   resizeable:true,
-          //   first:ko.observable(new Pane()),
-          //   second:ko.observable(new RightPane())
-          // }))
         }))
       }));
       self.panes = self.node().second().second;
