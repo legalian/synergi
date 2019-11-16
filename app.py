@@ -15,6 +15,8 @@ import json
 import pprint
 
 
+
+
 #as a side note, here are the basic patterns for notifying clients through socketio:
 #room=request.sid        <---- notifies only the person that sent the message
 #broadcast=True                      <---- (when inside a socketio route) notifies everyone connected to the session
@@ -193,7 +195,6 @@ def files():
 		
 		# pulls the information of the file from github 
 		# https://developer.github.com/v3/repos/contents/
-		print("git pull")
 		github_request = github.get("/repos/"+sesh.owner+"/"+sesh.repo+"/contents/"+json_from_client['path']+"?ref="+sesh.branch)
 		if github_request.status_code != 200:
 			print(github_request.content)
@@ -229,7 +230,7 @@ def handle_edit(edit):
 	if sesh == None: return
 	book = TemFile.query.filter_by(session_id = int(sesh.id),path=str(edit['path'])).first()
 	if book == None: return
-
+	print(edit)
 	#synchronize.js line 237 is where this data comes from.
 
 	#if creds not in sesh.activemembers.split(',') then automatically reject their change- they arent in the session.
@@ -247,24 +248,7 @@ def handle_edit(edit):
 	emit('edit',edit,broadcast=True,include_self=False)
 
 
-
-
-@socketio.on('set_project_settings')
-def handle_edit(edit):
-	creds=session['githubuser']
-	repo = Project.query.filter_by(id=int(edit['projectId'])).first()
-	if repo == None: return
-
-	if 'description' in edit.keys():
-		repo.description = edit['description']
-	if 'name' in edit.keys():
-		repo.name = edit['name']
-
-	db.session.commit()
-	emit('set_project_settings',{'description':repo.description,'name':repo.name},broadcast=True,include_self=False)
-
-
-
+	
 
 @app.route("/directories",methods=['POST'])
 def directories():
@@ -279,100 +263,6 @@ def directories():
 		return "too many files", 413
 	return json_github_request
 
-
-def git_commit(data):
-	# request.json() = [sessionId : "" , commit_message : ""]
-	# github.put(url = url, params = par_var)
-	# https://developer.github.com/v3/repos/contents/#create-or-update-a-file
-	# https://developer.github.com/v3/git/
-	# https://developer.github.com/v3/git/trees/
-	sesh = Session.query.filter_by(id = data['sessionId']).first()
-	commits = github.get("/repos/" + sesh.owner + "/" + sesh.repo + "/commits").json()
-	last_commit_sha = commits[0]['sha']
-	commit_json_from_github = github.get("/repos/" + sesh.owner + "/" + sesh.repo + "/commits/" + last_commit_sha).json()
-	# formattedprint(commit_json_from_github)
-	commit_tree_sha = commit_json_from_github['commit']['tree']['sha']
-	github_tree = github.get("/repos/"+sesh.owner+"/"+sesh.repo+"/git/trees/"+commit_tree_sha+"?recursive=1,ref="+sesh.branch).json()
-
-	params = {
-		"base_tree" : commit_tree_sha,
-		"tree" : []
-	}
-	for file in TemFile.query.filter_by(session_id = int(data['sessionId'])).all():
-		params["tree"].append({ "path" : file.path, "mode" : "100644", "type" : "blob", "content" : file.content})
-		# file == {id, session_id, path, content, sha, hash1-hash5}
-
-	# https://developer.github.com/v3/git/trees/#create-a-tree
-	
-	# dict_keys(['_permanent', 'github_oauth_token', 'githubuser', 'sessionId'])
-	# formattedprint(session.keys())
-	# formattedprint(session['github_oauth_token'])
-	access_token = session['github_oauth_token']['access_token']
-	base_tree = params['base_tree']
-	# tree = params['tree']
-	# formattedprint(github.get("/user").json())
-	post_response = github.post("/repos/" + sesh.owner + "/" + sesh.repo + "/git/trees", json= params)
-
-	# print("\n"*10)
-	# formattedprint(requests.post('http://httpbin.org/post', json = params).json())
-	# print("\n"*10)
-	# https://developer.github.com/v3/git/trees/#response-2
-	# formattedprint("post response: " , post_response.json())
-	# formattedprint("post response: " , post_response.status_code)
-	post_response = post_response.json()
-	
-	# out of for loop
-
-	# todo: commit
-	new_tree_sha = post_response['sha']
-	commit_data = {
-	 "message" : str(data['commit_message']),
-	 "parents" : [str(last_commit_sha)],
-	 "tree" : str(new_tree_sha)
-	}
-
-
-	# POST /repos/:owner/:repo/git/commits
-	# https://developer.github.com/v3/git/commits/#create-a-commit
-	git_commit_json = github.post("/repos/" + sesh.owner + "/" + sesh.repo + "/git/commits", json = commit_data).json()
-	# print("\n\nMake a new commit object response: ", git_commit_json)
-	sha = git_commit_json['sha']
-	if (git_commit_json['verification']['verified'] == False):
-		print("Commit unverified")
-		print("Reason: ", git_commit_json["verification"]['reason'])
-
-
-	# todo: update the branch to point to the commit sha
-	# https://developer.github.com/v3/git/refs/#get-a-single-reference
-	committ =  {
-		"ref" : "refs/heads/" + sesh.branch,
-		"sha" : sha
-	}
-	print("Committing....")
-	if (github.get("/repos/" + sesh.owner + "/" + sesh.repo + "/git/ref/heads/" + sesh.branch).status_code == 404):
-		# make a new branch if the branch doesn't exist
-		# test this 
-		# either post or patch, idk man
-		# POST /repos/:owner/:repo/git/refs
-		# PATCH /repos/:owner/:repo/git/refs/:ref
-		# POST :::: Create a branch
-		# PATCH ::: Update a branch
-		print("Branch " + str(sesh.branch) + " not found, committing to branch 'synergi'")
-		if(github.get("/repos/" + sesh.owner + "/"+ sesh.repo +"/git/refs/heads/synergi").status_code == 404):
-			print("Branch synergi not found, making synergi then committing to branch synergi")
-			github.post( url = "/repos/" + sesh.owner + "/"+ sesh.repo +"/git/refs/heads/synergi", json = {"ref" : "refs/heads/synergi", "sha" : sha})
-		else:
-			print("Committing to branch synergi")
-			github.patch( url = "/repos/" + sesh.owner + "/"+ sesh.repo +"/git/refs/heads/synergi", json = {"sha" : sha, "force" : False})
-	else:
-		response = github.post( url = "/repos/" + sesh.owner + "/"+ sesh.repo +"/git/refs/heads/" + sesh.branch, json = {"ref" : "refs/heads/" + sesh.branch, "sha" : sha}).json()
-		print("pointing commit to branch response: ", response)
-
-@app.route("/commit", methods = ["POST"])
-def commit():
-	data = request.json
-	git_commit(data)
-	
 
 # do a double check the user has write permissions; query github to check 
 # https://developer.github.com/v3/repos/#list-user-repositories
@@ -442,7 +332,7 @@ def on_join(data):
 		db.session.commit()
 
 	join_room(str(repo.id)+","+str(sesh.id))
-	emit('accept',{'project':repo.serialize(),'sessionId':sesh.id,'activemembers':sesh.activemembers},room=request.sid)
+	emit('accept',{'sessionId':sesh.id,'activemembers':sesh.activemembers},room=request.sid)
 	emit('player_join',{'name':creds},room=str(repo.id)+","+str(sesh.id),include_self=False)
 
 
@@ -454,7 +344,7 @@ def on_disconnect():
 		if creds in members_array:
 			print("\n\n\nfound ", members_array, creds )
 			members_array.remove(creds)
-			print("removed ", members_array, creds)
+			print("\n\n\nremoved ", members_array, creds)
 		else:
 			print("\n\n\nnot found: ", members_array, creds )
 		sesh.activemembers = ",".join(members_array)

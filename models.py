@@ -36,7 +36,7 @@ class Project(db.Model):
             'id': self.id, 
             'name': self.name,
             'description': self.description,
-            # 'created_date': self.created_date,
+            'created_date': self.created_date,
             'owner':self.owner,
             'repo':self.repo,
             'branch':self.branch,
