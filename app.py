@@ -389,6 +389,7 @@ def fileupdate(data):
 		#data['newpath']   #the place the file ought to be.
 		#data['directory'] #true if the file in question is a directory. False if the file is not a directory.
 	#output:
+		#if they supply either a source or destination path that ends in a /, the call is invalid.
 		#if they supply a source path and but you can't find the file to move, the call is invalid.
 		#if a file already exists at the destination path, the call is invalid.
 		#if the user inputs an invalid destination path, the call is invalid.

@@ -111,7 +111,7 @@
     footer: { data: { action: fork, closeLabel:'Cancel',primaryLabel:'Fork'}}
   }"></div>
   <div data-bind="modal: {
-    visible: false,
+    visible: userWantsToDelete(),
     header: { data: { label: 'Delete File' } },
     body: { name: 'user-wants-delete' },
     footer: { data: { action: deleteFile, closeLabel:'Cancel',primaryLabel:'Delete'}}
@@ -775,6 +775,7 @@ function AppViewModel(servedata) {
         newpath:newpath,
         directory:file.type=='tree'
       });
+      file.path = newpath;
       self.replacebase(file.path+"/",newpath+"/");
     },
     onRenameObject:function(elems,file){
@@ -801,6 +802,7 @@ function AppViewModel(servedata) {
     },
     onDestroyItem:function(elems,file){
       self.filetodelete = file;
+      console.log("wants to delete")
       self.userWantsToDelete(true);
     },
     elems:self.elems,
@@ -811,7 +813,11 @@ function AppViewModel(servedata) {
   socket.on('fileupdate',function(data) {
     var file;
     if (data.oldpath==null) {
-      file = new File({title:"",path:"",sha:""})
+      if (data.directory) {
+        file = new Directory({title:"",path:data.newpath,sha:""})
+      } else {
+        file = new File({title:"",path:data.newpath,sha:""})
+      }
     } else {
       file = self.find(data.oldpath);
       var oldcontainer = self.findcontainer(data.oldpath);
@@ -823,6 +829,9 @@ function AppViewModel(servedata) {
     file.title(data.newpath.split("/")[data.newpath.split("/").length-1]);
     file.path = data.newpath
     newcontainer.push(file);
+    if (data.oldpath!=null) {
+      self.replacebase(data.oldpath+"/",data.newpath+"/");
+    }
   });
 
   socket.on('deletefile',function(data) {
