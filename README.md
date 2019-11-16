@@ -1,10 +1,10 @@
 #synergi
 <h1>IN-PROGRESS</h1>
-<ol>
-	
-</ol>
 
-<h1>Updates to Synergi 2.0</h1>
+
+
+
+<h2>Updates to Synergi 2.0</h2>
 	-- All pages:
 		- you should be able to open an editor even if youre not logged in- you just can't save
 		- logged in with github should also show your github icon
@@ -65,6 +65,9 @@
 		need to support aws login
 		expand versioning system to remember all changes since last commit
 
+
+
+
 <h1>Front end</h1>
 	<ol>
 		<li>Site beauty<ol>
@@ -82,6 +85,9 @@
 			<li>batch changes together into one message to reduce network overhead</li>
 		</ol></li>
 	</ol>
+
+
+
 
 <h1>Back end</h1>
 	<ol>
@@ -104,13 +110,9 @@
 		</li>
 	</ol>
 
-<h1>Stretch Goals</h1>
+<h2>Stretch Goals</h2>
 	<ol>
 		<li>3rd party editors</li>
-		<li>add color indicators to see who's editing what<ol>
-			<li>at the file level</li>
-			<li>at the individual text level</li>
-		</ol></li>
 		<li>add tools to editor page</li>
 		<li>remove favicons 500 error</li>
 		<li>Doing a manual pull(button with pop-up settings.)</li>
@@ -126,9 +128,6 @@
 		<li>display images as images when opened</li>
 	</ol>
 
-<h1>Known bugs</h1>
-	<ol>
-		<li>putting underlined characters in a file prevents editing</li>
-	</ol>
-		
+
+
 

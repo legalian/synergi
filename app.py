@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, redirect, url_for, session
+from flask import Flask, render_template, request, jsonify, redirect, url_for, session, send_from_directory
 from flask_socketio import SocketIO, send, emit, join_room, leave_room
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import update
@@ -16,12 +16,12 @@ import json
 import pprint
 
 
+
+
 #as a side note, here are the basic patterns for notifying clients through socketio:
 #room=request.sid        <---- notifies only the person that sent the message
 #broadcast=True                      <---- (when inside a socketio route) notifies everyone connected to the session
 #broadcast=True,include_self=False   <---- (when inside a socketio route) notifies everyone connected to the session except for the person initiating the event
-#room=str(repo.id)+","+str(sesh.id)                      <----(when inside a flask route) notifies everyone connected to the session
-#room=str(repo.id)+","+str(sesh.id),include_self=False   <----(when inside a flask route) notifies everyone connected to the session except for the person initiating the event
 #clients recieve these events with shit like: socket.on('rejected',function(data){console.log(data);})
 
 
@@ -54,6 +54,7 @@ def music():
 	return render_template('grapheditor.html')
 
 
+
 ##################################
 
 
@@ -75,6 +76,10 @@ def projectlist():
 		return redirect(url_for("github.login"))
 	return render_template('todolist.html',creds=gitcreds(github))
 
+
+@app.route('/favicon.ico')
+def send_js():
+    return send_from_directory('static/icons', 'favicon.ico')
 
 
 @app.route("/github_repos")
@@ -194,7 +199,6 @@ def files():
 		
 		# pulls the information of the file from github 
 		# https://developer.github.com/v3/repos/contents/
-		print("git pull")
 		github_request = github.get("/repos/"+sesh.owner+"/"+sesh.repo+"/contents/"+json_from_client['path']+"?ref="+sesh.branch)
 		if github_request.status_code != 200:
 			print(github_request.content)
@@ -230,7 +234,7 @@ def handle_edit(edit):
 	if sesh == None: return
 	book = TemFile.query.filter_by(session_id = int(sesh.id),path=str(edit['path'])).first()
 	if book == None: return
-
+	print(edit)
 	#synchronize.js line 237 is where this data comes from.
 
 	#if creds not in sesh.activemembers.split(',') then automatically reject their change- they arent in the session.
@@ -248,24 +252,7 @@ def handle_edit(edit):
 	emit('edit',edit,broadcast=True,include_self=False)
 
 
-
-
-@socketio.on('set_project_settings')
-def handle_edit(edit):
-	creds=session['githubuser']
-	repo = Project.query.filter_by(id=int(edit['projectId'])).first()
-	if repo == None: return
-
-	if 'description' in edit.keys():
-		repo.description = edit['description']
-	if 'name' in edit.keys():
-		repo.name = edit['name']
-
-	db.session.commit()
-	emit('set_project_settings',{'description':repo.description,'name':repo.name},broadcast=True,include_self=False)
-
-
-
+	
 
 @app.route("/directories",methods=['POST'])
 def directories():
@@ -375,6 +362,53 @@ def commit():
 	git_commit(data)
 	
 
+
+
+
+@socketio.on('deletefile')
+def fileupdate(data):
+	#input:
+		#data['sessionId']
+		#data['path']      #the place the file is
+		#data['directory'] #true if the file in question is a directory. False if the file is not a directory.
+	#output:
+		#if you can't find the file, the call is invalid and you should emit suspect_desynchronization to the user. (don't broadcast)
+		#emit deletefile to everyone (including the user/include_self) if the call is valid
+
+	#considerations:
+		#you need to worry about the case where the user tries to delete a directory full of files.
+			#directories contain other files, so when they are moved, many files end up being deleted at once.
+			#the server needs to delete everything contained inside the folder if a folder is deleted.
+	pass
+
+
+@socketio.on('fileupdate')
+def fileupdate(data):
+	#input:
+		#data['sessionId']
+		#data['oldpath']   #the place the file used to be. This is None if the user is creating a file.
+		#data['newpath']   #the place the file ought to be.
+		#data['directory'] #true if the file in question is a directory. False if the file is not a directory.
+	#output:
+		#if they supply either a source or destination path that ends in a /, the call is invalid.
+		#if they supply a source path and but you can't find the file to move, the call is invalid.
+		#if a file already exists at the destination path, the call is invalid.
+		#if the user inputs an invalid destination path, the call is invalid.
+		#if the call is invalid, emit suspect_desynchronization to that client (don't broadcast it to everyone)
+		#if the call is valid, emit fileupdate with the same data to all the other clients (broadcast and do not include self)
+
+	#considerations:
+		#you need to worry about the case where the user tries to move a directory from one spot to another.
+			#directories contain other files, so when they are moved, many files end up being moved at once.
+			#the server needs to update the paths of every file/directory moved, which may be more than one if the user moves a folder.
+		#make sure the destination path is valid i.e. it's located inside a directory and it's written with characters that are allowed to appear in the path.
+	pass
+
+
+
+
+
+
 # do a double check the user has write permissions; query github to check 
 # https://developer.github.com/v3/repos/#list-user-repositories
 # or 
@@ -462,8 +496,8 @@ def on_join(data):
 	print("active members::::: ", sesh.activemembers)
 	
 	emit('accept',{'project':repo.serialize(),'sessionId':sesh.id,'activemembers':sesh.activemembers},room=request.sid)
-	emit('player_join',{'name':creds},room=str(repo.id)+","+str(sesh.id),include_self=False)
-	print(members_array)
+	emit('player_join',{'name':creds},broadcast=True,include_self=False)
+
 
 @socketio.on('disconnect')
 def on_disconnect():
@@ -475,6 +509,7 @@ def on_disconnect():
 			print("\n\n\nfound ", members_array, creds )
 			members_array.remove(creds)
 			print("disconnected ", members_array, creds)
+
 		else:
 			print("\n\n\nnot found: ", members_array, creds )
 		sesh.activemembers = members_array

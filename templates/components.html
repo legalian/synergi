@@ -152,7 +152,7 @@
 		<!-- ko if: rearrangeable -->
 		<div class="tabs" data-bind="dragula:{data:tabs,group:draggroup,afterDrop:afterDrop},attr:{id:id}">
 			<div class="tab" data-bind="class:$data==$parent.selected()?'selected':'',style:$parent.fill?{flex:1}:{},click:$parent.select">
-				<div class="innertabtext" data-bind="text:title"></div>
+				<div class="innertabtext" data-bind="text:title()"></div>
 				<!-- ko if:$parent.closeable && ( $parent.alwaysShowX || $data==$parent.selected() )  -->
 				<i class="material-icons littlex" data-bind="click:$parent.remove,clickBubble:false">close</i>
 				<!-- /ko -->
@@ -162,7 +162,7 @@
 		<!-- ko ifnot: rearrangeable -->
 		<div class="tabs" data-bind="foreach:tabs,attr:{id:id}">
 			<div class="tab" data-bind="class:$data==$parent.selected()?'selected':'',style:$parent.fill?{flex:1}:{},click:function(){$parent.select($index(),$data);}">
-				<div class="innertabtext" data-bind="text:title"></div>
+				<div class="innertabtext" data-bind="text:title()"></div>
 				<!-- ko if:$parent.closeable && ( $parent.alwaysShowX || $data==$parent.selected() ) -->
 				<i class="material-icons littlex" data-bind="click:$parent.remove,clickBubble:false">close</i>
 				<!-- /ko -->
@@ -284,34 +284,75 @@
 
 {% macro importRecursiveArea() %}
 	<style type="text/css">
-
-/*.rotate-90 {
-	transform: rotate(90deg);
-}*/
-
 		.recursiveexpander {
 			width:1em;
 			text-align: right;
 			flex-shrink:0;
-			line-height: 20px;
+			line-height: 17px;
+		}
+		.inlineicon {
+			font-size:inherit;
+			line-height: inherit;
 		}
 	</style>
+	<script type="text/html" id="parent-recursive-area">
+		<div style="width:100%;height:100%;position:relative;">
+			<div style="position:absolute;top:0;left:0;right:0;" data-bind="template:{name:'ghost-recursive-area',data:$data}"></div>
+			<div style="position:absolute;top:0;left:0;right:0;" data-bind="template:{name:rearrangeable?'rearrangeable-recursive-area':'recursive-area',data:$data}"></div>
+		</div>
+	</script>
+	<script type="text/html" id="ghost-recursive-area">
+		<!-- ko foreach:elems -->
+			<div style="height:17px;width:100%;" data-bind="style:hover()?{'background-color':'#444'}:{'background-color':'transparent'}"></div>
+			<!-- ko if:$data.elems -->
+				<!-- ko if:expanded() -->
+					<!-- ko template:{
+						name: 'ghost-recursive-area',
+						data:{elems:elems}} -->
+					<!-- /ko -->
+				<!-- /ko -->
+			<!-- /ko -->
+		<!-- /ko -->
+	</script>
 	<script type="text/html" id="rearrangeable-recursive-area">
-		<div style="padding-bottom:0px;" data-bind="dragula:{data:elems,group:draggroup,moves:moves,accepts:accepts, afterDrop:afterDrop}">
+		<div data-bind="dragula:{data:elems,group:transmit.draggroup,moves:transmit.moves,accepts:transmit.accepts, afterDrop:transmit.afterDrop}">
 			<div class="recursiveunit">
-				<div class="recursiveelement" style="display: flex">
+				<div class="recursiveelement" style="display: flex;cursor:pointer;position:relative;height: 17px" data-bind="click:$parent.transmit.onClick,event: { mouseover:function(){if (hover){hover(true);}},mouseleave:function(){if (hover){hover(false);}}}">
 					<div  class="recursiveexpander"  data-bind="if:$data.elems">
-						<i data-bind="class:expanded()?'material-icons rotate-90':'material-icons',click:function(){expanded(!expanded())}" style="cursor:pointer;font-size: inherit;line-height: inherit;">play_arrow</i>
+						<i data-bind="class:expanded()?'material-icons rotate-90 inlineicon':'material-icons inlineicon',click:function(){expanded(!expanded())},clickBubble:false">play_arrow</i>
 					</div>
+					<!-- ko if:editing -->
 					<div style="flex:1">
-						<span data-bind="text:title,click:$parent.onClick" style="overflow: hidden;white-space: nowrap;cursor:pointer;"></span>
+						<input data-bind="value:edittitle,hasfocus: true,event:{blur:function(){editing(false);$parent.transmit.onRenameObject($parent.elems,$data)}}" style="overflow: hidden;white-space: nowrap;min-width:10em;"/>
 					</div>
+					<!-- /ko -->
+					<!-- ko ifnot:editing -->
+					<div style="flex:1">
+						<span data-bind="text:title()" style="overflow: hidden;white-space: nowrap;cursor:pointer;"></span>
+					</div>
+					<div data-bind="if:hover && hover()" style="position: absolute;right:0;top:0;bottom:0;background-color:#444;font-size:10pt;">
+						<!-- ko if:$data.elems -->
+						<span data-bind="click:function(){expanded(true);elems.push($parent.transmit.newfiledata($data));},clickBubble:false">
+							<i class="material-icons inlineicon">note_add</i>
+						</span>
+						<span data-bind="click:function(){expanded(true);elems.push($parent.transmit.newfolderdata($data));},clickBubble:false">
+							<i class="material-icons inlineicon">create_new_folder</i>
+						</span>
+						<!-- /ko -->
+						<span data-bind="click:function(){edittitle(title());editing(true);},clickBubble:false">
+							<i class="material-icons inlineicon">text_format</i>
+						</span>
+						<span data-bind="click:function(){$parent.transmit.onDestroyItem($parent.elems,$data);},clickBubble:false">
+							<i class="material-icons inlineicon">delete_forever</i>
+						</span>
+					</div>
+					<!-- /ko -->
 				</div>
 				<!-- ko if:$data.elems -->
 					<div data-bind="visible: expanded()" style="margin-left:1em;">
 					<!-- ko template:{
 						name:'rearrangeable-recursive-area',
-						data:{onClick:$parent.onClick,moves:$parent.moves,accepts:$parent.accepts,afterDrop:$parent.afterDrop,draggroup:$parent.draggroup,elems:elems}} -->
+						data:{transmit:$parent.transmit,elems:elems}} -->
 					<!-- /ko -->
 					</div>
 				<!-- /ko -->
@@ -319,18 +360,18 @@
 		</div>
 	</script>
 	<script type="text/html" id="recursive-area">
-		<div style="margin-left:20px;margin-bottom:5px;" data-bind="foreach:elems">
+		<div data-bind="foreach:elems">
 			<div>
-				<div class="recursiveelement" style="display: flex">
+				<div class="recursiveelement" style="display: flex;cursor:pointer" data-bind="event: { mouseover:function(){if (hover){hover(true);}},mouseout:function(){if (hover){hover(false);}}}">
 					<div class="recursiveexpander" data-bind="if:$data.elems">
-						<i data-bind="class:expanded()?'material-icons rotate-90':'material-icons',click:function(){expanded(!expanded())}"  style="cursor:pointer;font-size: inherit;line-height: inherit;">play_arrow</i>
+						<i data-bind="class:expanded()?'material-icons rotate-90':'material-icons',click:function(){expanded(!expanded())}"  style="font-size: inherit;line-height: inherit;">play_arrow</i>
 					</div>
 					<div style="flex:1">
-						<span data-bind="text:title,click:$parent.onClick" style="overflow: hidden;white-space: nowrap;"></span>
+						<span data-bind="text:title(),click:$parent.onClick" style="overflow: hidden;white-space: nowrap;"></span>
 					</div>
 				</div>
 				<!-- ko if:$data.elems -->
-					<div data-bind="visible: expanded()">
+					<div data-bind="visible: expanded()" style="margin-left:1em;">
 					<!-- ko template:{
 						name: 'recursive-area',
 						data:{onClick:$parent.onClick,elems:elems}} -->
@@ -344,26 +385,36 @@
 	var recursivedragulagroups=0;
 	function RecursiveArea(props){
 		var self = this;
-		props = Object.assign({elems:null,id:"",rearrangeable:true,draggroup:null,onClick:function(){},afterDrop:function(){}},props);
-		if (props.draggroup == null) {self.draggroup = 'RecursiveGroup'+recursivedragulagroups++;}
-		else                         {self.draggroup = props.draggroup;}
+		props = Object.assign({elems:null,id:"",rearrangeable:true,draggroup:null,onRenameObject:null,newfiledata:null,newfolderdata:null,onDestroyItem:null,onClick:function(){},afterDrop:function(){}},props);
+		
 		self.rearrangeable = props.rearrangeable;
-		self.template = self.rearrangeable?"rearrangeable-recursive-area":"recursive-area";
-		self.elems = props.elems
-		self.afterDrop = props.afterDrop
-		self.onClick = props.onClick;
-		self.moves = function (el, source, handle,sibling) {
+		self.template = "parent-recursive-area";//self.rearrangeable?"rearrangeable-recursive-area":"recursive-area";
+		self.elems = props.elems;
+
+		self.transmit = {}
+		if (props.draggroup == null) {self.transmit.draggroup = 'RecursiveGroup'+recursivedragulagroups++;}
+		else                         {self.transmit.draggroup = props.draggroup;}
+		self.transmit.newfiledata = props.newfiledata;
+		self.transmit.newfolderdata = props.newfolderdata;
+		self.transmit.onDestroyItem = props.onDestroyItem;
+		self.transmit.onRenameObject = props.onRenameObject;
+		self.transmit.afterDrop = props.afterDrop
+		self.transmit.onClick = props.onClick;
+
+		self.transmit.moves = function (el, source, handle,sibling) {
 			while(handle!=null && !handle.classList.contains('recursiveunit')) {handle = handle.parentElement;}
 			return handle === el;
 		};
-		self.accepts = function (el, dest, source,sibling) {
+		self.transmit.accepts = function (el, dest, source,sibling) {
 			while(dest != null) {dest = dest.parentElement;if (dest==el){return false;}}
 			return true;
 		};
+
+
 		self.vresize = function() {}
 		self.onLoad = function(a) {
 			if (self.rearrangeable) {
-				window.knockoutDragula.options(self.draggroup);
+				window.knockoutDragula.options(self.transmit.draggroup);
 			}
 		}
 	}
@@ -406,41 +457,44 @@
 		}
 	</style>
 	<script type="text/html" id="errmsg-area">
-		<div class="centcontainer">
-			<!-- ko if:code=="loading" -->
-			<div class="loader"></div>
-			<!-- /ko -->
-			<!-- ko if:code=="toolarge" -->
-			<i class="material-icons erricon">folder</i>
-			<H3>File too large.</H3>
-			<p>Files this large cannot be opened in Synergi.
-			The maximum suppored filesize is ASKERIC. Files this large aren't usually just code, so make sure this is a file you wanted to open in the first place.</p>
-			<!-- /ko -->
-			<!-- ko if:code=="toomanyfiles" -->
-			<i class="material-icons erricon">insert_drive_file</i>
-			<H3>Project too large.</H3>
-			<p>Your project contains too many files to be opened in Synergi.
-			We recommend that you clone your repo locally and pare down the number of files.
-			Usually, if you run into this error, it means you should revise your .gitignore to ensure that you are only including the files you want.</p>
-			<!-- /ko -->
-			<!-- ko if:code=="unauthorized" -->
-			<i class="material-icons erricon">lock</i>
-			<H3>Not authorized.</H3>
-			<p>It seems you are not authorized to access this session.</p>
-			<!-- /ko -->
-			<!-- ko if:code=="unknown" -->
-			<i class="material-icons erricon">sms_failed</i>
-			<H3>File could not be loaded.</H3>
-			<p>This file could not be loaded at this time.
-			Try refreshing the page.</p>
-			<!-- /ko -->
+		<div style="position: relative;width:100%" data-bind="style:{height:height}">
+			<div class="centcontainer">
+				<!-- ko if:code=="loading" -->
+				<div class="loader"></div>
+				<!-- /ko -->
+				<!-- ko if:code=="toolarge" -->
+				<i class="material-icons erricon">folder</i>
+				<H3>File too large.</H3>
+				<p>Files this large cannot be opened in Synergi.
+				The maximum suppored filesize is ASKERIC. Files this large aren't usually just code, so make sure this is a file you wanted to open in the first place.</p>
+				<!-- /ko -->
+				<!-- ko if:code=="toomanyfiles" -->
+				<i class="material-icons erricon">insert_drive_file</i>
+				<H3>Project too large.</H3>
+				<p>Your project contains too many files to be opened in Synergi.
+				We recommend that you clone your repo locally and pare down the number of files.
+				Usually, if you run into this error, it means you should revise your .gitignore to ensure that you are only including the files you want.</p>
+				<!-- /ko -->
+				<!-- ko if:code=="unauthorized" -->
+				<i class="material-icons erricon">lock</i>
+				<H3>Not authorized.</H3>
+				<p>It seems you are not authorized to access this session.</p>
+				<!-- /ko -->
+				<!-- ko if:code=="unknown" -->
+				<i class="material-icons erricon">sms_failed</i>
+				<H3>File could not be loaded.</H3>
+				<p>This file could not be loaded at this time.
+				Try refreshing the page.</p>
+				<!-- /ko -->
+			</div>
 		</div>
 	</script>
 	<script type="text/javascript">
 	function ErrMsgArea(props){
 		var self = this;
-		props = Object.assign({code:"empty"},props);
+		props = Object.assign({code:"empty",height:"100%"},props);
 		self.code = props.code;
+		self.height = props.height;
 		self.template = "errmsg-area";
 		self.vresize = function() {}
 		self.onLoad = function() {}
