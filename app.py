@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for, session, send_from_directory
 from flask_socketio import SocketIO, send, emit, join_room, leave_room
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import update
 from flask_dance.contrib.github import make_github_blueprint, github
 from flask_session import Session
 from app_factory import db,app,blueprint,socketio
@@ -14,7 +13,7 @@ import hashlib
 import sys
 import json
 import pprint
-
+import copy
 
 
 
@@ -138,6 +137,7 @@ def projects():
 	# print("-=-=-=->",json_from_client)
 
 
+
 	users = github.get("/repos/" + str(json_from_client['owner']) + "/" + str(json_from_client['repo']) + "/contributors").json()
 	# formattedprint(users)
 
@@ -179,6 +179,7 @@ def logout():
 
 @socketio.on('connect')
 def sdahoufa():
+	print("user ", session['githubuser'], " connected")
 	pass
 
 
@@ -234,7 +235,7 @@ def handle_edit(edit):
 	if sesh == None: return
 	book = TemFile.query.filter_by(session_id = int(sesh.id),path=str(edit['path'])).first()
 	if book == None: return
-	print(edit)
+	# print(edit)
 	#synchronize.js line 237 is where this data comes from.
 
 	#if creds not in sesh.activemembers.split(',') then automatically reject their change- they arent in the session.
@@ -247,7 +248,7 @@ def handle_edit(edit):
 	if(not book.addHash(hash, edit['delta'])): 
 		emit('rejected',{"delta":edit['delta'],"mostRecentHash":book.hash1,"yourHash":hash},room=request.sid) 
 		return
-	print("added hash: " , hash)
+	# print("added hash: " , hash)
 	db.session.commit()
 	emit('edit',edit,broadcast=True,include_self=False)
 
@@ -268,19 +269,27 @@ def directories():
 	return json_github_request
 
 
-def git_commit(data):
+def git_commit(data, github_oauth_object):
+	# data = {sessionId: "", commit_message : ""}, github_oauth
 	# request.json() = [sessionId : "" , commit_message : ""]
 	# github.put(url = url, params = par_var)
 	# https://developer.github.com/v3/repos/contents/#create-or-update-a-file
 	# https://developer.github.com/v3/git/
 	# https://developer.github.com/v3/git/trees/
+	access_token = github_oauth_object['access_token']
+	print(github_oauth_object)
+	print(access_token)
+	headers = {"Authorization" : "token " + str(access_token)}
 	sesh = Session.query.filter_by(id = data['sessionId']).first()
-	commits = github.get("/repos/" + sesh.owner + "/" + sesh.repo + "/commits").json()
+	commits = requests.get(url = "https://api.github.com/repos/" + sesh.owner + "/" + sesh.repo + "/commits",headers = headers)
+	commits = commits.json()
 	last_commit_sha = commits[0]['sha']
-	commit_json_from_github = github.get("/repos/" + sesh.owner + "/" + sesh.repo + "/commits/" + last_commit_sha).json()
+	commit_json_from_github = requests.get(url = "https://api.github.com/repos/" + sesh.owner + "/" + sesh.repo + "/commits/" + last_commit_sha, headers= headers)
+	commit_json_from_github = commit_json_from_github.json()
 	# formattedprint(commit_json_from_github)
 	commit_tree_sha = commit_json_from_github['commit']['tree']['sha']
-	github_tree = github.get("/repos/"+sesh.owner+"/"+sesh.repo+"/git/trees/"+commit_tree_sha+"?recursive=1,ref="+sesh.branch).json()
+	github_tree = requests.get(url = "https://api.github.com/repos/"+sesh.owner+"/"+sesh.repo+"/git/trees/"+commit_tree_sha+"?recursive=1,ref="+sesh.branch,headers = headers)
+	github_tree = github_tree.json()
 
 	params = {
 		"base_tree" : commit_tree_sha,
@@ -295,11 +304,10 @@ def git_commit(data):
 	# dict_keys(['_permanent', 'github_oauth_token', 'githubuser', 'sessionId'])
 	# formattedprint(session.keys())
 	# formattedprint(session['github_oauth_token'])
-	access_token = session['github_oauth_token']['access_token']
 	base_tree = params['base_tree']
 	# tree = params['tree']
 	# formattedprint(github.get("/user").json())
-	post_response = github.post("/repos/" + sesh.owner + "/" + sesh.repo + "/git/trees", json= params)
+	post_response = requests.post(url = "https://api.github.com/repos/" + sesh.owner + "/" + sesh.repo + "/git/trees", headers = headers , json= params)
 
 	# print("\n"*10)
 	# formattedprint(requests.post('http://httpbin.org/post', json = params).json())
@@ -322,7 +330,7 @@ def git_commit(data):
 
 	# POST /repos/:owner/:repo/git/commits
 	# https://developer.github.com/v3/git/commits/#create-a-commit
-	git_commit_json = github.post("/repos/" + sesh.owner + "/" + sesh.repo + "/git/commits", json = commit_data).json()
+	git_commit_json = requests.post(url = "https://api.github.com/repos/" + sesh.owner + "/" + sesh.repo + "/git/commits", headers = headers, json = commit_data).json()
 	# print("\n\nMake a new commit object response: ", git_commit_json)
 	sha = git_commit_json['sha']
 	if (git_commit_json['verification']['verified'] == False):
@@ -337,7 +345,7 @@ def git_commit(data):
 		"sha" : sha
 	}
 	print("Committing....")
-	if (github.get("/repos/" + sesh.owner + "/" + sesh.repo + "/git/ref/heads/" + sesh.branch).status_code == 404):
+	if (requests.get(url = "https://api.github.com/repos/" + sesh.owner + "/" + sesh.repo + "/git/ref/heads/" + sesh.branch,headers = headers).status_code == 404):
 		# make a new branch if the branch doesn't exist
 		# test this 
 		# either post or patch, idk man
@@ -346,20 +354,21 @@ def git_commit(data):
 		# POST :::: Create a branch
 		# PATCH ::: Update a branch
 		print("Branch " + str(sesh.branch) + " not found, committing to branch 'synergi'")
-		if(github.get("/repos/" + sesh.owner + "/"+ sesh.repo +"/git/refs/heads/synergi").status_code == 404):
+		if(requests.get( url = "https://api.github.com/repos/" + sesh.owner + "/"+ sesh.repo +"/git/refs/heads/synergi",headers = headers).status_code == 404):
 			print("Branch synergi not found, making synergi then committing to branch synergi")
-			github.post( url = "/repos/" + sesh.owner + "/"+ sesh.repo +"/git/refs/heads/synergi", json = {"ref" : "refs/heads/synergi", "sha" : sha})
+			requests.post( url = "https://api.github.com/repos/" + sesh.owner + "/"+ sesh.repo +"/git/refs/heads/synergi", headers = headers, json = {"ref" : "refs/heads/synergi", "sha" : sha})
 		else:
 			print("Committing to branch synergi")
-			github.patch( url = "/repos/" + sesh.owner + "/"+ sesh.repo +"/git/refs/heads/synergi", json = {"sha" : sha, "force" : False})
+			requests.patch( url = "https://api.github.com/repos/" + sesh.owner + "/"+ sesh.repo +"/git/refs/heads/synergi", headers = headers, json = {"sha" : sha, "force" : False})
 	else:
-		response = github.post( url = "/repos/" + sesh.owner + "/"+ sesh.repo +"/git/refs/heads/" + sesh.branch, json = {"ref" : "refs/heads/" + sesh.branch, "sha" : sha}).json()
+		response = requests.post( url = "https://api.github.com/repos/" + sesh.owner + "/"+ sesh.repo +"/git/refs/heads/" + sesh.branch, headers = headers, json = {"ref" : "refs/heads/" + sesh.branch, "sha" : sha}).json()
 		print("pointing commit to branch response: ", response)
 
+	print("Commit successfule")
 @app.route("/commit", methods = ["POST"])
 def commit():
 	data = request.json
-	git_commit(data)
+	git_commit(data, session['github_oauth_token'])
 	
 
 
@@ -444,7 +453,7 @@ def joinjoin():
 			branch     = repo.branch,
 			sha        = head_tree_sha,
 			project_id = repo.id,
-			activemembers = [""],
+			activemembers = None,
 		)
 		db.session.add(sesh)
 		db.session.commit()
@@ -473,27 +482,27 @@ def on_join(data):
 	
 	print()
 	members_array = sesh.activemembers
+	if sesh.activemembers == None: members_array = []
 	print("current members:: ", members_array)
 	print("user " , creds , " joining session")
 	
 	if creds in members_array:
 		print("member in session already")
+
+
 	members_array.append(creds)
-	print("appended array: ", members_array)
 	sesh.activemembers = members_array
 	print("\nUsers:")
 	for item in sesh.activemembers:
 		print(item)
-	print("sesh.activemembers: ", sesh.activemembers)
-	print("member 0 ", members_array[0])
-	db.session.commit()
 
-	sesh.update({activemembers : members_array})
+	
 	db.session.commit()
-	print("user ", creds, " joined")
+	print("user ", members_array[len(members_array)-1], " joined")
 
-	join_room(str(repo.id)+","+str(sesh.id))
-	print("active members::::: ", sesh.activemembers)
+	join_room("room:"+str(sesh.id))
+
+	session['sessionId'] = sesh.id
 	
 	emit('accept',{'project':repo.serialize(),'sessionId':sesh.id,'activemembers':sesh.activemembers},room=request.sid)
 	emit('player_join',{'name':creds},broadcast=True,include_self=False)
@@ -503,17 +512,23 @@ def on_join(data):
 def on_disconnect():
 	creds = session['githubuser']
 	print("disconnecting....")
-	for sesh in Session.query.filter_by(id=int(session['sessionId'])).all():
-		members_array = sesh.activemembers
-		if creds in members_array:
-			print("\n\n\nfound ", members_array, creds )
-			members_array.remove(creds)
-			print("disconnected ", members_array, creds)
-
-		else:
-			print("\n\n\nnot found: ", members_array, creds )
-		sesh.activemembers = members_array
+	sesh = Session.query.filter_by(id = session['sessionId']).first()
+	print("current users: ", sesh.activemembers)
+	members_array = sesh.activemembers
+	members_array = copy.copy(members_array)
+	if creds in members_array: members_array.remove(creds)
+	sesh.activemembers = members_array
+	print("temp: ", sesh.activemembers)
 	db.session.commit()
+	print("Active users: ", sesh.activemembers)
+	if (sesh.activemembers == []):
+		print("Session empty")
+		print("Auto-committing")
+		git_commit({"sessionId" : session['sessionId'], "commit_message": "Auto-generated Commit"}, session["github_oauth_token"])
+		for sesh in Session.query.filter_by(project_id = data["projectid"]).all():
+		#in the future we'd have to emergency push all data in each session before a session gets deleted. This applies here and also when people disconnect from sessions.
+			TemFile.query.filter_by(session_id = sesh.id).delete()
+		Session.query.filter_by(project_id = data["projectid"]).delete()
 	emit('player_leave',{'name':creds},include_self=False)
 
 
