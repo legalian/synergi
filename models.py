@@ -56,6 +56,17 @@ class Session(db.Model):
     project_id = db.Column(db.Integer, db.ForeignKey('project.id'))
     activemembers = db.Column(pg.ARRAY(db.String))
 
+    def addMember(self, member):
+        self.activemembers.append(member)
+
+    def removeMember(self, member):
+        if member in self.activemembers:
+            self.activemembers.remove(member)
+
+    def hasMember(self, member):
+        return member in self.activemembers
+
+
     def __init__(self, owner, repo, branch, sha,project_id,activemembers):
         self.owner = owner,
         self.repo = repo,
@@ -64,7 +75,7 @@ class Session(db.Model):
         self.project_id = project_id,
         self.activemembers = activemembers
 
-
+        
     def __repr__(self):
         return '<id {}>'.format(self.id)
     
@@ -109,6 +120,21 @@ class TemFile(db.Model):
     hash3      = db.Column(db.String())
     hash4      = db.Column(db.String())
     hash5      = db.Column(db.String())
+
+    # whether the file was moved, deleted, edited, or renamed
+    deleted    = db.Column(Boolean, default = False)
+    changed    = db.Column(Boolean, default = False)
+    loaded     = db.Column(Boolean, default = False)
+
+    def load(self):
+        self.loaded = True
+
+    def delete(self):
+        self.deleted = True
+
+    def change(self):
+        self.changed = True
+
 
     def addHash(self, md5, delta):#delta['start'],delta['amt'],delta['msg']
         def process(delt_start,delt_amt,delt_data):

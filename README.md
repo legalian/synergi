@@ -4,7 +4,7 @@
 	<li>moving/creating/deleting files
 		<ol>
 			<li>add "changed", "loaded" , "deleted" properties to temFile</li>
-			<li>modify commit() to check to see if the files have been changed or moved
+			<li>modify commit() to check to see if the files have been changed or moved</li>
 		</ol>
 	</li>
 </ol>

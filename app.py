@@ -1,17 +1,13 @@
-from flask import Flask, render_template, request, jsonify, redirect, url_for, session, send_from_directory
-from flask_socketio import SocketIO, send, emit, join_room, leave_room
-from flask_sqlalchemy import SQLAlchemy
-from flask_dance.contrib.github import make_github_blueprint, github
-from flask_session import Session
-from app_factory import db,app,blueprint,socketio
+from flask import render_template, request, redirect, url_for, session, send_from_directory
+from flask_socketio import emit, join_room
+from flask_dance.contrib.github import github
+# from flask_session import Session
+from app_factory import db, app, socketio
 from models import Project, Session, TemFile
 import base64
 import requests
-import os
 import json
 import hashlib
-import sys
-import json
 import pprint
 import copy
 
@@ -168,7 +164,6 @@ def editor():
 def login():
 	if not github.authorized:
 		return redirect(url_for("github.login"))
-	resp = github.get("/user")
 	return redirect("/")
 
 
@@ -185,18 +180,20 @@ def sdahoufa():
 
 @app.route("/files",methods=['POST'])
 def files():
-	json_from_client = request.json
+	return loadFile(request.json)
+
+def loadFile(request):
+	# request = {sessionId :"", path : ""}
+	json_from_client = request
 	sesh = Session.query.filter_by(id=int(json_from_client['sessionId'])).first()
 	if sesh == None: return
 
 	#creds=session['githubuser']
 	#if creds not in sesh.activemembers.split(',') then tell the user to go directly to hell- dont give them any files they arent to be trusted.
-	creds = session['githubuser']
 	# if creds not in sesh.activemembers.split(','): return "ur not allowed lol",402
 
 	book = TemFile.query.filter_by(session_id = int(sesh.id),path=str(json_from_client['path'])).first()
-	print(book)
-	if book == None:
+	if not book.loaded:
 		
 		# pulls the information of the file from github 
 		# https://developer.github.com/v3/repos/contents/
@@ -214,15 +211,9 @@ def files():
 		decoded = str(base64.b64decode(json_from_github['content']).decode("utf-8"))
 
 		# making the database entry in TemFile of the current file
-		book = TemFile(
-			session_id = sesh.id,
-			path = json_from_client['path'],
-			content = decoded,
-			sha = json_from_github['sha'],
-			md5 = hashlib.md5(decoded.encode("utf-8")).hexdigest()
-		)
-
-		db.session.add(book)
+		book.content = decoded
+		book.md5	 = hashlib.md5(decoded.encode("utf-8")).hexdigest()
+		book.load()
 		db.session.commit()
 	return book.content
 
@@ -230,7 +221,6 @@ def files():
 
 @socketio.on('edit')
 def handle_edit(edit):
-	creds=session['githubuser']
 	sesh = Session.query.filter_by(id=int(edit['sessionId'])).first()
 	if sesh == None: return
 	book = TemFile.query.filter_by(session_id = int(sesh.id),path=str(edit['path'])).first()
@@ -243,17 +233,15 @@ def handle_edit(edit):
 	# if (creds not in sesh.activemembers.split(',')): 
 	# 	emit('rejected',{"delta":edit['delta'],"reason":"invalid credentials"},room=request.sid) 
 	# 	return
-	
 	hash = edit['md5']
 	if(not book.addHash(hash, edit['delta'])): 
 		emit('rejected',{"delta":edit['delta'],"mostRecentHash":book.hash1,"yourHash":hash},room=request.sid) 
 		return
 	# print("added hash: " , hash)
+	book.change()
 	db.session.commit()
 	emit('edit',edit,broadcast=True,include_self=False)
 
-
-	
 
 @app.route("/directories",methods=['POST'])
 def directories():
@@ -304,7 +292,6 @@ def git_commit(data, github_oauth_object):
 	# dict_keys(['_permanent', 'github_oauth_token', 'githubuser', 'sessionId'])
 	# formattedprint(session.keys())
 	# formattedprint(session['github_oauth_token'])
-	base_tree = params['base_tree']
 	# tree = params['tree']
 	# formattedprint(github.get("/user").json())
 	post_response = requests.post(url = "https://api.github.com/repos/" + sesh.owner + "/" + sesh.repo + "/git/trees", headers = headers , json= params)
@@ -340,10 +327,6 @@ def git_commit(data, github_oauth_object):
 
 	# todo: update the branch to point to the commit sha
 	# https://developer.github.com/v3/git/refs/#get-a-single-reference
-	committ =  {
-		"ref" : "refs/heads/" + sesh.branch,
-		"sha" : sha
-	}
 	print("Committing....")
 	if (requests.get(url = "https://api.github.com/repos/" + sesh.owner + "/" + sesh.repo + "/git/ref/heads/" + sesh.branch,headers = headers).status_code == 404):
 		# make a new branch if the branch doesn't exist
@@ -364,7 +347,7 @@ def git_commit(data, github_oauth_object):
 		response = requests.post( url = "https://api.github.com/repos/" + sesh.owner + "/"+ sesh.repo +"/git/refs/heads/" + sesh.branch, headers = headers, json = {"ref" : "refs/heads/" + sesh.branch, "sha" : sha}).json()
 		print("pointing commit to branch response: ", response)
 
-	print("Commit successfule")
+	print("Commit successful")
 @app.route("/commit", methods = ["POST"])
 def commit():
 	data = request.json
@@ -411,6 +394,34 @@ def fileupdate(data):
 			#directories contain other files, so when they are moved, many files end up being moved at once.
 			#the server needs to update the paths of every file/directory moved, which may be more than one if the user moves a folder.
 		#make sure the destination path is valid i.e. it's located inside a directory and it's written with characters that are allowed to appear in the path.
+	tmp = TemFile.query.filter_by(path = data['newpath']).first()
+	if tmp != None or data['newpath']== "" or data['newpath'][-1]=="/":
+		emit("suspect_desynchronization")
+		return
+
+	if data['oldpath'] == None:
+		file = TemFile(
+				sessionId = data['sessionId'],
+				path = data['newpath'],
+				content = "",
+				sha = None,
+				md5 = hashlib.md5("".encode("utf-8")).hexdigest()
+			)
+		db.session.add(file)
+		db.session.commit()
+		print("Created file")
+		return
+
+	file = TemFile.query.filter_by(path = data['oldpath']).first()
+	if file == None: # if the file does not exist, somethin wonky is happening
+		emit("suspect_desynchronization")
+		return
+
+	# newFile = TemFile(
+			
+	# 	)
+
+
 	pass
 
 
@@ -457,7 +468,19 @@ def joinjoin():
 		)
 		db.session.add(sesh)
 		db.session.commit()
+		# make every file in the tree a temFile
 
+		file_tree = github.get("/repos/"+ repo.owner +"/"+ repo.repo +"/git/trees/"+ head_tree_sha +"?recursive=1")
+		for file in file_tree['tree']:
+			book = TemFile(
+				session_id = sesh.id,
+				path = file['path'],
+				content = "",
+				sha = file['sha'],
+				md5 = hashlib.md5("".encode("utf-8")).hexdigest()
+			)
+			db.session.add(book)
+		db.session.commit()
 
 	session['sessionId'] = sesh.id
 
@@ -510,6 +533,7 @@ def on_join(data):
 
 @socketio.on('disconnect')
 def on_disconnect():
+	data = request.json()
 	creds = session['githubuser']
 	print("disconnecting....")
 	sesh = Session.query.filter_by(id = session['sessionId']).first()
