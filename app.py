@@ -283,8 +283,13 @@ def git_commit(data, github_oauth_object):
 		"base_tree" : commit_tree_sha,
 		"tree" : []
 	}
+	
 	for file in TemFile.query.filter_by(session_id = int(data['sessionId'])).all():
-		params["tree"].append({ "path" : file.path, "mode" : "100644", "type" : "blob", "content" : file.content})
+		if (file.deleted):
+			params["tree"].append({ "path" : file.path, "mode" : "100644", "type" : "blob", "sha" : None})
+		else:
+			params["tree"].append({ "path" : file.path, "mode" : "100644", "type" : "blob", "content" : file.content})
+
 		# file == {id, session_id, path, content, sha, hash1-hash5}
 
 	# https://developer.github.com/v3/git/trees/#create-a-tree
@@ -358,7 +363,7 @@ def commit():
 
 
 @socketio.on('deletefile')
-def fileupdate(data):
+def filedelete(data):
 	#input:
 		#data['sessionId']
 		#data['path']      #the place the file is
@@ -371,7 +376,24 @@ def fileupdate(data):
 		#you need to worry about the case where the user tries to delete a directory full of files.
 			#directories contain other files, so when they are moved, many files end up being deleted at once.
 			#the server needs to delete everything contained inside the folder if a folder is deleted.
-	pass
+	if data['path'] == None:
+		emit("suspect_desynchronization")
+
+	if not data['directory']:
+		file = TemFile.query.filter_by(session_id=data['sessionId'], path=data['path']).first()
+		if (file == None):
+			emit("suspect_desynchronization")
+			return
+		file.delete()
+	else:
+		file_tree = TemFile.query.filter_by(session_id = data['sessionId']).all()
+		files = [each for each in file_tree if each.path.startswith(data['path'] + "/")]
+		for f in files:
+			f.delete()
+
+	db.session.commit()
+	emit("deletefile", data, broadcast = True, include_self = True)
+	
 
 
 @socketio.on('fileupdate')
@@ -394,39 +416,73 @@ def fileupdate(data):
 			#directories contain other files, so when they are moved, many files end up being moved at once.
 			#the server needs to update the paths of every file/directory moved, which may be more than one if the user moves a folder.
 		#make sure the destination path is valid i.e. it's located inside a directory and it's written with characters that are allowed to appear in the path.
-	tmp = TemFile.query.filter_by(path = data['newpath']).first()
-	if tmp != None or data['newpath']== "" or data['newpath'][-1]=="/":
+	
+	# if there is a file at the specified new path, start pooping on the keyboard and return an error
+	if data['newpath']== "" or data['newpath'][-1]=="/":
 		emit("suspect_desynchronization")
 		return
+	tmp = TemFile.query.filter_by(path = data['newpath']).first()
+	if tmp != None:
+		if not tmp.deleted:
+			emit("suspect_desynchronization")
+			return
+		db.session.delete(tmp)
+		db.session.commit()
+
 
 	if data['oldpath'] == None:
-		file = TemFile(
-				sessionId = data['sessionId'],
-				path = data['newpath'],
-				content = "",
-				sha = None,
-				md5 = hashlib.md5("".encode("utf-8")).hexdigest()
-			)
-		db.session.add(file)
-		db.session.commit()
-		print("Created file")
+		if data['directory']:
+			file = TemFile(
+					session_id = data['sessionId'],
+					path = data['newpath'],
+					content = "",
+					sha = None,
+					md5 = hashlib.md5("".encode("utf-8")).hexdigest()
+				)
+			db.session.add(file)
+			db.session.commit()
+			print("Created file")
+		else:
+			pass
+		emit("fileupdate", data, broadcast=True,include_self=False)
 		return
 
-	file = TemFile.query.filter_by(path = data['oldpath']).first()
+	file = TemFile.query.filter_by(session_id = data['sessionId'], path = data['oldpath']).first()
 	if file == None: # if the file does not exist, somethin wonky is happening
 		emit("suspect_desynchronization")
 		return
 
-	# newFile = TemFile(
-			
-	# 	)
+	# File move
+	if not data['directory']:
+		atomicMoveFile(file, data['newpath'])
+		db.session.commit()
+
+	# TODO: make folder move
+	else:
+		file_tree = TemFile.query.filter_by(session_id = data['sessionId']).all()
+		files = [each for each in file_tree if each.path.startswith(data['oldpath'] + "/")]
+		for file in files:
+			atomicMoveFile(file, data['newpath'] + "/" + file.path[len(data['oldpath'])+1:])
+		db.session.commit()
 
 
-	pass
 
+	emit("fileupdate", data, broadcast=True,include_self=False)
+	
 
+# make the file move update the path and create a new temfile with no content, the old path, and property of deleted
 
-
+def atomicMoveFile(file, newpath):
+	junkFile = TemFile(
+		session_id = file.session_id,
+		path = file.path,
+		content = "",
+		sha = file.sha,
+		md5 = file.md5
+	)
+	junkFile.delete()
+	db.session.add(junkFile)
+	file.path = newpath
 
 
 # do a double check the user has write permissions; query github to check 

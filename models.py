@@ -122,9 +122,9 @@ class TemFile(db.Model):
     hash5      = db.Column(db.String())
 
     # whether the file was moved, deleted, edited, or renamed
-    deleted    = db.Column(Boolean, default = False)
-    changed    = db.Column(Boolean, default = False)
-    loaded     = db.Column(Boolean, default = False)
+    deleted    = db.Column(db.Boolean, default = False)
+    changed    = db.Column(db.Boolean, default = False)
+    loaded     = db.Column(db.Boolean, default = False)
 
     def load(self):
         self.loaded = True
@@ -206,6 +206,14 @@ class TemFile(db.Model):
         return '<id {}>'.format(self.id)
 
 
+# class TemFolder(db.Model):
+#     __tablename__ = 'temfolder'
+
+#     id         = db.Column(db.Integer, primary_key=True)
+#     session_id = db.Column(db.Integer, db.ForeignKey('session.id'))
+#     path       = db.Column(db.String())
+    
+#     sha        = db.Column(db.String())
 
 # class User(db.Model):
 #     __tablename__ = 'user'
