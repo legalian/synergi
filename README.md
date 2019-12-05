@@ -7,6 +7,7 @@
 			<li>modify commit() to check to see if the files have been changed or moved</li>
 		</ol>
 	</li>
+	<li>Renaming breaks loading from github</li>
 </ol>
 
 
@@ -91,6 +92,9 @@
 			<li>improve client side code so everything works even if the server takes obnoxiously long to respond</li>
 			<li>batch changes together into one message to reduce network overhead</li>
 		</ol></li>
+		<li>change rename text to something other than white</li>
+		<li>make the "make folder/file" buttons persistent</li>
+		<li>make dragging files into folders more intuitive</li>
 	</ol>
 
 

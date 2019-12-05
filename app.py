@@ -193,6 +193,8 @@ def loadFile(request):
 	# if creds not in sesh.activemembers.split(','): return "ur not allowed lol",402
 
 	book = TemFile.query.filter_by(session_id = int(sesh.id),path=str(json_from_client['path'])).first()
+	if book is None:
+		return
 	if not book.loaded:
 		
 		# pulls the information of the file from github 
@@ -280,27 +282,27 @@ def git_commit(data, github_oauth_object):
 	github_tree = github_tree.json()
 
 	params = {
-		"base_tree" : commit_tree_sha,
+		# "base_tree" : commit_tree_sha,
 		"tree" : []
 	}
 	
 	for file in TemFile.query.filter_by(session_id = int(data['sessionId'])).all():
-		if (file.deleted):
-			params["tree"].append({ "path" : file.path, "mode" : "100644", "type" : "blob", "sha" : None})
-		else:
+		if (file.loaded):
 			params["tree"].append({ "path" : file.path, "mode" : "100644", "type" : "blob", "content" : file.content})
+		else:
+			params["tree"].append({ "path" : file.path, "mode" : "100644", "type" : "blob", "sha" : file.sha})
 
 		# file == {id, session_id, path, content, sha, hash1-hash5}
 
 	# https://developer.github.com/v3/git/trees/#create-a-tree
-	
+	formattedprint(params['tree'])
 	# dict_keys(['_permanent', 'github_oauth_token', 'githubuser', 'sessionId'])
 	# formattedprint(session.keys())
 	# formattedprint(session['github_oauth_token'])
 	# tree = params['tree']
 	# formattedprint(github.get("/user").json())
 	post_response = requests.post(url = "https://api.github.com/repos/" + sesh.owner + "/" + sesh.repo + "/git/trees", headers = headers , json= params)
-
+	formattedprint(post_response.json())
 	# print("\n"*10)
 	# formattedprint(requests.post('http://httpbin.org/post', json = params).json())
 	# print("\n"*10)
@@ -384,14 +386,15 @@ def filedelete(data):
 		if (file == None):
 			emit("suspect_desynchronization")
 			return
-		file.delete()
 	else:
 		file_tree = TemFile.query.filter_by(session_id = data['sessionId']).all()
-		files = [each for each in file_tree if each.path.startswith(data['path'] + "/")]
-		for f in files:
-			f.delete()
+		for f in file_tree:
+			if f.path.startswith(data['path'] + "/"):
+				db.session.delete(f)
+
 
 	db.session.commit()
+	print("file/folder deleted")
 	emit("deletefile", data, broadcast = True, include_self = True)
 	
 
@@ -423,23 +426,19 @@ def fileupdate(data):
 		return
 	tmp = TemFile.query.filter_by(path = data['newpath']).first()
 	if tmp != None:
-		if not tmp.deleted:
-			emit("suspect_desynchronization")
-			return
-		db.session.delete(tmp)
-		db.session.commit()
-
-
+		emit("suspect_desynchronization")
+		return
 	if data['oldpath'] == None:
-		if data['directory']:
+		if not data['directory']:
 			file = TemFile(
-					session_id = data['sessionId'],
-					path = data['newpath'],
-					content = "",
-					sha = None,
-					md5 = hashlib.md5("".encode("utf-8")).hexdigest()
-				)
+				session_id = data['sessionId'],
+				path = data['newpath'],
+				content = "",
+				sha = None,
+				md5 = hashlib.md5("".encode("utf-8")).hexdigest()
+			)
 			db.session.add(file)
+			file.load()
 			db.session.commit()
 			print("Created file")
 		else:
@@ -456,6 +455,7 @@ def fileupdate(data):
 	if not data['directory']:
 		atomicMoveFile(file, data['newpath'])
 		db.session.commit()
+		print("Moved/renamed file")
 
 	# TODO: make folder move
 	else:
@@ -464,6 +464,7 @@ def fileupdate(data):
 		for file in files:
 			atomicMoveFile(file, data['newpath'] + "/" + file.path[len(data['oldpath'])+1:])
 		db.session.commit()
+		print("moved/renamed folder")
 
 
 
@@ -478,7 +479,6 @@ def atomicMoveFile(file, newpath):
 		path = file.path,
 		content = "",
 		sha = file.sha,
-		md5 = file.md5
 	)
 	junkFile.delete()
 	db.session.add(junkFile)
@@ -526,16 +526,20 @@ def joinjoin():
 		db.session.commit()
 		# make every file in the tree a temFile
 
-		file_tree = github.get("/repos/"+ repo.owner +"/"+ repo.repo +"/git/trees/"+ head_tree_sha +"?recursive=1")
+		file_tree = github.get("/repos/"+ repo.owner +"/"+ repo.repo +"/git/trees/"+ head_tree_sha +"?recursive=1").json()
 		for file in file_tree['tree']:
-			book = TemFile(
-				session_id = sesh.id,
-				path = file['path'],
-				content = "",
-				sha = file['sha'],
-				md5 = hashlib.md5("".encode("utf-8")).hexdigest()
-			)
-			db.session.add(book)
+			formattedprint(file)
+			if(file['type'] != "tree"):
+				book = TemFile(
+					session_id = sesh.id,
+					path = file['path'],
+					content = "",
+					sha = file['sha'],
+					md5 = hashlib.md5("".encode("utf-8")).hexdigest()
+				)
+				formattedprint(book.path)
+
+				db.session.add(book)
 		db.session.commit()
 
 	session['sessionId'] = sesh.id
